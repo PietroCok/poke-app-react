@@ -1,0 +1,39 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light dark;
+  --main-bg: light-dark(#FFF, #121212);
+  --main-color: light-dark(#000, #FFF);
+  --accent-1: #df3939;
+  --accent-2: #bd8928;
+  --accent-3: #0095bc;
+  --accent-4: #ec6f95;
+  --accent-5: lightgrey;
+}
+
+/*
+Can force color scheme from any element in the page 
+(if it's the only one with the attribute) 
+*/
+body[data-theme="light"] {
+  color-scheme: light;
+}
+
+body[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+body {
+  color: var(--main-color);
+  background-color: var(--main-bg);
+}
+
+/* Removes the highlight effect on mobile devices */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+

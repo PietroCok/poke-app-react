@@ -1,0 +1,385 @@
+/* List of common rules to add when needed */
+
+/* Common style for all buttons */
+.button {
+  cursor: pointer;
+  border: none;
+
+  &:not(.disabled):active{
+    box-shadow: 0 0 2px 1px var(--main-color);
+  }
+}
+
+/* For devices that supports hover status */
+@media (hover: hover) {
+  .button:not(.disabled):hover{
+    box-shadow: 0 0 2px 1px var(--main-color);
+  }
+}
+
+.weight-normal{
+  font-weight: normal;
+}
+
+.weight-bold{
+  font-weight: bold;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.disabled {
+  opacity: .4;
+}
+
+.accent-1{
+  color: var(--accent-1);
+}
+
+.accent-1-invert{
+  background-color: var(--accent-1);
+}
+
+.accent-2{
+  color: var(--accent-2);
+}
+
+.accent-2-invert{
+  background-color: var(--accent-2);
+}
+
+.accent-3{
+  color: var(--accent-3);
+}
+
+.accent-3-invert{
+  background-color: var(--accent-3);
+}
+
+.accent-4{
+  color: var(--accent-4);
+}
+
+.accent-4-invert{
+  background-color: var(--accent-4);
+}
+
+.accent-info{
+  color: var(--accent-info);
+}
+
+.accent-info-invert{
+  background-color: var(--accent-info);
+}
+
+.accent-warn{
+  color: var(--accent-warn);
+}
+
+.accent-warn-invert{
+  background-color: var(--accent-warn);
+}
+
+.accent-main{
+  color: var(--main-color);
+}
+
+.accent-main-invert{
+  background-color: var(--main-color);
+}
+
+.accent-bg{
+  color: var(--main-bg);
+}
+
+.accent-bg-invert{
+  background-color: var(--main-bg);
+}
+
+.main-bg{
+  background-color: var(--main-bg);
+}
+
+.transparent-bg{
+  background-color: transparent;
+}
+
+.absolute{
+  position: absolute;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-1{
+  flex: 1;
+}
+
+.row-reverse{
+  flex-direction: row-reverse;
+}
+
+.sticky{
+  position: sticky;
+}
+
+.flex-center {
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}
+
+.just-start{
+  justify-content: flex-start;
+}
+
+.just-center{
+  justify-content: center;
+}
+
+.just-end{
+  justify-content: flex-end;
+}
+
+.just-between{
+  justify-content: space-between;
+}
+
+.align-center{
+  align-items: center;
+}
+
+.align-end{
+  align-items: flex-end;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-small {
+  font-size: small;
+}
+
+.text-normal {
+  font-size: medium;
+}
+
+.text-large {
+  font-size: large;
+}
+
+.border-color{
+  border: 1px solid var(--main-color);
+}
+
+.border-r-10{
+  border-radius: 10px;
+}
+
+.padding-0{
+  padding: 0;
+}
+
+.padding-1{
+  padding: 1rem;
+}
+
+.padding-10{
+  padding: 10px;
+}
+
+.padding-1-0{
+  padding: 1em 0;
+}
+
+.padding-0-1{
+  padding: 0 1rem;
+}
+
+.padding-top-0{
+  padding-top: 0;
+}
+
+.margin-0{
+  margin: 0;
+}
+
+.margin-5-0 {
+  margin: 5px 0;
+}
+
+.margin-1-0 {
+  margin: 1em 0;
+}
+
+.margin-08-0 {
+  margin: .8em 0;
+}
+
+.margin-10{
+  margin: 10px;
+}
+
+.margin-5{
+  margin: 5px;
+}
+
+.margin-r10{
+  margin-right: 10px;
+}
+
+.margin-b6{
+  margin-bottom: 6rem;
+}
+
+.h-100{
+  height: 100%;
+}
+
+.w-1{
+  width: 1rem;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.w-80 {
+  width: 80%;
+}
+
+.w-70 {
+  width: 70%;
+}
+
+.w-20 {
+  width: 20%;
+}
+
+.w-fit{
+  width: fit-content;
+}
+
+.min-w-fit{
+  min-width: fit-content;
+}
+
+.gap-1 {
+  gap: 1rem;
+}
+
+.gap-2 {
+  gap: 2rem;
+}
+
+.gap-5 {
+  gap: 5px;
+}
+
+.z-1{
+  z-index: 1;
+}
+
+.z-10 {
+  z-index: 10;
+}
+
+.z-20 {
+  z-index: 20;
+}
+
+.z-100 {
+  z-index: 100;
+}
+
+.top-0 {
+  top: 0;
+}
+
+.top-3 {
+  top: 3rem;
+}
+
+.bottom-0{
+  bottom: 0;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.left-1 {
+  left: 1rem;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.right-1 {
+  right: 1rem;
+}
+
+.h-header{
+  min-height: 58px;
+}
+
+.scroll{
+  overflow: auto;
+}
+
+.no-scroll{
+  overflow: hidden;
+}
+
+.min-w-22{
+  min-width: 22%;
+}
+
+.min-w-50{
+  min-width: 50%;
+}
+
+.hidden {
+  display: none;
+}
+
+.underline{
+  text-decoration: underline;
+}
+
+.hide-empty:has(span:empty) {
+  display: none;
+}
