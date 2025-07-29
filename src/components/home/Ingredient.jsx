@@ -1,14 +1,13 @@
-import { ingredientIdToName } from "../../scripts/utils";
 
 
-export default function Ingredient({ ingredientId }){
-  const ingredientName = ingredientIdToName(ingredientId); 
+
+export default function Ingredient({ ingredientId, ingredientName }){
 
   return (
-    <div className="option-container">
+    <div className="ingredient-container">
       <label 
         htmlFor={ingredientId} 
-        className="option-name">
+        className="ingredient-name">
           {ingredientName}
       </label>
       <input 
