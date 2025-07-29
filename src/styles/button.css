@@ -1,0 +1,30 @@
+/* Common style for all buttons */
+.button {
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+
+  &:not(.disabled):active{
+    box-shadow: 0 0 2px 1px var(--main-color);
+  }
+}
+
+/* For devices that supports hover status */
+@media (hover: hover) {
+  .button:not(.disabled):hover{
+    box-shadow: 0 0 2px 1px var(--main-color);
+  }
+}
+
+.icon-only{
+  padding: .75rem;
+  background-color: var(--alt-bg);
+}
+
+.icon-only > *{
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

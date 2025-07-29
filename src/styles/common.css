@@ -1,22 +1,5 @@
 /* List of common rules to add when needed */
 
-/* Common style for all buttons */
-.button {
-  cursor: pointer;
-  border: none;
-
-  &:not(.disabled):active{
-    box-shadow: 0 0 2px 1px var(--main-color);
-  }
-}
-
-/* For devices that supports hover status */
-@media (hover: hover) {
-  .button:not(.disabled):hover{
-    box-shadow: 0 0 2px 1px var(--main-color);
-  }
-}
-
 .weight-normal{
   font-weight: normal;
 }
