@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -9,10 +10,21 @@ import PersonalArea from "./pages/PersonalArea";
 import OrderPreview from "./pages/OrderPreview";
 
 export default function App() {
+  const [appConfig, setAppConfig] = useState(null);
+
+  useEffect(() => {
+    fetch('./config.json')
+      .then(res => res.json())
+      .then(data => setAppConfig(data))
+      .catch(err => err)
+  }, []);
+
+  if (!appConfig) return <p>Loading config...</p>;
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home config={appConfig} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/favorites" element={<Favorites />} />
