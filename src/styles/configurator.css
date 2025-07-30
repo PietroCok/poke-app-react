@@ -1,0 +1,31 @@
+
+input[type="radio"]{
+  display: none;
+}
+
+input[type="checkbox"]{
+  position: absolute;
+  opacity: .5;
+}
+
+#size-selector-container{
+  display: flex;
+  margin: 1rem 4.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.size-container{
+  border: 2px solid var(--main-color);
+  min-width: 250px;
+  flex: 1;
+  border-radius: .5rem;
+}
+
+label {
+  cursor: pointer;
+}
+
+.size-container.selected{
+  border-color: var(--accent-4);
+}
