@@ -1,9 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 
-import AuthProvider, { useAuth } from './context/AuthContext';
+import appConfig from '../config.json';
+
+import AuthProvider from './context/AuthContext';
+import SizeProvider from './context/configurator/SizeContext';
+
 import ProtectedRoute from './components/common/ProtectedRoute'
-import LoadingSpinner from './components/common/LoadingSpinner';
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Cart from "./pages/Cart";
@@ -13,37 +15,19 @@ import PersonalArea from "./pages/PersonalArea";
 import OrderPreview from "./pages/OrderPreview";
 
 export default function App() {
-  const [appConfig, setAppConfig] = useState(null);
-
-  useEffect(() => {
-    const loadApp = async () => {
-      fetch('./config.json')
-        .then(res => res.json())
-        .then(data => setAppConfig(data))
-        .catch(err => err)
-      
-      await new Promise(resolve => setTimeout(resolve, 2000));
-    }
-
-    loadApp();
-  }, []);
-
-  if (!appConfig) return (
-    <LoadingSpinner
-      color={"var(--main-color)"}
-      duration={2}
-      radius={40}
-    />
-  );
-
   return (
-    <AuthProvider config={appConfig}>
+    <AuthProvider>
       <Router>
         <Routes>
           <Route path="/login" element={<Login />} />
 
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Home config={appConfig} />} />
+
+            <Route path="/" element={
+              <SizeProvider>
+                <Home config={appConfig} />
+              </SizeProvider>
+            } />
             <Route path="/cart" element={<Cart />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/remote-carts" element={<RemoteCarts />} />
