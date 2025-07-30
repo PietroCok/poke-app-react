@@ -82,6 +82,7 @@ body {
   top: 0;
 
   background-color: var(--main-bg);
+  box-shadow: 0 0 10px 0 var(--main-color);
 
   &::after,
   &::before {

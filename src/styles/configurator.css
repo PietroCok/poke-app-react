@@ -1,23 +1,22 @@
-
-input[type="radio"]{
+input[type="radio"] {
   display: none;
 }
 
-input[type="checkbox"]{
+input[type="checkbox"] {
   position: absolute;
   opacity: .5;
 }
 
-#size-selector-container{
+#size-selector-container {
   display: flex;
-  margin: 1rem 4.5rem;
+  margin: 1rem 2rem;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
-.size-container{
+.size-container {
   border: 2px solid var(--main-color);
-  min-width: 250px;
+  min-width: 270px;
   flex: 1;
   border-radius: .5rem;
 }
@@ -26,6 +25,19 @@ label {
   cursor: pointer;
 }
 
-.size-container.selected{
+.size-container.selected {
   border-color: var(--accent-4);
+}
+
+.size-limits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5rem 1rem;
+  padding: 1rem;
+}
+
+.size-price {
+  font-weight: bold;
+  padding: 2px 5px;
+  background-color: var(--accent-4);
 }
