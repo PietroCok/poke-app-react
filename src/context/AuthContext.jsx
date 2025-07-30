@@ -40,7 +40,7 @@ export default function AuthProvider({ children }) {
   const tryAutoLogin = async () => {
     console.log('Auto login attempt');
     // simulate login attempt
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    // await new Promise(resolve => setTimeout(resolve, 2000));
 
     await login();
   }
