@@ -1,9 +1,9 @@
-import { useSize } from '../../context/configurator/SizeContext'
+import { useSelection } from '../../context/configurator/SelectionContext';
 import SizeGroup from './SizeGroup'
 
 
 export default function SizeSelector({ sizes }) {
-  const { size: selectedSize } = useSize();
+  const { size: selectedSize } = useSelection();
 
   const renderSizes = () => {
     return sizes.map(size => {

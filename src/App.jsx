@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import appConfig from '../config.json';
 
 import AuthProvider from './context/AuthContext';
-import SizeProvider from './context/configurator/SizeContext';
+import SelectionProvider from './context/configurator/SelectionContext';
 
 import ProtectedRoute from './components/common/ProtectedRoute'
 import Home from "./pages/Home";
@@ -24,15 +24,16 @@ export default function App() {
           <Route element={<ProtectedRoute />}>
 
             <Route path="/" element={
-              <SizeProvider>
+              <SelectionProvider>
                 <Home config={appConfig} />
-              </SizeProvider>
+              </SelectionProvider>
             } />
             <Route path="/cart" element={<Cart />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/remote-carts" element={<RemoteCarts />} />
             <Route path="/personal" element={<PersonalArea />} />
             <Route path="/order-preview" element={<OrderPreview />} />
+            
           </Route>
         </Routes>
       </Router>

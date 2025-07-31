@@ -1,15 +1,15 @@
-import { useSize } from "../../context/configurator/SizeContext";
+import { useSelection } from "../../context/configurator/SelectionContext";
 
 
 
 export default function SizeGroup({ name, price, limits }) {
-  const { size, selectSize } = useSize();
+  const { size, selectSize } = useSelection();
   const id = `size-${name}`;
 
   const selected = name === size ? 'selected' : '';
 
   return (
-    <div className={`size-container ${selected}`}>
+    <div className={`size-container${' ' + selected}`}>
       <label htmlFor={id}>
         <input
           type="radio"

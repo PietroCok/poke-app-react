@@ -11,6 +11,6 @@ export function ingredientNameToId(name){
 export function ingredientIdToName(id){
   if(!id) return '';
 
-  return id.replaceAll("-", " ").replaceAll("--", "'");
+  return id.replaceAll("--", "'").replaceAll("-", " ");
 }
 

@@ -1,10 +1,6 @@
-input[type="radio"] {
-  display: none;
-}
-
+input[type="radio"],
 input[type="checkbox"] {
-  position: absolute;
-  opacity: .5;
+  display: none;
 }
 
 .size-container label,
@@ -49,8 +45,7 @@ input[type="checkbox"] {
 
 /* INGREDIENTS GROUP */
 
-.ingredient-group {
-}
+.ingredient-group {}
 
 .ingredient-group-header {
   position: sticky;
@@ -60,7 +55,7 @@ input[type="checkbox"] {
   align-items: center;
   gap: .5rem;
   background-color: var(--main-bg);
-  padding: 1rem;
+  padding: 1rem 2rem;
   padding-top: 1.5rem;
   z-index: 1;
 }
@@ -73,18 +68,56 @@ input[type="checkbox"] {
   padding: 5px;
 }
 
-.extra-label{
+.extra-label {
   color: var(--accent-1);
   font-size: .8rem;
+}
+
+.extra-price {
+  color: var(--accent-1);
+  display: flex;
+  gap: 5px;
+}
+
+.group-count-price {
+  display: flex;
+  gap: 7px;
+}
+
+.group-count {
+  display: flex;
+  gap: 2px;
 }
 
 /* END INGREDIENTS GROUP */
 
 /* INGREDIENTS */
 
-.ingredient-container{
-  margin: 0 2rem
+.ingredient-group-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0 2rem;
+}
 
+.ingredient-container{
+  border: 2px solid var(--main-color);
+  border-radius: 5px;
+  text-transform: capitalize;
+  font-size: large;
+  flex: 1;
+  display: flex;
+}
+
+.ingredient-container.selected{
+  border-color: var(--accent-4)
+}
+
+.ingredient-container label{
+  display: inline-block;
+  padding: 1.5rem;
+  min-width: 250px;
+  flex: 1;
 }
 
 /* END INGREDIENTS */
