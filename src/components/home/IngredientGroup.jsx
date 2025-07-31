@@ -8,7 +8,7 @@ export default function IngredientGroup({ group }) {
   return (
     <>
       <section className="ingredient-group">
-        <div className="ingredient-group-header">
+        <div className="ingredient-group-header text-uppercase">
           <h3 className="ingredient-group-name">{group.type}</h3>
           <GroupLimits
             count={0}
