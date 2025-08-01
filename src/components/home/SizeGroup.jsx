@@ -1,7 +1,5 @@
 import { useSelection } from "../../context/configurator/SelectionContext";
 
-
-
 export default function SizeGroup({ name, price, limits }) {
   const { size, selectSize } = useSelection();
   const id = `size-${name}`;
