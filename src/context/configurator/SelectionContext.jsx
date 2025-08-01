@@ -1,13 +1,10 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useReducer, useState } from "react";
 
 import appConfig from '../../../config.json';
 import { ingredientIdToName } from "../../scripts/utils";
+import { ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
 
 const defaultSize = Object.keys(appConfig?.dimensioni)[0] ?? '';
-const defaultIngredients = Object.fromEntries(Object.entries(appConfig.gruppi).map(group => [group[0], []]));
-
-console.log(defaultIngredients);
-
 
 const SelectionContext = createContext(null);
 
@@ -19,35 +16,32 @@ export const useSelection = () => {
 
 export default function SelectionProvider({ children }) {
   const [size, setSize] = useState(defaultSize);
-  const [ingredients, setIngredient] = useState(defaultIngredients);
+  const [ingredients, dispatch] = useReducer(selectionReducer, emptyIngredients);
 
   // Add or increase quantity of ingredient to selection
   const addIngredient = (group, ingredientId) => {
     const ingredientName = ingredientIdToName(ingredientId);
-    const groupIngredients = ingredients[group];
-    const ingredient = {
-      id: ingredientId,
-      quantity: 1,
-      price: appConfig?.gruppi[group]?.opzioni.find(i => i.name == ingredientName)?.prezzo || 0
-    }
-    const updateGroupIngredients = [...groupIngredients, ingredient];
+    const price = appConfig?.gruppi[group]?.opzioni.find(i => i.name == ingredientName)?.prezzo || 0;
 
-    setIngredient({
-      ...ingredients,
-      [group]: updateGroupIngredients
+    dispatch({
+      type: ACTIONS.ADD_INGREDIENT,
+      payload: { group, ingredient: { id: ingredientId, quantity: 1, price } }
     });
   }
 
   // Completetly an ingredient from selection
   const removeIngredient = (group, ingredientId) => {
-    const groupIngredients = ingredients[group];
+    dispatch({
+      type: ACTIONS.REMOVE_INGREDIENT,
+      payload: { group, ingredientId }
+    })
+  }
 
-    const updateGroupIngredients = groupIngredients.filter(ingredient => ingredient.id != ingredientId);
-
-    setIngredient({
-      ...ingredients,
-      [group]: updateGroupIngredients
-    });
+  const increaseQuantity = (group, ingredientId) => {
+    dispatch({
+      type: ACTIONS.INCREMENT_QUANTITY,
+      payload: { group, ingredientId }
+    })
   }
 
   const groupCount = (groupId) => {
@@ -95,6 +89,7 @@ export default function SelectionProvider({ children }) {
       ingredients,
       addIngredient,
       removeIngredient,
+      increaseQuantity,
       groupCount,
       groupExtraPrice
     }}>

@@ -6,20 +6,32 @@ import Ingredient from "./Ingredient"
 export default function IngredientGroup({ group }) {
   const { 
     ingredients: selectedIngredients,
-    groupCount, groupExtraPrice, getLimit, addIngredient, removeIngredient } = useSelection();
+    groupCount, 
+    groupExtraPrice, 
+    getLimit, 
+    addIngredient,
+    increaseQuantity,
+    removeIngredient 
+  } = useSelection();
+
   const ingredients = group.opzioni;
 
-  const count = groupCount(group.type);
-  const limit = getLimit(group.type);
+  const count = groupCount(group.id);
+  const limit = getLimit(group.id);
+
+  // Preconfigure callbacks
+  const addIngredientGroup = (ingredientId) => addIngredient(group.id, ingredientId);
+  const removeIngredientGroup = (ingredientId) => removeIngredient(group.id, ingredientId);
+  const increaseQuantityGroup = (ingredientId) => increaseQuantity(group.id, ingredientId);
 
   return (
     <section className="ingredient-group">
       <div className="ingredient-group-header text-uppercase">
-        <h3 className="ingredient-group-name">{group.type}</h3>
+        <h3 className="ingredient-group-name">{group.id}</h3>
         <GroupLimits
           count={count}
           limit={limit}
-          extraPrice={count > limit ? groupExtraPrice(group.type) : 0}
+          extraPrice={count > limit ? groupExtraPrice(group.id) : 0}
         />
         <h4 className="extra-label text-center">{group.extras}</h4>
       </div>
@@ -27,15 +39,16 @@ export default function IngredientGroup({ group }) {
       <div className="ingredient-group-container">
         {ingredients.map(ingredient => {
           const ingredientId = ingredientNameToId(ingredient.name);
-          const isSelected = selectedIngredients[group.type]?.find(ingredient => ingredient.id == ingredientId) || false;
+          const isSelected = selectedIngredients[group.id]?.find(ingredient => ingredient.id == ingredientId) || false;
           return (
             <Ingredient
               key={ingredientId}
-              ingredientGroup={group.type}
+              ingredientGroup={group.id}
               ingredientId={ingredientId}
               ingredientName={ingredient.name}
-              addIngredient={addIngredient}
-              removeIngredient={removeIngredient}
+              addIngredient={addIngredientGroup}
+              removeIngredient={removeIngredientGroup}
+              increaseQuantity={increaseQuantityGroup}
               isSelected={isSelected}
             />
           )
