@@ -33,13 +33,13 @@ export default function Home({ config }) {
 function renderGroups(groups) {
   return groups.map(group => {
     const _group = {
-      type: group[0],
+      id: group[0],
       ...group[1]
     }
 
     return (
       <IngredientGroup
-        key={_group.type}
+        key={_group.id}
         group={_group}
       />
     )
