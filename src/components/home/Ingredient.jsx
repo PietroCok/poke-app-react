@@ -1,13 +1,10 @@
-import { useState } from "react";
-
-
 
 export default function Ingredient({
-  ingredientGroup,
   ingredientId,
   ingredientName,
   addIngredient,
   removeIngredient,
+  increaseQuantity,
   isSelected = false
 }) {
   const selected = isSelected ? 'selected' : '';
@@ -16,9 +13,9 @@ export default function Ingredient({
     const checked = event.target.checked;
 
     if (checked) {
-      addIngredient(ingredientGroup, ingredientId)
+      addIngredient(ingredientId)
     } else {
-      removeIngredient(ingredientGroup, ingredientId)
+      removeIngredient(ingredientId)
     }
   }
 
@@ -26,7 +23,8 @@ export default function Ingredient({
     <div className={`ingredient-container${' ' + selected}`}>
       <label
         htmlFor={ingredientId}
-        className="ingredient-name">
+        className="ingredient-name"
+      >
         {ingredientName}
       </label>
       <input
