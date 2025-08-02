@@ -1,6 +1,12 @@
-import SizeGroup from './SizeGroup'
+import type { Dimension } from '@/types'
 
-export default function SizeSelector({ sizes }) {
+import { SizeGroup } from './SizeGroup'
+
+interface SizeSelectorProps {
+  sizes: [string, Dimension][]
+}
+
+export default function SizeSelector({ sizes }: SizeSelectorProps) {
 
   const renderSizes = () => {
     return sizes.map(size => {

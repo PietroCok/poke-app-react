@@ -1,13 +1,19 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-const AuthContext = createContext(null);
+import type { AuthContextType } from "@/types";
+
+export interface AuthProviderProps {
+  children: React.ReactNode
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used within an AuthProvider');
   return ctx;
 };
 
-export default function AuthProvider({ children }) {
+export function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -26,9 +32,9 @@ export default function AuthProvider({ children }) {
     setIsOffline(false);
   };
 
-  const setOffline = (value) => {
+  const setOffline = (value: boolean) => {
     console.log('user is navigating in offline mode');
-    setIsOffline(!!value);
+    setIsOffline(value);
   }
 
   const logout = async () => {
@@ -46,7 +52,9 @@ export default function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isOffline, loading, login, logout, setOffline }}>
+    <AuthContext.Provider 
+      value={{ isAuthenticated, isOffline, loading, login, logout, setOffline }}
+    >
       {children}
     </AuthContext.Provider>
   );

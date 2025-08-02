@@ -3,10 +3,18 @@ import { createContext, useContext, useReducer, useState } from "react";
 import appConfig from '../../../config.json';
 import { ingredientIdToName } from "../../scripts/utils";
 import { ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
+import type { AppConfig, ContextIngredient, SelectionContext } from "@/types";
 
-const defaultSize = Object.keys(appConfig?.dimensioni)[0] ?? '';
 
-const SelectionContext = createContext(null);
+export interface SelectionProviderProps {
+  children: React.ReactNode
+}
+
+const config: AppConfig = appConfig;
+
+const defaultSize = Object.keys(config.dimensioni)[0] ?? '';
+
+const SelectionContext = createContext<SelectionContext | null>(null);
 
 export const useSelection = () => {
   const ctx = useContext(SelectionContext);
@@ -14,14 +22,14 @@ export const useSelection = () => {
   return ctx;
 };
 
-export default function SelectionProvider({ children }) {
+export function SelectionProvider({ children }: SelectionProviderProps) {
   const [size, setSize] = useState(defaultSize);
   const [ingredients, dispatch] = useReducer(selectionReducer, emptyIngredients);
 
   // Add or increase quantity of ingredient to selection
-  const addIngredient = (group, ingredientId) => {
+  const addIngredient = (group: string, ingredientId: string) => {
     const ingredientName = ingredientIdToName(ingredientId);
-    const price = appConfig?.gruppi[group]?.opzioni.find(i => i.name == ingredientName)?.prezzo || 0;
+    const price = config.gruppi[group]?.opzioni.find(i => i.name == ingredientName)?.prezzo || 0;
 
     dispatch({
       type: ACTIONS.ADD_INGREDIENT,
@@ -30,21 +38,21 @@ export default function SelectionProvider({ children }) {
   }
 
   // Completetly an ingredient from selection
-  const removeIngredient = (group, ingredientId) => {
+  const removeIngredient = (group: string, ingredientId: string) => {
     dispatch({
       type: ACTIONS.REMOVE_INGREDIENT,
       payload: { group, ingredientId }
     })
   }
 
-  const increaseQuantity = (group, ingredientId) => {
+  const increaseQuantity = (group: string, ingredientId: string) => {
     dispatch({
       type: ACTIONS.INCREMENT_QUANTITY,
       payload: { group, ingredientId }
     })
   }
 
-  const groupCount = (groupId) => {
+  const groupCount = (groupId: string) => {
     const groupIngredients = ingredients[groupId];
     let total = 0;
     for (const ingredient of groupIngredients) {
@@ -53,12 +61,12 @@ export default function SelectionProvider({ children }) {
     return total;
   }
 
-  const groupExtraPrice = (groupId) => {
-    const groupLimit = appConfig?.dimensioni[size]?.limiti[groupId];
+  const groupExtraPrice = (groupId: string) => {
+    const groupLimit = config.dimensioni[size]?.limiti[groupId];
     if (groupCount(groupId) < groupLimit) return 0;
 
     // order selected ingredient based on extra price
-    const extraIngredients = ingredients[groupId].sort((a, b) => b.price - a.price).slice(groupLimit);
+    const extraIngredients = ingredients[groupId].sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price).slice(groupLimit);
 
     console.log(extraIngredients);
 
@@ -70,15 +78,15 @@ export default function SelectionProvider({ children }) {
     return total;
   }
 
-  const selectSize = (newSelectedSize) => {
+  const selectSize = (newSelectedSize: string) => {
     if (size != newSelectedSize) {
       setSize(newSelectedSize);
     }
   }
 
   // Return limit for current size and groupId
-  const getLimit = (groupId) => {
-    return appConfig?.dimensioni[size]?.limiti[groupId] || 0;
+  const getLimit = (groupId: string) => {
+    return config.dimensioni[size]?.limiti[groupId] || 0;
   }
 
   return (
@@ -92,7 +100,7 @@ export default function SelectionProvider({ children }) {
       increaseQuantity,
       groupCount,
       groupExtraPrice
-    }}>
+    } as SelectionContext}>
       {children}
     </SelectionContext.Provider>
   );

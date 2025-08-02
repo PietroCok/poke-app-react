@@ -1,13 +1,13 @@
 import { Navigate, Outlet } from "react-router-dom";
 
 import { useAuth } from '../../context/AuthContext';
-import LoadingSpinner from "./LoadingSpinner";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 
 /**
  * Checks if the user is authenticated or is navigating in offline mode
  */
-export default function ProtectedRoute() {
+export function ProtectedRoute() {
   const { isAuthenticated, isOffline, loading } = useAuth();
 
   if (loading) return (

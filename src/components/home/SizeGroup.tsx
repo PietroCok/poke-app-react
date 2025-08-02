@@ -1,6 +1,16 @@
 import { useSelection } from "../../context/configurator/SelectionContext";
 
-export default function SizeGroup({ name, price, limits }) {
+export interface SizeGroupProps {
+  name: string,
+  price: number,
+  limits: Limits
+}
+
+type Limits = {
+  [key: string]: number;
+}
+
+export function SizeGroup({ name, price, limits }: SizeGroupProps) {
   const { size, selectSize } = useSelection();
   const id = `size-${name}`;
 
@@ -28,10 +38,10 @@ export default function SizeGroup({ name, price, limits }) {
 }
 
 
-function renderLimits(limits) {
+function renderLimits(limits: Limits) {
   return Object.entries(limits).map(limit => {
-    const type = limit[0];
-    const quantity = limit[1];
+    const type: string = limit[0];
+    const quantity: number = limit[1];
 
     return (
       <span key={type} className="limit">
