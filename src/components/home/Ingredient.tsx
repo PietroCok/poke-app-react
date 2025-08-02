@@ -4,6 +4,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 export interface IngredientProps {
   ingredientId: string,
   ingredientName: string,
+  ingredientQuantity: number,
   addIngredient: Function,
   removeIngredient: Function,
   increaseQuantity: Function,
@@ -13,6 +14,7 @@ export interface IngredientProps {
 export function Ingredient({
   ingredientId,
   ingredientName,
+  ingredientQuantity,
   addIngredient,
   removeIngredient,
   increaseQuantity,
@@ -31,7 +33,10 @@ export function Ingredient({
   }
 
   return (
-    <div className={`${selected}ingredient-container relative`}>
+    <div 
+      className={`${selected}ingredient-container relative`}
+      {...(ingredientQuantity > 1 ? {'data-extra': ingredientQuantity} : {})}
+    >
       <label
         htmlFor={ingredientId}
         className="ingredient-name"

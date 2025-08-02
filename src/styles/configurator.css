@@ -93,14 +93,7 @@ input[type="checkbox"] {
 
 /* INGREDIENTS */
 
-.ingredient-group-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin: 0 2rem;
-}
-
-.ingredient-container{
+.ingredient-container {
   border: 2px solid var(--main-color);
   border-radius: 5px;
   text-transform: capitalize;
@@ -109,15 +102,36 @@ input[type="checkbox"] {
   display: flex;
 }
 
-.ingredient-container.selected{
+.ingredient-group-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0 2rem;
+  padding: 1rem 0;
+}
+
+.ingredient-container.selected {
   border-color: var(--accent-4)
 }
 
-.ingredient-container label{
+.ingredient-container label {
   display: inline-block;
   padding: 1.5rem;
   min-width: 250px;
   flex: 1;
+}
+
+.ingredient-container[data-extra]::after {
+  content: 'x' attr(data-extra);
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: rotate(-20deg) translate(20px, -8px);
+  font-weight: bold;
+  color: var(--accent-1);
+  background-color: var(--main-bg);
+  padding: 5px;
+  border-radius: 50%;
 }
 
 /* END INGREDIENTS */
