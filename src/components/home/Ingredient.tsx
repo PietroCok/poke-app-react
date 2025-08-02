@@ -1,3 +1,5 @@
+import { IconButton } from "../common/IconButton";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export interface IngredientProps {
   ingredientId: string,
@@ -16,7 +18,7 @@ export function Ingredient({
   increaseQuantity,
   isSelected = false
 }: IngredientProps) {
-  const selected = isSelected ? 'selected' : '';
+  const selected = isSelected ? 'selected ' : '';
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     const checked = event.target.checked;
@@ -29,7 +31,7 @@ export function Ingredient({
   }
 
   return (
-    <div className={`ingredient-container${' ' + selected}`}>
+    <div className={`${selected}ingredient-container relative`}>
       <label
         htmlFor={ingredientId}
         className="ingredient-name"
@@ -42,6 +44,15 @@ export function Ingredient({
         checked={isSelected}
         onChange={handleChange}
       />
+
+      {
+        isSelected &&
+        <IconButton
+          icon={faPlus}
+          classes={"flex flex-center h-100 aspect-1 border-round right-0 absolute"}
+          clickHandler={() => increaseQuantity(ingredientId)}
+        />
+      }
     </div>
   )
 }

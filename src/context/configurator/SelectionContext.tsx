@@ -66,14 +66,26 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
     if (groupCount(groupId) < groupLimit) return 0;
 
     // order selected ingredient based on extra price
-    const extraIngredients = ingredients[groupId].sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price).slice(groupLimit);
+    const sortedIngredients = ingredients[groupId].sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price).slice();
+    console.log(sortedIngredients);
 
-    console.log(extraIngredients);
-
+    // Find te most expensive items price
+    let deductedCounter = 0;
+    let deductedPrice = 0;
     let total = 0;
-    for (const ingredient of extraIngredients) {
+    for (let i = 0; i < sortedIngredients.length; i++) {
+      const ingredient = sortedIngredients[i];
+      let j = 0;
+      while(deductedCounter < groupLimit && ingredient.quantity > j){
+        deductedPrice += ingredient.price;
+        deductedCounter++;
+        j++;
+      }
+
       total += ingredient.price * ingredient.quantity;
     }
+
+    total -= deductedPrice;
 
     return total;
   }

@@ -2,12 +2,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export interface IconButtonProps {
   icon: any,
-  color: string
+  classes?: string,
+  clickHandler?: () => void
 }
 
-export function IconButton({ icon, color }: IconButtonProps) {
+export function IconButton({ icon, classes, clickHandler }: IconButtonProps) {
+  const _classes = classes ? `${classes} ` : '';
   return (
-    <button className={`button icon icon-only alt-bg ${color}`}>
+    <button 
+      className={`${_classes}button icon icon-only alt-bg`}
+      onClick={clickHandler}
+    >
       <FontAwesomeIcon icon={icon} />
     </button>
   )
