@@ -1,14 +1,14 @@
 /* List of common rules to add when needed */
 
-.weight-normal{
+.weight-normal {
   font-weight: normal;
 }
 
-.weight-bold{
+.weight-bold {
   font-weight: bold;
 }
 
-.pointer{
+.pointer {
   cursor: pointer;
 }
 
@@ -16,79 +16,83 @@
   opacity: .4;
 }
 
-.accent-1{
+.accent-1 {
   color: var(--accent-1);
 }
 
-.accent-1-invert{
+.accent-1-invert {
   background-color: var(--accent-1);
 }
 
-.accent-2{
+.accent-2 {
   color: var(--accent-2);
 }
 
-.accent-2-invert{
+.accent-2-invert {
   background-color: var(--accent-2);
 }
 
-.accent-3{
+.accent-3 {
   color: var(--accent-3);
 }
 
-.accent-3-invert{
+.accent-3-invert {
   background-color: var(--accent-3);
 }
 
-.accent-4{
+.accent-4 {
   color: var(--accent-4);
 }
 
-.accent-4-invert{
+.accent-4-invert {
   background-color: var(--accent-4);
 }
 
-.accent-info{
+.accent-info {
   color: var(--accent-info);
 }
 
-.accent-info-invert{
+.accent-info-invert {
   background-color: var(--accent-info);
 }
 
-.accent-warn{
+.accent-warn {
   color: var(--accent-warn);
 }
 
-.accent-warn-invert{
+.accent-warn-invert {
   background-color: var(--accent-warn);
 }
 
-.accent-main{
+.accent-main {
   color: var(--main-color);
 }
 
-.accent-main-invert{
+.accent-main-invert {
   background-color: var(--main-color);
 }
 
-.accent-bg{
+.accent-bg {
   color: var(--main-bg);
 }
 
-.accent-bg-invert{
+.accent-bg-invert {
   background-color: var(--main-bg);
 }
 
-.main-bg{
+.main-bg {
   background-color: var(--main-bg);
 }
 
-.transparent-bg{
+.transparent-bg {
   background-color: transparent;
 }
 
-.absolute{
+.relative {
+  position: relative;
+}
+
+.absolute {
   position: absolute;
 }
 
@@ -100,15 +104,15 @@
   display: flex;
 }
 
-.flex-1{
+.flex-1 {
   flex: 1;
 }
 
-.row-reverse{
+.row-reverse {
   flex-direction: row-reverse;
 }
 
-.sticky{
+.sticky {
   position: sticky;
 }
 
@@ -119,27 +123,27 @@
   align-content: center;
 }
 
-.just-start{
+.just-start {
   justify-content: flex-start;
 }
 
-.just-center{
+.just-center {
   justify-content: center;
 }
 
-.just-end{
+.just-end {
   justify-content: flex-end;
 }
 
-.just-between{
+.just-between {
   justify-content: space-between;
 }
 
-.align-center{
+.align-center {
   align-items: center;
 }
 
-.align-end{
+.align-end {
   align-items: flex-end;
 }
 
@@ -183,39 +187,43 @@
   font-size: large;
 }
 
-.border-color{
+.border-color {
   border: 1px solid var(--main-color);
 }
 
-.border-r-10{
+.border-r-10 {
   border-radius: 10px;
 }
 
-.padding-0{
+.border-round {
+  border-radius: 50%;
+}
+
+.padding-0 {
   padding: 0;
 }
 
-.padding-1{
+.padding-1 {
   padding: 1rem;
 }
 
-.padding-10{
+.padding-10 {
   padding: 10px;
 }
 
-.padding-1-0{
+.padding-1-0 {
   padding: 1em 0;
 }
 
-.padding-0-1{
+.padding-0-1 {
   padding: 0 1rem;
 }
 
-.padding-top-0{
+.padding-top-0 {
   padding-top: 0;
 }
 
-.margin-0{
+.margin-0 {
   margin: 0;
 }
 
@@ -231,27 +239,27 @@
   margin: .8em 0;
 }
 
-.margin-10{
+.margin-10 {
   margin: 10px;
 }
 
-.margin-5{
+.margin-5 {
   margin: 5px;
 }
 
-.margin-r10{
+.margin-r10 {
   margin-right: 10px;
 }
 
-.margin-b6{
+.margin-b6 {
   margin-bottom: 6rem;
 }
 
-.h-100{
+.h-100 {
   height: 100%;
 }
 
-.w-1{
+.w-1 {
   width: 1rem;
 }
 
@@ -271,15 +279,15 @@
   width: 20%;
 }
 
-.w-fit{
+.w-fit {
   width: fit-content;
 }
 
-.min-w-fit{
+.min-w-fit {
   min-width: fit-content;
 }
 
-.gap-05{
+.gap-05 {
   gap: 0.5rem;
 }
 
@@ -295,7 +303,7 @@
   gap: 5px;
 }
 
-.z-1{
+.z-1 {
   z-index: 1;
 }
 
@@ -319,7 +327,7 @@
   top: 3rem;
 }
 
-.bottom-0{
+.bottom-0 {
   bottom: 0;
 }
 
@@ -339,31 +347,35 @@
   right: 1rem;
 }
 
-.h-header{
+.h-header {
   min-height: 58px;
 }
 
-.scroll{
+.scroll {
   overflow: auto;
 }
 
-.no-scroll{
+.no-scroll {
   overflow: hidden;
 }
 
-.min-w-22{
+.min-w-22 {
   min-width: 22%;
 }
 
-.min-w-50{
+.min-w-50 {
   min-width: 50%;
+}
+
+.aspect-1 {
+  aspect-ratio: 1;
 }
 
 .hidden {
   display: none;
 }
 
-.underline{
+.underline {
   text-decoration: underline;
 }
 

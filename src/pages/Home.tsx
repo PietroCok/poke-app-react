@@ -16,7 +16,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
         left={
           <IconButton
             icon={faCartShopping}
-            color="accent-2"
+            classes="accent-2 border-r-10"
           />
         }
         right={<button></button>}
