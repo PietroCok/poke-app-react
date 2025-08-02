@@ -34,6 +34,9 @@ body {
 
   font-family: sans-serif;
   user-select: none;
+
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 /* Removes the highlight effect on mobile devices */
@@ -82,7 +85,6 @@ body {
   top: 0;
 
   background-color: var(--main-bg);
-  box-shadow: 0 0 10px 0 var(--main-color);
 
   &::after,
   &::before {
