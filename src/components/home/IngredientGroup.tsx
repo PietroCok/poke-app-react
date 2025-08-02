@@ -1,17 +1,30 @@
+import type { ContextIngredient } from "@/types";
+
 import { useSelection } from "../../context/configurator/SelectionContext";
 import { ingredientNameToId } from "../../scripts/utils";
-import GroupLimits from "./GroupLimits"
-import Ingredient from "./Ingredient"
+import { GroupLimits } from "./GroupLimits"
+import { Ingredient } from "./Ingredient"
 
-export default function IngredientGroup({ group }) {
-  const { 
+interface IngredientGroupProps {
+  group: {
+    extras: string;
+    opzioni: {
+      name: string;
+      prezzo: number;
+    }[];
+    id: string;
+  }
+}
+
+export function IngredientGroup({ group }: IngredientGroupProps) {
+  const {
     ingredients: selectedIngredients,
-    groupCount, 
-    groupExtraPrice, 
-    getLimit, 
+    groupCount,
+    groupExtraPrice,
+    getLimit,
     addIngredient,
     increaseQuantity,
-    removeIngredient 
+    removeIngredient
   } = useSelection();
 
   const ingredients = group.opzioni;
@@ -20,9 +33,9 @@ export default function IngredientGroup({ group }) {
   const limit = getLimit(group.id);
 
   // Preconfigure callbacks
-  const addIngredientGroup = (ingredientId) => addIngredient(group.id, ingredientId);
-  const removeIngredientGroup = (ingredientId) => removeIngredient(group.id, ingredientId);
-  const increaseQuantityGroup = (ingredientId) => increaseQuantity(group.id, ingredientId);
+  const addIngredientGroup = (ingredientId: string) => addIngredient(group.id, ingredientId);
+  const removeIngredientGroup = (ingredientId: string) => removeIngredient(group.id, ingredientId);
+  const increaseQuantityGroup = (ingredientId: string) => increaseQuantity(group.id, ingredientId);
 
   return (
     <section className="ingredient-group">
@@ -39,11 +52,10 @@ export default function IngredientGroup({ group }) {
       <div className="ingredient-group-container">
         {ingredients.map(ingredient => {
           const ingredientId = ingredientNameToId(ingredient.name);
-          const isSelected = selectedIngredients[group.id]?.find(ingredient => ingredient.id == ingredientId) || false;
+          const isSelected = selectedIngredients[group.id]?.find((ingredient: ContextIngredient) => ingredient.id == ingredientId) ? true : false;
           return (
             <Ingredient
               key={ingredientId}
-              ingredientGroup={group.id}
               ingredientId={ingredientId}
               ingredientName={ingredient.name}
               addIngredient={addIngredientGroup}

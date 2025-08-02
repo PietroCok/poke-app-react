@@ -1,7 +1,11 @@
 
+export interface GroupLimitsProps {
+  count: number,
+  limit: number,
+  extraPrice: number
+}
 
-
-export default function GroupLimits({ count, limit, extraPrice }) {
+export function GroupLimits({ count, limit, extraPrice }: GroupLimitsProps) {
   const excess = count - limit;
 
   return (

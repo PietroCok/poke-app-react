@@ -1,4 +1,9 @@
-import '../../styles/loading-spinner.css'
+
+export interface LoadingSpinnerProps {
+  radius: number,
+  duration: number,
+  color: string
+}
 
 /**
  * @param active Bool show or hide element
@@ -7,29 +12,30 @@ import '../../styles/loading-spinner.css'
  * @param color String color of the element
  * @returns loading element
  */
-export default function LoadingSpinner({ radius, duration = '3s', color }) {
-  if (!Number(radius)) {
+export function LoadingSpinner({ radius, duration = 3, color }: LoadingSpinnerProps) {
+  if (radius < 0) {
     radius = 15;
   }
+  if(duration < 0){
+    duration = 2;
+  }
+
   const sub_radius = radius / 5 + 'px';
+  let _radius = '';
+  let _duration = '';
 
-  if (Number(radius)) {
-    radius += 'px';
-  }
-
-  if (Number(duration)) {
-    duration = duration + 's';
-  }
+  _radius = radius + 'px';
+  _duration = duration + 's';
 
   return (
     <div
       className='loading-container'
       style={{
-        '--radius': radius,
+        '--radius': _radius,
         '--sub-elem-radius': sub_radius,
-        '--loop-duration': duration,
+        '--loop-duration': _duration,
         '--color': color
-      }}
+      } as React.CSSProperties}
     >
       <div className="loading-spinner">
         <div></div>

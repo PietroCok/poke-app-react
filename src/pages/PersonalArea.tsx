@@ -1,6 +1,6 @@
 
 
-export default function PersonalArea(){
+export function PersonalArea(){
   return (
     <>
       <div>This is the PersonalArea page</div>

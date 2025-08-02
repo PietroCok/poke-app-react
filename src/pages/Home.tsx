@@ -1,13 +1,14 @@
-import IconButton from "../components/common/IconButton";
-import PageHeader from "../components/common/PageHeader";
-import IngredientGroup from "../components/home/IngredientGroup";
+import type { AppConfig, Group } from "@/types";
 
+import { IconButton } from "../components/common/IconButton";
+import { PageHeader } from "../components/common/PageHeader";
+import { IngredientGroup } from "../components/home/IngredientGroup";
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import SizeSelector from "../components/home/SizeSelector";
 
-export default function Home({ config }) {
-  const dimensions = Object.entries(config.dimensioni);
-  const groups = Object.entries(config.gruppi);
+export function Home({ dimensioni, gruppi }: AppConfig) {
+  const dimensions = Object.entries(dimensioni);
+  const groups = Object.entries(gruppi);
 
   return (
     <div className="page-container sticky">
@@ -21,7 +22,7 @@ export default function Home({ config }) {
         right={<button></button>}
       />
       <h2 id="page-title">crea la tua poke bowl</h2>
-      <SizeSelector sizes={dimensions}/>
+      <SizeSelector sizes={dimensions} />
       <section id="ingredients-selection-container">
         {renderGroups(groups)}
       </section>
@@ -30,7 +31,7 @@ export default function Home({ config }) {
 }
 
 
-function renderGroups(groups) {
+function renderGroups(groups: [string, Group][]) {
   return groups.map(group => {
     const _group = {
       id: group[0],
