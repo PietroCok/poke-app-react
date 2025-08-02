@@ -52,12 +52,14 @@ export function IngredientGroup({ group }: IngredientGroupProps) {
       <div className="ingredient-group-container">
         {ingredients.map(ingredient => {
           const ingredientId = ingredientNameToId(ingredient.name);
-          const isSelected = selectedIngredients[group.id]?.find((ingredient: ContextIngredient) => ingredient.id == ingredientId) ? true : false;
+          const selectedIngredient = selectedIngredients[group.id]?.find((ingredient: ContextIngredient) => ingredient.id == ingredientId);
+          const isSelected = selectedIngredient ? true : false;
           return (
             <Ingredient
               key={ingredientId}
               ingredientId={ingredientId}
               ingredientName={ingredient.name}
+              ingredientQuantity={selectedIngredient?.quantity || 0}
               addIngredient={addIngredientGroup}
               removeIngredient={removeIngredientGroup}
               increaseQuantity={increaseQuantityGroup}
