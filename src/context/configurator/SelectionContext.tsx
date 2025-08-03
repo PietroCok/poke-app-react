@@ -1,10 +1,10 @@
 import { createContext, useContext, useReducer, useState } from "react";
 
+import type { AppConfig, ContextIngredient, SelectionContext } from "@/types";
+
 import appConfig from '../../../config.json';
 import { ingredientIdToName } from "../../scripts/utils";
 import { ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
-import type { AppConfig, ContextIngredient, SelectionContext } from "@/types";
-
 
 export interface SelectionProviderProps {
   children: React.ReactNode
@@ -52,6 +52,16 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
     })
   }
 
+  const hasIngredients = () => {
+    for (const [_, _ingredients] of Object.entries(ingredients)) {
+      if (_ingredients.length > 0) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   const groupCount = (groupId: string) => {
     const groupIngredients = ingredients[groupId];
     let total = 0;
@@ -67,7 +77,6 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
 
     // order selected ingredient based on extra price
     const sortedIngredients = ingredients[groupId].sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price).slice();
-    console.log(sortedIngredients);
 
     // Find te most expensive items price
     let deductedCounter = 0;
@@ -76,7 +85,7 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
     for (let i = 0; i < sortedIngredients.length; i++) {
       const ingredient = sortedIngredients[i];
       let j = 0;
-      while(deductedCounter < groupLimit && ingredient.quantity > j){
+      while (deductedCounter < groupLimit && ingredient.quantity > j) {
         deductedPrice += ingredient.price;
         deductedCounter++;
         j++;
@@ -101,6 +110,13 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
     return config.dimensioni[size]?.limiti[groupId] || 0;
   }
 
+  // Reset ingredients selected
+  const resetContext = () => {
+    dispatch({
+      type: ACTIONS.RESET,
+    })
+  }
+
   return (
     <SelectionContext.Provider value={{
       size,
@@ -110,8 +126,10 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
       addIngredient,
       removeIngredient,
       increaseQuantity,
+      hasIngredients,
       groupCount,
-      groupExtraPrice
+      groupExtraPrice,
+      resetContext
     } as SelectionContext}>
       {children}
     </SelectionContext.Provider>

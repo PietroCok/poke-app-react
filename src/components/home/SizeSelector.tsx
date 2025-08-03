@@ -6,7 +6,7 @@ interface SizeSelectorProps {
   sizes: [string, Dimension][]
 }
 
-export default function SizeSelector({ sizes }: SizeSelectorProps) {
+export function SizeSelector({ sizes }: SizeSelectorProps) {
 
   const renderSizes = () => {
     return sizes.map(size => {

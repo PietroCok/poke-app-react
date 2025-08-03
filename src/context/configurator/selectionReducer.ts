@@ -1,11 +1,11 @@
 import appConfig from '../../../config.json';
-import type { ContextIngredient, IngredientsState } from './SelectionContext';
+import type { ContextIngredient, IngredientsState } from '@/types';
 
 export type ActionType = typeof ACTIONS[keyof typeof ACTIONS];
 
 type Action = {
   type: ActionType,
-  payload: any
+  payload?: any
 }
 
 export const emptyIngredients = Object.fromEntries(Object.entries(appConfig.gruppi).map(group => [group[0], []]));

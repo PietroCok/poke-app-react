@@ -18,8 +18,11 @@ export type SelectionContext = {
   addIngredient: (groupId: string, ingredientId: string) => void,
   removeIngredient: (groupId: string, ingredientId: string) => void,
   increaseQuantity: (groupId: string, ingredientId: string) => void,
+  hasIngredients: () => boolean,
   groupCount: (groupId: string) => number,
-  groupExtraPrice: (groupId: string) => number
+  groupExtraPrice: (groupId: string) => number,
+
+  resetContext: () => void
 }
 
 export type AuthContextType = {

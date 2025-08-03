@@ -97,3 +97,18 @@ body {
 }
 
 /* PAGE HEADER */
+
+
+
+/* PAGE FOOTER */
+
+.page-footer {
+  display: flex;
+  position: sticky;
+  bottom: 0;
+  z-index: 99;
+
+  justify-content: space-between;
+}
+
+/* END PAGE FOOTER */
