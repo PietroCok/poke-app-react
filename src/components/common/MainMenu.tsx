@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { NavLink } from "react-router-dom";
 
 import { ButtonIcon } from "./ButtonIcon";
 import { faBars, faCloud, faStar, faSun, faUser, faX } from "@fortawesome/free-solid-svg-icons";
@@ -8,17 +9,17 @@ import { faBars, faCloud, faStar, faSun, faUser, faX } from "@fortawesome/free-s
 export function MainMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
-  function checkCloseMenu(event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>){
+  function checkCloseMenu(event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) {
     // Close the menu only if the user has not clicked one of the buttons
     const target = event.target as HTMLElement;
-    if(target.id == "main-menu-overlay" || target.id == "main-menu-options"){
+    if (target.id == "main-menu-overlay" || target.id == "main-menu-options") {
       setIsOpen(false);
     }
   }
 
   function renderMenuOptions() {
     return (
-      <div 
+      <div
         id="main-menu-overlay"
         onClick={checkCloseMenu}
         onTouchStart={checkCloseMenu}
@@ -38,20 +39,33 @@ export function MainMenu() {
             classes="border-r-10"
           />
 
-          <ButtonIcon
-            icon={faStar}
-            classes="accent-2 border-r-10"
-          />
+          <NavLink
+            to={"/favorites"}
+          >
+            <ButtonIcon
+              icon={faStar}
+              classes="accent-2 border-r-10"
+            />
+          </NavLink>
 
-          <ButtonIcon
-            icon={faUser}
-            classes="accent-3 border-r-10"
-          />
+          <NavLink
+            to={"/personal"}
+          >
+            <ButtonIcon
+              icon={faUser}
+              classes="accent-3 border-r-10"
+            />
+          </NavLink>
 
-          <ButtonIcon
-            icon={faCloud}
-            classes="accent-3 border-r-10"
-          />
+
+          <NavLink
+            to={"/remote-carts"}
+          >
+            <ButtonIcon
+              icon={faCloud}
+              classes="accent-3 border-r-10"
+            />
+          </NavLink>
         </div>
       </div>
     )

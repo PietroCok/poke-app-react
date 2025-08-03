@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import type { AppConfig, Group } from "@/types";
 
 import { IngredientGroup } from "../components/home/IngredientGroup";
@@ -21,11 +22,15 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
     <div className="page-container sticky">
       <PageHeader
         left={
-          <ButtonIcon
-            icon={faCartShopping}
-            classes="accent-2 border-r-10"
-            tooltip="Carello"
-          />
+          <NavLink
+            to={"/cart"}
+          >
+            <ButtonIcon
+              icon={faCartShopping}
+              classes="accent-2 border-r-10"
+              tooltip="Carello"
+            />
+          </NavLink>
         }
         right={
           <MainMenu />
