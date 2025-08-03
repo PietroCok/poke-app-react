@@ -1,4 +1,4 @@
-import { IconButton } from "../common/IconButton";
+import { ButtonIcon } from "../common/ButtonIcon";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 export interface IngredientProps {
@@ -52,7 +52,7 @@ export function Ingredient({
 
       {
         isSelected &&
-        <IconButton
+        <ButtonIcon
           icon={faPlus}
           classes={"flex flex-center h-100 aspect-1 border-round right-0 absolute"}
           clickHandler={() => increaseQuantity(ingredientId)}
