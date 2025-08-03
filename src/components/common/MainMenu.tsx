@@ -1,0 +1,71 @@
+import { useState } from "react";
+import { createPortal } from "react-dom";
+
+import { ButtonIcon } from "./ButtonIcon";
+import { faBars, faCloud, faStar, faSun, faUser, faX } from "@fortawesome/free-solid-svg-icons";
+
+
+export function MainMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  function renderMenuOptions() {
+    return (
+      <div id="main-menu-overlay">
+        <div
+          id="main-menu-options"
+          className="flex flex-column align-end gap-1"
+        >
+          <ButtonIcon
+            icon={faX}
+            clickHandler={() => setIsOpen(false)}
+            classes="accent-1 border-r-10"
+          />
+
+          <ButtonIcon
+            icon={faSun}
+            classes="border-r-10"
+          />
+
+          <ButtonIcon
+            icon={faStar}
+            classes="accent-2 border-r-10"
+          />
+
+          <ButtonIcon
+            icon={faUser}
+            classes="accent-3 border-r-10"
+          />
+
+          <ButtonIcon
+            icon={faCloud}
+            classes="accent-3 border-r-10"
+          />
+        </div>
+      </div>
+    )
+  }
+
+  if (!isOpen) {
+    return (
+      <div id="main-menu">
+        <ButtonIcon
+          icon={faBars}
+          classes="accent-3 border-r-10"
+          clickHandler={() => setIsOpen(true)}
+          tooltip="Apri menu"
+        />
+      </div>
+    )
+  } else {
+    return (
+      <>
+        {createPortal(
+          renderMenuOptions(),
+          document.getElementById('root')!
+        )}
+      </>
+    )
+  }
+}
+
+

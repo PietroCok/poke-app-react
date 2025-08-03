@@ -49,7 +49,7 @@ body {
 
 .page-header {
   display: grid;
-  grid-template-columns: 5rem auto 5rem;
+  grid-template-columns: 5.5rem auto 5.5rem;
   grid-template-rows: 1fr;
   position: sticky;
   top: 0;
@@ -112,3 +112,25 @@ body {
 }
 
 /* END PAGE FOOTER */
+
+
+
+/* MAIN MENU */
+#main-menu-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+
+  z-index: 999;
+  backdrop-filter: blur(1px);
+}
+
+#main-menu-options {
+  padding: 1rem;
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+/* END MAIN MENU */
