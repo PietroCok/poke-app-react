@@ -1,13 +1,14 @@
 import type { AppConfig, Group } from "@/types";
 
-import { ButtonIcon } from "../components/common/ButtonIcon";
-import { PageHeader } from "../components/common/PageHeader";
 import { IngredientGroup } from "../components/home/IngredientGroup";
-import { faCartShopping, faBars } from '@fortawesome/free-solid-svg-icons';
 import { SizeSelector } from "../components/home/SizeSelector";
 import { PageFooter } from "../components/common/PageFooter";
 import { ButtonText } from "../components/common/ButtonText";
 import { useSelection } from "../context/configurator/SelectionContext";
+import { PageHeader } from "../components/common/PageHeader";
+import { ButtonIcon } from "../components/common/ButtonIcon";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { MainMenu } from "../components/common/MainMenu";
 
 export function Home({ dimensioni, gruppi }: AppConfig) {
   const { resetContext, hasIngredients } = useSelection();
@@ -27,11 +28,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
           />
         }
         right={
-          <ButtonIcon 
-            icon={faBars}
-            classes="accent-3 border-r-10"
-            tooltip="Menu"
-          />
+          <MainMenu />
         }
       />
 
