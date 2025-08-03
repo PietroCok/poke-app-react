@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, type ButtonProps } from './Button';
+import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 export interface ButtonIconProps extends ButtonProps {
-  icon: any,
+  icon: IconDefinition
 }
 
 export function ButtonIcon({ icon, classes, tooltip, disabled, clickHandler }: ButtonIconProps) {
