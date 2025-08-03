@@ -8,9 +8,21 @@ import { faBars, faCloud, faStar, faSun, faUser, faX } from "@fortawesome/free-s
 export function MainMenu() {
   const [isOpen, setIsOpen] = useState(false);
 
+  function checkCloseMenu(event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>){
+    // Close the menu only if the user has not clicked one of the buttons
+    const target = event.target as HTMLElement;
+    if(target.id == "main-menu-overlay" || target.id == "main-menu-options"){
+      setIsOpen(false);
+    }
+  }
+
   function renderMenuOptions() {
     return (
-      <div id="main-menu-overlay">
+      <div 
+        id="main-menu-overlay"
+        onClick={checkCloseMenu}
+        onTouchStart={checkCloseMenu}
+      >
         <div
           id="main-menu-options"
           className="flex flex-column align-end gap-1"
