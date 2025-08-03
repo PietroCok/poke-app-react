@@ -19,7 +19,7 @@ const config: AppConfig = appConfig;
 export default function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename='poke-app-react'>
         <Routes>
           <Route path="/login" element={<Login />} />
 
