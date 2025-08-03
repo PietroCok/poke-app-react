@@ -22,29 +22,31 @@ export function selectionReducer(state: IngredientsState, action: Action): Ingre
 
     case ACTIONS.ADD_INGREDIENT: {
       const { group, ingredient } = action.payload;
-      return {
+      const updatedState = {
         ...state,
         [group]: [...state[group], ingredient]
       };
+      return updatedState;
     }
 
     case ACTIONS.REMOVE_INGREDIENT: {
       const { group, ingredientId } = action.payload;
-      return {
+      const updatedState = {
         ...state,
         [group]: state[group].filter((ingredient: ContextIngredient) => ingredient.id != ingredientId)
       };
+      return updatedState;
     }
 
     case ACTIONS.INCREMENT_QUANTITY: {
       const { group, ingredientId } = action.payload;
-
-      return {
+      const updatedState = {
         ...state,
         [group]: state[group].map((ingredient: ContextIngredient) =>
           ingredient.id == ingredientId ? { ...ingredient, quantity: ingredient.quantity + 1 } : ingredient
         )
       }
+      return updatedState;
     }
 
     case ACTIONS.RESET: {

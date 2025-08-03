@@ -1,14 +1,18 @@
-import { createContext, useContext, useReducer, useState } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
-import type { AppConfig, ContextIngredient, SelectionContext } from "@/types";
+import type { AppConfig, ContextIngredient, IngredientsState, SelectionContext } from "@/types";
 
 import appConfig from '../../../config.json';
 import { ingredientIdToName } from "../../scripts/utils";
 import { ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
+import { useLocalStorage } from "../../hooks/localStorage";
 
 export interface SelectionProviderProps {
   children: React.ReactNode
 }
+
+export const ingredientsStorageKey = 'poke-ingredients';
+export const sizeStorageKey = 'poke-size';
 
 const config: AppConfig = appConfig;
 
@@ -22,14 +26,35 @@ export const useSelection = () => {
   return ctx;
 };
 
+const getIngredientsFromLocalstorage = (): IngredientsState => {
+  const _ingredients = localStorage.getItem(ingredientsStorageKey);
+  let ingredients = {}
+  try {
+    if (_ingredients != null) {
+      ingredients = JSON.parse(_ingredients);
+      return ingredients;
+    }
+  } catch (error) { }
+
+  return emptyIngredients;
+}
+
 export function SelectionProvider({ children }: SelectionProviderProps) {
-  const [size, setSize] = useState(defaultSize);
-  const [ingredients, dispatch] = useReducer(selectionReducer, emptyIngredients);
+  const [size, setSize] = useLocalStorage(sizeStorageKey, defaultSize);
+  const [ingredients, dispatch] = useReducer(
+    selectionReducer,
+    emptyIngredients,
+    getIngredientsFromLocalstorage
+  );
+
+  useEffect(() => {
+    localStorage.setItem(ingredientsStorageKey, JSON.stringify(ingredients));
+  }, [ingredients]);
 
   // Add or increase quantity of ingredient to selection
   const addIngredient = (group: string, ingredientId: string) => {
     const ingredientName = ingredientIdToName(ingredientId);
-    const price = config.gruppi[group]?.opzioni.find(i => i.name == ingredientName)?.prezzo || 0;
+    const price = config.gruppi[group]?.opzioni.find(i => i.name == ingredientName)?.prezzo ?? 0;
 
     dispatch({
       type: ACTIONS.ADD_INGREDIENT,
@@ -76,7 +101,8 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
     if (groupCount(groupId) < groupLimit) return 0;
 
     // order selected ingredient based on extra price
-    const sortedIngredients = ingredients[groupId].sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price).slice();
+    // NB: shallow copy, do NOT edit ingredients props from this array, as they still reference the original state
+    const sortedIngredients = ingredients[groupId].slice().sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price);
 
     // Find te most expensive items price
     let deductedCounter = 0;
@@ -107,7 +133,7 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
 
   // Return limit for current size and groupId
   const getLimit = (groupId: string) => {
-    return config.dimensioni[size]?.limiti[groupId] || 0;
+    return config.dimensioni[size]?.limiti[groupId] ?? 0;
   }
 
   // Reset ingredients selected
