@@ -13,31 +13,34 @@ import { Cart } from "./pages/Cart";
 import { Favorites } from "./pages/Favorites";
 import { RemoteCarts } from "./pages/RemoteCarts";
 import { PersonalArea } from "./pages/PersonalArea";
+import { ThemeProvider } from './context/ThemeContext';
 
 const config: AppConfig = appConfig;
 
 export default function App() {
   return (
     <AuthProvider>
-      <Router basename='poke-app-react'>
-        <Routes>
-          <Route path="/login" element={<Login />} />
+      <ThemeProvider>
+        <Router basename='poke-app-react'>
+          <Routes>
+            <Route path="/login" element={<Login />} />
 
-          <Route element={<ProtectedRoute />}>
+            <Route element={<ProtectedRoute />}>
 
-            <Route path="/" element={
-              <SelectionProvider>
-                <Home {...config} />
-              </SelectionProvider>
-            } />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/favorites" element={<Favorites />} />
-            <Route path="/remote-carts" element={<RemoteCarts />} />
-            <Route path="/personal" element={<PersonalArea />} />
+              <Route path="/" element={
+                <SelectionProvider>
+                  <Home {...config} />
+                </SelectionProvider>
+              } />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/favorites" element={<Favorites />} />
+              <Route path="/remote-carts" element={<RemoteCarts />} />
+              <Route path="/personal" element={<PersonalArea />} />
 
-          </Route>
-        </Routes>
-      </Router>
+            </Route>
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </AuthProvider>
   )
 }

@@ -3,8 +3,8 @@ import { createPortal } from "react-dom";
 import { NavLink } from "react-router-dom";
 
 import { ButtonIcon } from "./ButtonIcon";
-import { faBars, faCloud, faStar, faSun, faUser, faX } from "@fortawesome/free-solid-svg-icons";
-
+import { faBars, faCloud, faStar, faUser, faX } from "@fortawesome/free-solid-svg-icons";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function MainMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,9 +34,8 @@ export function MainMenu() {
             classes="accent-1 border-r-10"
           />
 
-          <ButtonIcon
-            icon={faSun}
-            classes="border-r-10"
+          <ThemeSwitcher 
+            setIsOpen={setIsOpen}
           />
 
           <NavLink
@@ -58,14 +57,10 @@ export function MainMenu() {
           </NavLink>
 
 
-          <NavLink
-            to={"/remote-carts"}
-          >
-            <ButtonIcon
-              icon={faCloud}
-              classes="accent-3 border-r-10"
-            />
-          </NavLink>
+          <ButtonIcon
+            icon={faCloud}
+            classes="accent-3 border-r-10"
+          />
         </div>
       </div>
     )
