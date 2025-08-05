@@ -16,72 +16,52 @@
   opacity: .4;
 }
 
-.accent-1 {
-  color: var(--accent-1);
+.main-bg {
+  background-color: var(--main-bg);
 }
 
-.accent-1-invert {
-  background-color: var(--accent-1);
-}
-
-.accent-2 {
-  color: var(--accent-2);
-}
-
-.accent-2-invert {
-  background-color: var(--accent-2);
-}
-
-.accent-3 {
-  color: var(--accent-3);
-}
-
-.accent-3-invert {
-  background-color: var(--accent-3);
-}
-
-.accent-4 {
-  color: var(--accent-4);
-}
-
-.accent-4-invert {
-  background-color: var(--accent-4);
-}
-
-.accent-info {
-  color: var(--accent-info);
-}
-
-.accent-info-invert {
-  background-color: var(--accent-info);
-}
-
-.accent-warn {
-  color: var(--accent-warn);
-}
-
-.accent-warn-invert {
-  background-color: var(--accent-warn);
-}
-
-.accent-main {
+.main-color {
   color: var(--main-color);
 }
 
-.accent-main-invert {
-  background-color: var(--main-color);
+.alt-bg {
+  background-color: var(--alt-bg);
 }
 
-.accent-bg {
-  color: var(--main-bg);
+.primary-bg {
+  background-color: var(--primary-color);
 }
 
-.accent-bg-invert {
-  background-color: var(--main-bg);
+.primary-color {
+  color: var(--primary-color);
 }
 
-.main-bg {
-  background-color: var(--main-bg);
+.primary-contrast-bg {
+  background-color: var(--primary-contrast);
+}
+
+.primary-contrast-color {
+  color: var(--primary-contrast);
+}
+
+.red-bg {
+  background-color: var(--accent-red);
+}
+
+.red {
+  color: var(--accent-red);
+}
+
+.gold-bg {
+  background-color: var(--accent-gold);
+}
+
+.gold {
+  color: var(--accent-gold);
+}
+
+.transparent {
+  color: transparent;
 }
 
 .transparent-bg {

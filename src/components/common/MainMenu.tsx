@@ -31,19 +31,17 @@ export function MainMenu() {
           <ButtonIcon
             icon={faX}
             clickHandler={() => setIsOpen(false)}
-            classes="accent-1 border-r-10"
+            classes="red border-r-10"
           />
 
-          <ThemeSwitcher 
-            setIsOpen={setIsOpen}
-          />
+          <ThemeSwitcher />
 
           <NavLink
             to={"/favorites"}
           >
             <ButtonIcon
               icon={faStar}
-              classes="accent-2 border-r-10"
+              classes="gold border-r-10"
             />
           </NavLink>
 
@@ -52,14 +50,14 @@ export function MainMenu() {
           >
             <ButtonIcon
               icon={faUser}
-              classes="accent-3 border-r-10"
+              classes="primary-color border-r-10"
             />
           </NavLink>
 
 
           <ButtonIcon
             icon={faCloud}
-            classes="accent-3 border-r-10"
+            classes="primary-color border-r-10"
           />
         </div>
       </div>
@@ -71,7 +69,7 @@ export function MainMenu() {
       <div id="main-menu">
         <ButtonIcon
           icon={faBars}
-          classes="accent-3 border-r-10"
+          classes="primary-color border-r-10"
           clickHandler={() => setIsOpen(true)}
           tooltip="Apri menu"
         />

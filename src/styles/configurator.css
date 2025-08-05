@@ -25,7 +25,8 @@ input[type="checkbox"] {
 }
 
 .size-container.selected {
-  border-color: var(--accent-4);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px 0 var(--primary-color) inset;
 }
 
 .size-limits {
@@ -38,7 +39,8 @@ input[type="checkbox"] {
 .size-price {
   font-weight: bold;
   padding: 2px 5px;
-  background-color: var(--accent-4);
+  background-color: var(--primary-color);
+  color: var(--main-bg);
 }
 
 /* END SIZES */
@@ -61,20 +63,20 @@ input[type="checkbox"] {
 }
 
 .ingredient-group-name {
-  background-color: var(--accent-3);
-  color: var(--main-bg);
+  background-color: var(--primary-color);
+  color: var(--primary-contrast);
   width: 150px;
   text-align: center;
   padding: 5px;
 }
 
 .extra-label {
-  color: var(--accent-1);
+  color: var(--accent-red);
   font-size: .8rem;
 }
 
 .extra-price {
-  color: var(--accent-1);
+  color: var(--accent-red);
   display: flex;
   gap: 5px;
 }
@@ -111,7 +113,8 @@ input[type="checkbox"] {
 }
 
 .ingredient-container.selected {
-  border-color: var(--accent-4)
+  border-color: var(--primary-color);
+  box-shadow: 0 0 10px 0 var(--primary-color) inset;
 }
 
 .ingredient-container label {
@@ -126,9 +129,9 @@ input[type="checkbox"] {
   position: absolute;
   right: 0;
   top: 0;
-  transform: rotate(-20deg) translate(20px, -8px);
+  transform: rotate(-20deg) translate(22px, -8px);
   font-weight: bold;
-  color: var(--accent-1);
+  color: var(--accent-red);
   background-color: var(--main-bg);
   padding: 5px;
   border-radius: 50%;

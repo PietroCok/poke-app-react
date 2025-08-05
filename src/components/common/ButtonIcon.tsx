@@ -6,7 +6,7 @@ export interface ButtonIconProps extends ButtonProps {
   icon: IconDefinition
 }
 
-export function ButtonIcon({ icon, classes, tooltip, disabled, clickHandler }: ButtonIconProps) {
+export function ButtonIcon({ icon, style, classes, tooltip, disabled, clickHandler }: ButtonIconProps) {
   const _classes = classes ? `${classes} ` : '';
 
   return (
@@ -15,6 +15,7 @@ export function ButtonIcon({ icon, classes, tooltip, disabled, clickHandler }: B
       clickHandler={clickHandler}
       tooltip={tooltip}
       disabled={disabled}
+      style={style}
     >
       <FontAwesomeIcon icon={icon} />
     </Button>

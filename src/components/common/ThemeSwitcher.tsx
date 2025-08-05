@@ -1,48 +1,85 @@
 import { useState } from "react";
 
-import { type Theme, type ThemeOption } from "../../context/ThemeContext";
+import { type Theme } from "../../context/ThemeContext";
 
 import { ButtonIcon } from "./ButtonIcon";
 import { iconMapping, useTheme, themeOptions } from "../../context/ThemeContext";
+import { faSquare } from "@fortawesome/free-solid-svg-icons";
+
+// red, orange, acquagreen, cyan, pink
+const hues = [0, 30, 150, 210, 310];
 
 export interface ThemeSwitcherProps {
-  setIsOpen: (status: boolean) => void
 }
 
-export function ThemeSwitcher({ setIsOpen: setMenuIsOpen }: ThemeSwitcherProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+export function ThemeSwitcher({ }: ThemeSwitcherProps) {
+  const [isThemeOpen, setIsThemeOpen] = useState(false);
+  const [isColorOpen, setisColorOpen] = useState(false);
+  const { theme, setTheme, color, setColor } = useTheme();
 
   const selectedIcon = iconMapping[theme];
 
   const updateTheme = (theme: Theme) => {
     setTheme(theme);
-    setMenuIsOpen(false);
+    setIsThemeOpen(false);
+  }
+
+  const updateColor = (hue: number) => {
+    setColor(hue);
+    setisColorOpen(false);
   }
 
   return (
     <div
-      className="flex gap-1 row-reverse"
+      className="flex gap-1 flex-column align-end"
     >
-      <ButtonIcon
-        icon={selectedIcon}
-        clickHandler={() => setIsOpen(!isOpen)}
-        classes="border-r-10"
-      />
+      {/* Theme mode selector */}
+      <div
+        className="flex gap-1 row-reverse"
+      >
+        <ButtonIcon
+          icon={selectedIcon}
+          clickHandler={() => setIsThemeOpen(!isThemeOpen)}
+          classes="selected-theme border-r-10"
+        />
 
-      {isOpen &&
-        <div
-          className="flex gap-1"
-        >
-          {renderOtherOptions(themeOptions, theme, updateTheme)}
-        </div>
-      }
+        {isThemeOpen &&
+          <div
+            className="flex gap-1"
+          >
+            {renderOtherThemeOptions(theme, updateTheme)}
+          </div>
+        }
+      </div>
+
+      {/* Theme color selector */}
+      <div
+        className="flex gap-1 row-reverse"
+      >
+        <ButtonIcon
+          icon={faSquare}
+          classes="transparent border-r-10"
+          clickHandler={() => setisColorOpen(!isColorOpen)}
+          style={{
+            backgroundColor: getHls(color)
+          }}
+        />
+
+        {
+          isColorOpen &&
+          <div
+            className="flex gap-1"
+          >
+            {renderOtherColorOptions(color, updateColor)}
+          </div>
+        }
+      </div>
     </div>
   )
 }
 
-function renderOtherOptions(options: ThemeOption[], selected: Theme, updateTheme: (theme: Theme) => void) {
-  return options.map(option => {
+function renderOtherThemeOptions(selected: Theme, updateTheme: (theme: Theme) => void) {
+  return themeOptions.map(option => {
     if (option.theme === selected) return null;
 
     return (
@@ -54,4 +91,26 @@ function renderOtherOptions(options: ThemeOption[], selected: Theme, updateTheme
       />
     )
   })
+}
+
+function renderOtherColorOptions(hue: number, updateColor: (hue: number) => void) {
+  return hues.map(h => {
+    if (h === hue) return null;
+
+    const hls = getHls(h);
+    return (
+      <ButtonIcon
+        icon={faSquare}
+        classes="transparent border-r-10"
+        style={{
+          backgroundColor: hls
+        }}
+        clickHandler={() => updateColor(h)}
+      />
+    )
+  })
+}
+
+const getHls = (hue: number) => {
+  return `hsl(${hue}, var(--theme-saturation-primary), var(--theme-lightness-primary))`
 }

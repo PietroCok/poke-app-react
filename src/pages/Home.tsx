@@ -27,7 +27,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
           >
             <ButtonIcon
               icon={faCartShopping}
-              classes="accent-2 border-r-10"
+              classes="gold border-r-10"
               tooltip="Carello"
             />
           </NavLink>
@@ -49,7 +49,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
         left={
           <ButtonText
             text="cancella"
-            classes="accent-1-invert accent-bg border-r-10"
+            classes="red-bg primary-contrast-color border-r-10"
             clickHandler={resetContext}
             disabled={isEmpty}
             tooltip="Rimuove la selezione attuale"
@@ -58,7 +58,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
         right={
           <ButtonText
             text="salva"
-            classes="accent-3-invert accent-bg border-r-10"
+            classes="primary-bg primary-contrast-color border-r-10"
             disabled={isEmpty}
             tooltip="Salva la selezione attuale"
           />
