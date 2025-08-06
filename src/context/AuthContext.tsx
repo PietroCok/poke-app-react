@@ -48,6 +48,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // simulate login attempt
     // await new Promise(resolve => setTimeout(resolve, 2000));
 
+    // .env variable example
+    console.log(import.meta.env.VITE_PROJECT_ID);
+
     await login();
   }
 
