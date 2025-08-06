@@ -4,9 +4,6 @@ export type AppConfig = {
   },
   gruppi: {
     [key: string]: Group
-  },
-  firebaseConfig: {
-    [key: string]: string | number
   }
 }
 

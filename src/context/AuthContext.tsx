@@ -2,6 +2,10 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 import type { AuthContextType } from "@/types";
 
+import { firebaseAuth, firebaseSignIn, firebaseSignUp } from "../firebase/auth";
+import { onAuthStateChanged, signOut, type User } from "firebase/auth";
+import { LoadingSpinner } from "../components/common/LoadingSpinner";
+
 export interface AuthProviderProps {
   children: React.ReactNode
 }
@@ -14,49 +18,59 @@ export const useAuth = () => {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isOffline, setIsOffline] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [isOffline, setIsOffline] = useState(false);
 
   useEffect(() => {
-    tryAutoLogin()
-      .finally(() => {
-        console.log('End of auto login attempt');
-        setLoading(false)
-      });
+    onAuthStateChanged(firebaseAuth, async (user) => {
+      console.log('onAuthStateChanged', user);
+
+      if (user) {
+        setUser(user);
+        setIsOffline(false);
+      } else {
+        setUser(null);
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setLoading(false);
+    });
   }, []);
 
-  const login = async () => {
-    console.log('user logged in');
-    setIsAuthenticated(true);
-    setIsOffline(false);
+  const login = async (email: string, password: string) => {
+    firebaseSignIn(email, password);
   };
 
-  const setOffline = (value: boolean) => {
-    console.log('user is navigating in offline mode');
+  const signUp = async (email: string, password: string) => {
+    firebaseSignUp(email, password);
+  }
+
+  const setOffline = async (value: boolean) => {
+    if (user) {
+      await logout();
+    }
     setIsOffline(value);
   }
 
   const logout = async () => {
-    console.log('user logged out');
-    setIsAuthenticated(false);
-    setIsOffline(false);
+    signOut(firebaseAuth);
   };
 
-  const tryAutoLogin = async () => {
-    console.log('Auto login attempt');
-    // simulate login attempt
-    // await new Promise(resolve => setTimeout(resolve, 2000));
-
-    // .env variable example
-    console.log(import.meta.env.VITE_PROJECT_ID);
-
-    await login();
+  // Shows loading screen until we know the user is for sure logged or not
+  if (loading) {
+    return (
+      <LoadingSpinner
+        color={"var(--primary-color)"}
+        duration={2}
+        radius={40}
+      />
+    )
   }
 
   return (
-    <AuthContext.Provider 
-      value={{ isAuthenticated, isOffline, loading, login, logout, setOffline }}
+    <AuthContext.Provider
+      value={{ user, isOffline, login, logout, signUp, setOffline }}
     >
       {children}
     </AuthContext.Provider>
