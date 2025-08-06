@@ -1,0 +1,234 @@
+{
+  "dimensioni": {
+    "regular": {
+      "limiti": {
+        "proteine": 1,
+        "condimenti": 4,
+        "croccantini": 2,
+        "salse": 3
+      },
+      "prezzo": 8.90
+    },
+    "large": {
+      "limiti": {
+        "proteine": 2,
+        "condimenti": 5,
+        "croccantini": 2,
+        "salse": 3
+      },
+      "prezzo": 10.90
+    }
+  },
+  "gruppi": {
+    "proteine": {
+      "extras": "extra salmone tonno crudo € 2.00 / altri € 1.50",
+      "opzioni": [
+        {
+          "name": "salmone crudo",
+          "prezzo": 2
+        },
+        {
+          "name": "tonno crudo",
+          "prezzo": 2
+        },
+        {
+          "name": "salmone cotto",
+          "prezzo": 1.5
+        },
+        {
+          "name": "tonno sott'olio",
+          "prezzo": 1.5
+        },
+        {
+          "name": "gamberi cotti",
+          "prezzo": 1.5
+        },
+        {
+          "name": "tempura di gamberi",
+          "prezzo": 1.5
+        },
+        {
+          "name": "cotoletta di pollo",
+          "prezzo": 1.5
+        },
+        {
+          "name": "pollo cotto",
+          "prezzo": 1.5
+        },
+        {
+          "name": "tofu fresco",
+          "prezzo": 1.5
+        },
+        {
+          "name": "uova sode",
+          "prezzo": 1.5
+        },
+        {
+          "name": "uova al tegamino",
+          "prezzo": 1.5
+        }
+      ]
+    },
+    "condimenti": {
+      "extras": "extra € 0.50",
+      "opzioni": [
+        {
+          "name": "alghe wakame",
+          "prezzo": 0.5
+        },
+        {
+          "name": "mais",
+          "prezzo": 0.5
+        },
+        {
+          "name": "avocado",
+          "prezzo": 0.5
+        },
+        {
+          "name": "ceci",
+          "prezzo": 0.5
+        },
+        {
+          "name": "pomodorino",
+          "prezzo": 0.5
+        },
+        {
+          "name": "edamame",
+          "prezzo": 0.5
+        },
+        {
+          "name": "peperoni",
+          "prezzo": 0.5
+        },
+        {
+          "name": "fagioli",
+          "prezzo": 0.5
+        },
+        {
+          "name": "cetrioli",
+          "prezzo": 0.5
+        },
+        {
+          "name": "mango",
+          "prezzo": 0.5
+        },
+        {
+          "name": "carote",
+          "prezzo": 0.5
+        },
+        {
+          "name": "zenzero",
+          "prezzo": 0.5
+        },
+        {
+          "name": "ananas",
+          "prezzo": 0.5
+        },
+        {
+          "name": "olive nere",
+          "prezzo": 0.5
+        }
+      ]
+    },
+    "croccantini": {
+      "extras": "extra € 0.50",
+      "opzioni": [
+        {
+          "name" : "anacardi",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "mandorle",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "alghe nori",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "sesamo",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "tobico",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "kataifi",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "noci",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "cipolla croccante",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "pistacchio",
+          "prezzo": 0.5
+        }
+      ]
+    },
+    "salse": {
+      "extras": "extra € 0.50",
+      "opzioni": [
+        {
+          "name" : "olio di oliva",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "aceto balsamico",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "soia",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "maionese",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "philadelphia",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "teriyaki",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "wasabi",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "spicy maionese",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "salsa mango",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "salsa ponzu",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "salsa agrodolce",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "salsa agropiccante",
+          "prezzo": 0.5
+        },
+        {
+          "name" : "salsa yogurt",
+          "prezzo": 0.5
+        }
+      ]
+    }
+  },
+  "numero_telefono": "",
+  "cart_limit": 50
+}
