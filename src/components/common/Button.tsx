@@ -1,3 +1,4 @@
+import type { ButtonClickEvent } from "@/types"
 import type { ReactNode } from "react"
 
 export interface ButtonProps {
@@ -6,10 +7,11 @@ export interface ButtonProps {
   classes?: string
   tooltip?: string
   disabled?: boolean
-  clickHandler?: () => void
+  type?: "submit" | "reset" | "button" | undefined
+  clickHandler?: (event: ButtonClickEvent) => void
 }
 
-export function Button({ children, style, classes, tooltip, disabled, clickHandler }: ButtonProps) {
+export function Button({ children, style, classes, tooltip, disabled, type, clickHandler }: ButtonProps) {
   let _classes = classes ? `${classes} ` : '';
   if (disabled) {
     _classes += 'disabled '
@@ -18,9 +20,10 @@ export function Button({ children, style, classes, tooltip, disabled, clickHandl
   return (
     <button
       className={`${_classes}button`}
-      onClick={clickHandler}
+      onClick={(event: ButtonClickEvent) => clickHandler ? clickHandler(event): ''}
       title={tooltip}
       style={style}
+      type={type}
     >
       {children}
     </button>
