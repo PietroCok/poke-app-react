@@ -14,16 +14,18 @@ import { Favorites } from "./pages/Favorites";
 import { RemoteCarts } from "./pages/RemoteCarts";
 import { PersonalArea } from "./pages/PersonalArea";
 import { ThemeProvider } from './context/ThemeContext';
+import { Registration } from './pages/Register';
 
 const config: AppConfig = appConfig;
 
 export default function App() {
   return (
-    <AuthProvider>
-      <ThemeProvider>
+    <ThemeProvider>
+      <AuthProvider>
         <Router basename='poke-app-react'>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Registration />} />
 
             <Route element={<ProtectedRoute />}>
 
@@ -40,8 +42,8 @@ export default function App() {
             </Route>
           </Routes>
         </Router>
-      </ThemeProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
 
