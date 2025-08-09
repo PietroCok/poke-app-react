@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { FirebaseError } from "firebase/app";
 import { AuthErrorCodes } from "firebase/auth";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -14,6 +14,7 @@ import { LoadingSpinner } from "../components/common/LoadingSpinner";
 
 export function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, setOffline } = useAuth();
 
   const [email, setEmail] = useState("");
@@ -24,6 +25,10 @@ export function Login() {
   const [waiting, setWaiting] = useState(false);
 
   const canLogin = !!(email && password) && !(emailMessage || passwordMessage);
+  // Save path the user tried to navigate to
+  const from = location.state?.from?.pathname || '/';
+  // Avoids redirect to the same page
+  const redirectTo = from && from !== "/login" ? from : "/";
 
   const updatePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = event.target.value;
@@ -69,13 +74,16 @@ export function Login() {
 
     setWaiting(false);
     console.log(loginResult);
+
+    // Redirect user to requested page or home
+    navigate(redirectTo, { replace: true });
   }
 
   const continueAsOffline = (event: ButtonClickEvent) => {
     event.preventDefault();
     if (confirm("Forzando la navigazione offline alcune funzionalità non saranno disponibili, continuare?")) {
       setOffline(true);
-      navigate('/');
+      navigate(redirectTo, { replace: true });
     }
   }
 
