@@ -39,11 +39,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const login = async (email: string, password: string) => {
-    firebaseSignIn(email, password);
+    return await firebaseSignIn(email, password);
   };
 
   const signUp = async (email: string, password: string) => {
-    firebaseSignUp(email, password);
+    return await firebaseSignUp(email, password);
   }
 
   const setOffline = async (value: boolean) => {

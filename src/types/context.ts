@@ -1,4 +1,5 @@
-import type { User } from "firebase/auth"
+import type { FirebaseError } from "firebase/app"
+import type { User, UserCredential } from "firebase/auth"
 
 export type ContextIngredient = {
   id: string,
@@ -30,8 +31,8 @@ export type SelectionContext = {
 export type AuthContextType = {
   user: User | null;
   isOffline: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>;
+  signUp: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>;
   logout: () => Promise<void>;
   setOffline: (value: boolean) => void;
 }
