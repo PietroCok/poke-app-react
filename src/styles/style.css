@@ -48,6 +48,20 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
+a,
+a:visited,
+.fake-link {
+  color: var(--primary-color);
+}
+
+.fake-link{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#root {
+  height: 100svh;
+}
 
 /* PAGE HEADER */
 
@@ -138,4 +152,6 @@ body {
 }
 
 /* END MAIN MENU */
+
+
 
