@@ -28,7 +28,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
             <ButtonIcon
               icon={faCartShopping}
               classes="gold border-r-10"
-              tooltip="Carello"
+              tooltip="Carrello"
             />
           </NavLink>
         }
