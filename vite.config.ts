@@ -1,10 +1,23 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { resolve } from 'path'
+import { copyFileSync } from 'fs'
 
 // https://vite.dev/config/
 export default defineConfig({
   base: '/poke-app-react',
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'copy-404', // serves index.html even when the page is not found
+      closeBundle() {
+        copyFileSync(
+          resolve(__dirname, 'dist/index.html'),
+          resolve(__dirname, 'dist/404.html')
+        )
+      }
+    }
+  ],
   server: {
     host: true, // same as 0.0.0.0
   },

@@ -15,6 +15,7 @@ import { RemoteCarts } from "./pages/RemoteCarts";
 import { PersonalArea } from "./pages/PersonalArea";
 import { ThemeProvider } from './context/ThemeContext';
 import { Registration } from './pages/Register';
+import { NotFound } from './pages/NotFound';
 
 const config: AppConfig = appConfig;
 
@@ -38,6 +39,7 @@ export default function App() {
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/remote-carts" element={<RemoteCarts />} />
               <Route path="/personal" element={<PersonalArea />} />
+              <Route path="*" element={<NotFound />} />
 
             </Route>
           </Routes>
