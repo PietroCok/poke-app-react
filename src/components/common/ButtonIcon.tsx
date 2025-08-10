@@ -1,9 +1,7 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, type ButtonProps } from './Button';
-import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 export interface ButtonIconProps extends ButtonProps {
-  icon: IconDefinition
+  icon: React.ReactElement
 }
 
 export function ButtonIcon({ icon, style, classes, tooltip, disabled, clickHandler }: ButtonIconProps) {
@@ -17,7 +15,7 @@ export function ButtonIcon({ icon, style, classes, tooltip, disabled, clickHandl
       disabled={disabled}
       style={style}
     >
-      <FontAwesomeIcon icon={icon} />
+      {icon}
     </Button>
   )
 }

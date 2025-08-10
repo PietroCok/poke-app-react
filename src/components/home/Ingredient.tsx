@@ -1,5 +1,7 @@
-import { ButtonIcon } from "../common/ButtonIcon";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
+import { ButtonIcon } from "../common/ButtonIcon";
 
 export interface IngredientProps {
   ingredientId: string,
@@ -53,7 +55,7 @@ export function Ingredient({
       {
         isSelected &&
         <ButtonIcon
-          icon={faPlus}
+          icon={<FontAwesomeIcon icon={faPlus} />}
           classes={"flex flex-center transparent-bg h-100 aspect-1 border-round right-0 absolute"}
           clickHandler={() => increaseQuantity(ingredientId)}
         />

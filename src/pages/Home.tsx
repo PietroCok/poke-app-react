@@ -1,5 +1,7 @@
 import { NavLink } from "react-router-dom";
 import type { AppConfig, Group } from "@/types";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 
 import { IngredientGroup } from "../components/home/IngredientGroup";
 import { SizeSelector } from "../components/home/SizeSelector";
@@ -8,7 +10,6 @@ import { ButtonText } from "../components/common/ButtonText";
 import { useSelection } from "../context/configurator/SelectionContext";
 import { PageHeader } from "../components/common/PageHeader";
 import { ButtonIcon } from "../components/common/ButtonIcon";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { MainMenu } from "../components/common/MainMenu";
 
 export function Home({ dimensioni, gruppi }: AppConfig) {
@@ -26,7 +27,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
             to={"/cart"}
           >
             <ButtonIcon
-              icon={faCartShopping}
+              icon={<FontAwesomeIcon icon={faCartShopping} />}
               classes="gold border-r-10"
               tooltip="Carrello"
             />

@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faCartShopping, faRightFromBracket, faShareNodes, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
 import { ButtonIcon } from "./ButtonIcon";
-import { faBars, faCloud, faRightFromBracket, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useAuth } from "../../context/AuthContext";
+import { StackedIcons } from "./StackedIcons";
 
 export function MainMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,9 +33,10 @@ export function MainMenu() {
           className="flex flex-column align-end gap-1"
         >
           <ButtonIcon
-            icon={faX}
+            icon={<FontAwesomeIcon icon={faX} />}
             clickHandler={() => setIsOpen(false)}
             classes="red border-r-10"
+            tooltip="Chiudi"
           />
 
           <ThemeSwitcher />
@@ -42,20 +45,26 @@ export function MainMenu() {
             to={"/favorites"}
           >
             <ButtonIcon
-              icon={faStar}
+              icon={<FontAwesomeIcon icon={faStar} />}
               classes="gold border-r-10"
+              tooltip="Preferiti"
             />
           </NavLink>
 
           <ButtonIcon
-            icon={faRightFromBracket}
+            icon={<FontAwesomeIcon icon={faRightFromBracket} />}
             classes="red border-r-10"
-            tooltip="logout"
+            tooltip="Logout"
             clickHandler={logout}
           />
 
           <ButtonIcon
-            icon={faCloud}
+            icon={
+              <StackedIcons
+                outer={<FontAwesomeIcon color={`var(--accent-gold)`} icon={faCartShopping}/>}
+                inner={<FontAwesomeIcon color={`var(--primary-color)`} icon={faShareNodes}/>}
+              />
+            }
             classes="primary-color border-r-10"
             tooltip="Carrelli condivisi"
           />
@@ -68,7 +77,7 @@ export function MainMenu() {
     return (
       <div id="main-menu">
         <ButtonIcon
-          icon={faBars}
+          icon={<FontAwesomeIcon icon={faBars} />}
           classes="primary-color border-r-10"
           clickHandler={() => setIsOpen(true)}
           tooltip="Apri menu"

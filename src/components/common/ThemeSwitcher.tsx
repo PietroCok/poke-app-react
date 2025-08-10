@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { faSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { type Theme } from "../../context/ThemeContext";
 
 import { ButtonIcon } from "./ButtonIcon";
 import { iconMapping, useTheme, themeOptions } from "../../context/ThemeContext";
-import { faSquare } from "@fortawesome/free-solid-svg-icons";
 
 // red, orange, acquagreen, cyan, pink
 const hues = [0, 30, 150, 210, 310];
@@ -38,9 +39,10 @@ export function ThemeSwitcher({ }: ThemeSwitcherProps) {
         className="flex gap-1 row-reverse"
       >
         <ButtonIcon
-          icon={selectedIcon}
+          icon={<FontAwesomeIcon icon={selectedIcon} />}
           clickHandler={() => setIsThemeOpen(!isThemeOpen)}
           classes="selected-theme border-r-10"
+          tooltip={isThemeOpen ? theme : "Scelta tema"}
         />
 
         {isThemeOpen &&
@@ -57,9 +59,10 @@ export function ThemeSwitcher({ }: ThemeSwitcherProps) {
         className="flex gap-1 row-reverse align-start"
       >
         <ButtonIcon
-          icon={faSquare}
+          icon={<FontAwesomeIcon icon={faSquare} />}
           classes="transparent border-r-10"
           clickHandler={() => setisColorOpen(!isColorOpen)}
+          tooltip={isColorOpen ? "" : "Scelta colore"}
           style={{
             backgroundColor: getHls(color)
           }}
@@ -85,9 +88,10 @@ function renderOtherThemeOptions(selected: Theme, updateTheme: (theme: Theme) =>
     return (
       <ButtonIcon
         key={option.theme}
-        icon={option.icon}
+        icon={<FontAwesomeIcon icon={option.icon} />}
         clickHandler={() => updateTheme(option.theme)}
         classes="border-r-10"
+        tooltip={option.theme}
       />
     )
   })
@@ -101,7 +105,7 @@ function renderOtherColorOptions(hue: number, updateColor: (hue: number) => void
     return (
       <ButtonIcon
         key={h}
-        icon={faSquare}
+        icon={<FontAwesomeIcon icon={faSquare} />}
         classes="transparent border-r-10"
         style={{
           backgroundColor: hls
