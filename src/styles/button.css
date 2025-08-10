@@ -20,7 +20,7 @@
   background-color: var(--alt-bg);
 }
 
-.icon-only>* {
+.icon-only svg {
   width: 2rem;
   height: 2rem;
   display: flex;
@@ -28,6 +28,18 @@
   align-items: center;
 }
 
+.stacked-icons-container {
+  position: relative;
+}
+
+.icon-only .stacked-icons-inner svg {
+  position: absolute;
+  width: 1.25rem;
+  height: 1.25rem;
+  top: 75%;
+  left: 75%;
+  transform: translate(-50%, -50%);
+}
 
 .button-text {
   font-weight: bold;
