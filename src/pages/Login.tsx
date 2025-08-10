@@ -62,12 +62,24 @@ export function Login() {
     const loginResult = await login(email, password);
     if (loginResult instanceof FirebaseError) {
       switch (loginResult.code) {
+
+        // Should not happen
         case AuthErrorCodes.INVALID_EMAIL:
           setEmailMessage('Mail non valida');
           break;
+
+        // Should not happen
+        case AuthErrorCodes.INVALID_PASSWORD:
+          setPasswordMessage('Password non valida');
+          break;
+
         case AuthErrorCodes.INVALID_LOGIN_CREDENTIALS:
           setLoginMessage('Credenziali errate');
           setPassword('');
+          break;
+
+        default:
+          setLoginMessage('Impossibile accedere. Riprova più tardi.');
           break;
       }
     }
@@ -109,7 +121,7 @@ export function Login() {
         className="login-form"
       >
 
-        <h1 className="text-center">Login</h1>
+        <h1 className="text-center">Poke App</h1>
 
         <div className="email-form-container">
 
