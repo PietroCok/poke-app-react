@@ -3,12 +3,12 @@ import type { User, UserCredential } from "firebase/auth"
 
 export type ContextIngredient = {
   id: string,
-  quantity: number
-  price: number
+  quantity: number,
+  price: number,
 }
 
 export type IngredientsState = {
-  [key: string]: ContextIngredient[]
+  [key: string]: ContextIngredient[],
 }
 
 export type SelectionContext = {
@@ -25,14 +25,23 @@ export type SelectionContext = {
   groupCount: (groupId: string) => number,
   groupExtraPrice: (groupId: string) => number,
 
-  resetContext: () => void
+  resetContext: () => void,
+}
+
+
+export type UserProfile = {
+  email: string,
+  status: string,
+  role: string,
+  carts: any[],
 }
 
 export type AuthContextType = {
-  user: User | null;
-  isOffline: boolean;
-  login: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>;
-  signUp: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>;
-  logout: () => Promise<void>;
-  setOffline: (value: boolean) => void;
+  user: User | null,
+  profile: UserProfile | null,
+  isOffline: boolean,
+  login: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>,
+  signUp: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>,
+  logout: () => Promise<void>,
+  setOffline: (value: boolean) => void,
 }
