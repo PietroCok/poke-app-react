@@ -142,7 +142,6 @@ a:visited,
   bottom: 0;
 
   z-index: 999;
-  backdrop-filter: blur(1px);
 }
 
 #main-menu-options {
