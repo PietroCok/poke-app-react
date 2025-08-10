@@ -61,6 +61,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = async () => {
     signOut(firebaseAuth);
+
+    // Redirect to login should be automatic
   };
 
   // Shows loading screen until we know the user is for sure logged or not

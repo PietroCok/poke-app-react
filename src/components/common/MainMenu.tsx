@@ -3,11 +3,13 @@ import { createPortal } from "react-dom";
 import { NavLink } from "react-router-dom";
 
 import { ButtonIcon } from "./ButtonIcon";
-import { faBars, faCloud, faStar, faUser, faX } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCloud, faRightFromBracket, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { useAuth } from "../../context/AuthContext";
 
 export function MainMenu() {
   const [isOpen, setIsOpen] = useState(false);
+  const { logout } = useAuth();
 
   function checkCloseMenu(event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) {
     // Close the menu only if the user has not clicked one of the buttons
@@ -45,19 +47,17 @@ export function MainMenu() {
             />
           </NavLink>
 
-          <NavLink
-            to={"/personal"}
-          >
-            <ButtonIcon
-              icon={faUser}
-              classes="primary-color border-r-10"
-            />
-          </NavLink>
-
+          <ButtonIcon
+            icon={faRightFromBracket}
+            classes="red border-r-10"
+            tooltip="logout"
+            clickHandler={logout}
+          />
 
           <ButtonIcon
             icon={faCloud}
             classes="primary-color border-r-10"
+            tooltip="Carrelli condivisi"
           />
         </div>
       </div>
