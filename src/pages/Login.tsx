@@ -60,7 +60,6 @@ export function Login() {
     setWaiting(true);
 
     const loginResult = await login(email, password);
-    console.log(loginResult);
 
     setWaiting(false);
 
@@ -106,6 +105,7 @@ export function Login() {
     event.preventDefault();
 
     alert("Coming soon!");
+    return;
 
     // check if mail inserted
     if (!email.trim() || emailMessage) {
