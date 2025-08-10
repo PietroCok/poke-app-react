@@ -35,6 +35,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setProfile(await getUserProfile(user));
       } else {
         setUser(null);
+        setProfile(null);
       }
 
       setLoading(false);
