@@ -44,4 +44,5 @@ export type AuthContextType = {
   signUp: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>,
   logout: () => Promise<void>,
   setOffline: (value: boolean) => void,
+  deleteAccount: () => void
 }

@@ -2,16 +2,17 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faCartShopping, faRightFromBracket, faShareNodes, faStar, faX } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCartShopping, faShareNodes, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
 import { ButtonIcon } from "./ButtonIcon";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useAuth } from "../../context/AuthContext";
 import { StackedIcons } from "./StackedIcons";
+import { UserMenu } from "./UserMenu";
 
 export function MainMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const { logout } = useAuth();
+  const { user } = useAuth();
 
   function checkCloseMenu(event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) {
     // Close the menu only if the user has not clicked one of the buttons
@@ -51,23 +52,25 @@ export function MainMenu() {
             />
           </NavLink>
 
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faRightFromBracket} />}
-            classes="red border-r-10"
-            tooltip="Logout"
-            clickHandler={logout}
-          />
-
-          <ButtonIcon
-            icon={
-              <StackedIcons
-                outer={<FontAwesomeIcon color={`var(--accent-gold)`} icon={faCartShopping}/>}
-                inner={<FontAwesomeIcon color={`var(--primary-color)`} icon={faShareNodes}/>}
+          {/* The following are available only when the user is logged in */}
+          {
+            user &&
+            <>
+              <ButtonIcon
+                icon={
+                  <StackedIcons
+                    outer={<FontAwesomeIcon color={`var(--accent-gold)`} icon={faCartShopping} />}
+                    inner={<FontAwesomeIcon color={`var(--primary-color)`} icon={faShareNodes} />}
+                  />
+                }
+                classes="primary-color border-r-10"
+                tooltip="Carrelli condivisi"
               />
-            }
-            classes="primary-color border-r-10"
-            tooltip="Carrelli condivisi"
-          />
+
+              <UserMenu />
+            </>
+          }
+
         </div>
       </div>
     )
