@@ -119,6 +119,10 @@
   justify-content: space-between;
 }
 
+.align-start {
+  align-items: start;
+}
+
 .align-center {
   align-items: center;
 }

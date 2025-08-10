@@ -54,7 +54,7 @@ export function ThemeSwitcher({ }: ThemeSwitcherProps) {
 
       {/* Theme color selector */}
       <div
-        className="flex gap-1 row-reverse"
+        className="flex gap-1 row-reverse align-start"
       >
         <ButtonIcon
           icon={faSquare}
@@ -68,7 +68,7 @@ export function ThemeSwitcher({ }: ThemeSwitcherProps) {
         {
           isColorOpen &&
           <div
-            className="flex gap-1"
+            className="flex flex-wrap gap-1 just-end"
           >
             {renderOtherColorOptions(color, updateColor)}
           </div>
@@ -100,6 +100,7 @@ function renderOtherColorOptions(hue: number, updateColor: (hue: number) => void
     const hls = getHls(h);
     return (
       <ButtonIcon
+        key={h}
         icon={faSquare}
         classes="transparent border-r-10"
         style={{
