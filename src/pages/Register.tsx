@@ -71,6 +71,10 @@ export function Registration({ }: RegistrationProps) {
     setWaiting(true);
 
     const signupResult = await signUp(email, password);
+    console.log(signupResult);
+
+    setWaiting(false);
+
     if (signupResult instanceof FirebaseError) {
       switch (signupResult.code) {
 
@@ -93,10 +97,9 @@ export function Registration({ }: RegistrationProps) {
           setSignUpMessage('Impossible completare la registrazione. Riprova più tardi.');
           break;
       }
-    }
 
-    setWaiting(false);
-    console.log(signupResult);
+      return;
+    }
 
     navigate("/");
   }

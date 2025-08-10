@@ -60,6 +60,10 @@ export function Login() {
     setWaiting(true);
 
     const loginResult = await login(email, password);
+    console.log(loginResult);
+
+    setWaiting(false);
+
     if (loginResult instanceof FirebaseError) {
       switch (loginResult.code) {
 
@@ -82,10 +86,9 @@ export function Login() {
           setLoginMessage('Impossibile accedere. Riprova più tardi.');
           break;
       }
-    }
 
-    setWaiting(false);
-    console.log(loginResult);
+      return;
+    }
 
     // Redirect user to requested page or home
     navigate(redirectTo, { replace: true });
