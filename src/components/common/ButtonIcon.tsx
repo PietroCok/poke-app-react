@@ -4,16 +4,13 @@ export interface ButtonIconProps extends ButtonProps {
   icon: React.ReactElement
 }
 
-export function ButtonIcon({ icon, style, classes, tooltip, disabled, clickHandler }: ButtonIconProps) {
+export function ButtonIcon({ icon, classes, ...otherProps }: ButtonIconProps) {
   const _classes = classes ? `${classes} ` : '';
 
   return (
     <Button
       classes={`${_classes}icon icon-only alt-bg`}
-      clickHandler={clickHandler}
-      tooltip={tooltip}
-      disabled={disabled}
-      style={style}
+      {...otherProps}
     >
       {icon}
     </Button>

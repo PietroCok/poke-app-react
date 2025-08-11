@@ -1,5 +1,6 @@
 /* Common style for all buttons */
 .button {
+  display: block;
   cursor: pointer;
   border: 0 transparent;
 
