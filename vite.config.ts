@@ -21,4 +21,19 @@ export default defineConfig({
   server: {
     host: true, // same as 0.0.0.0
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('firebase')) return 'firebase';
+            if (id.includes('fontawesome')) return 'fontawesome';
+            if (id.includes('react')) return 'react';
+            return 'vendor';
+          }
+          if (id.includes('src/components')) return 'components';
+        }
+      }
+    }
+  }
 })
