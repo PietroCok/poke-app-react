@@ -1,20 +1,48 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 import { useAuth } from '../../context/AuthContext';
+import type { UserProfile } from "@/types";
+
+export interface ProtectedRouteProps {
+  roles?: string[]
+}
 
 /**
  * Checks if the user is authenticated or is navigating in offline mode
  */
-export function ProtectedRoute() {
-  const { user, isOffline } = useAuth();
+export function ProtectedRoute( { roles }: ProtectedRouteProps) {
+  const { user, isOffline, profile } = useAuth();
   const location = useLocation();
 
-  if (user || isOffline) {
-    return <Outlet />
+  if (!user && !isOffline) {
+    // Here we force to user to the login page and save the requested path
+    console.log('User not logged. Redirecting to login page...');
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  console.log('User not logged. Redirecting to login page...');
+  // Checks if the path requires the user to have a role
+  if(roles && (!profile || !isUserAthorized(profile, roles))){
+    console.log('User unauthorized. Redirecting to home page...');
+    return <Navigate to="/" replace />;
+  }
 
-  // Here we force to user to the login page and save the requested path
-  return <Navigate to="/login" state={{ from: location }} replace />
+  return <Outlet />
+}
+
+const isUserAthorized = (profile: UserProfile, roles: string[]) => {
+  if(roles.length == 0) {
+    return true;
+  }
+
+  if(!profile || !profile.role) {
+    return false;
+  }
+
+  for(const role of roles){
+    if(profile.role.indexOf(role) >= 0){
+      return true;
+    }
+  }
+
+  return false;
 }
