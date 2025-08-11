@@ -34,26 +34,54 @@ const createUserRecord = async (user: User): Promise<UserProfile | null> => {
   const profile = {
     ...userRecord,
     role: 'basic',
-    carts: []
+    carts: [],
+    uid: user.uid
   }
 
   return profile;
 }
 
+type FirebaseDbUser = {
+  [key: string]: UserProfile
+}
+
 export const getUserProfile = async (user: User): Promise<UserProfile | null> => {
-
-  // Simulate longer loading time
-  // await new Promise(resolve => setTimeout(resolve, 2000));
-
   try {
     const snapshot = await get(ref(firebaseDatabase, `/users/${user.uid}`));
     if (snapshot.exists()) {
-      return snapshot.val();
+      return {
+        ...snapshot.val(),
+        uid: user.uid
+      }
     } else {
       return await createUserRecord(user);
     }
   } catch (error) {
     console.warn(error);
     return null;
+  }
+}
+
+
+export const getUsers = async (): Promise<UserProfile[] | []> => {
+  try {
+    const snapshot = await get(ref(firebaseDatabase, `/users`));
+    if(snapshot.exists()) {
+      const users: FirebaseDbUser = snapshot.val();
+
+      const parsedUsers = [];
+      for(const [uid, user] of Object.entries(users)){
+        parsedUsers.push({
+          ...user,
+          uid: uid
+        })
+      }
+      return parsedUsers;
+    } else {
+      return [];
+    }
+  } catch (error) {
+    console.warn(error);
+    return [];
   }
 }

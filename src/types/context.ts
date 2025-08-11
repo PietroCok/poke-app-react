@@ -34,6 +34,7 @@ export type UserProfile = {
   status: string,
   role: string,
   carts: any[],
+  uid: string
 }
 
 export type AuthContextType = {
