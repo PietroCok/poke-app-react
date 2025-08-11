@@ -41,7 +41,7 @@ export function UserMenu({ menuId, openMenuId, setMenuId }: UserMenuProps) {
               }
               classes="border-r-10"
               tooltip="Gestione utenti"
-              clickHandler={() => alert('Coming soon')}
+              linkTo={"/admin/users"}
             />
           }
 

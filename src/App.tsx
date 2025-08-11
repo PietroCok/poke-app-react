@@ -16,6 +16,7 @@ import { PersonalArea } from "./pages/PersonalArea";
 import { ThemeProvider } from './context/ThemeContext';
 import { Registration } from './pages/Register';
 import { NotFound } from './pages/NotFound';
+import { AdminUsersManagement } from './pages/AdminUsersManagement';
 
 const config: AppConfig = appConfig;
 
@@ -41,6 +42,10 @@ export default function App() {
               <Route path="/personal" element={<PersonalArea />} />
               <Route path="*" element={<NotFound />} />
 
+            </Route>
+
+            <Route element={<ProtectedRoute roles={['admin']} />} >
+              <Route path='/admin/users' element={<AdminUsersManagement />} />
             </Route>
           </Routes>
         </Router>
