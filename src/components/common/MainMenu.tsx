@@ -5,14 +5,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faCartShopping, faShareNodes, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
 import { ButtonIcon } from "./ButtonIcon";
-import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useAuth } from "../../context/AuthContext";
 import { StackedIcons } from "./StackedIcons";
 import { UserMenu } from "./UserMenu";
+import { ThemeModeSwitcher } from "./ThemeModeSwitcher";
+import { ThemeColorSwitcher } from "./ThemeColorSwitcher";
 
 export function MainMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
+
+  // Tracks current open submenu
+  const [openMenuId, setOpenMenuId] = useState('');
+
+  const setSubMenuId = (menuId: string) => {
+    setOpenMenuId((openMenuId === menuId) ? '' : menuId);
+  }
 
   function checkCloseMenu(event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) {
     // Close the menu only if the user has not clicked one of the buttons
@@ -40,7 +48,17 @@ export function MainMenu() {
             tooltip="Chiudi"
           />
 
-          <ThemeSwitcher />
+          <ThemeModeSwitcher 
+            menuId={'theme-mode'}
+            openMenuId={openMenuId}
+            setMenuId={setSubMenuId}
+          />
+
+          <ThemeColorSwitcher 
+            menuId={'theme-colorcolor'}
+            openMenuId={openMenuId}
+            setMenuId={setSubMenuId}
+          />
 
           <NavLink
             to={"/favorites"}
@@ -67,7 +85,11 @@ export function MainMenu() {
                 tooltip="Carrelli condivisi"
               />
 
-              <UserMenu />
+              <UserMenu 
+                menuId={'user-menu'}
+                openMenuId={openMenuId}
+                setMenuId={setSubMenuId}
+              />
             </>
           }
 

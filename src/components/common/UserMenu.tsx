@@ -1,16 +1,19 @@
-import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
 
+import type { SubMenuProps } from "@/types";
 import { ButtonIcon } from "./ButtonIcon";
 import { useAuth } from "../../context/AuthContext";
 
 
+export interface UserMenuProps extends SubMenuProps {
 
+}
 
-export function UserMenu() {
-  const [isOpen, setIsOpen] = useState(false);
+export function UserMenu({ menuId, openMenuId, setMenuId }: UserMenuProps) {
   const { logout, deleteAccount } = useAuth();
+
+  const isOpen = openMenuId === menuId;
 
   return (
     <div
@@ -18,9 +21,9 @@ export function UserMenu() {
     >
       <ButtonIcon
         icon={<FontAwesomeIcon color={`var(--primary-color)`} icon={faUser} />}
-        classes=" border-r-10"
+        classes="border-r-10"
         tooltip="Menu Utente"
-        clickHandler={() => setIsOpen(!isOpen)}
+        clickHandler={() => setMenuId(menuId)}
       />
 
       {
@@ -28,14 +31,14 @@ export function UserMenu() {
         <>
           < ButtonIcon
             icon={<FontAwesomeIcon color={`var(--accent-red)`} icon={faRightFromBracket} />}
-            classes="red border-r-10"
+            classes="border-r-10"
             tooltip="Logout"
             clickHandler={logout}
           />
 
           <ButtonIcon
             icon={<FontAwesomeIcon color={`var(--accent-red)`} icon={faTrash} />}
-            classes="red border-r-10"
+            classes="border-r-10"
             tooltip="Cancella account"
             clickHandler={deleteAccount}
           />
