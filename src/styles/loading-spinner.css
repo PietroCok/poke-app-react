@@ -14,6 +14,12 @@
         position: relative;
     }
 
+    &:has(.loading-spinner).fullscreen {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
     & .loading-spinner,
     & .loading-spinner div {
         width: calc(var(--radius)*2);

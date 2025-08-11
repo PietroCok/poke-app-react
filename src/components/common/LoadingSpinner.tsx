@@ -1,5 +1,6 @@
 
 export interface LoadingSpinnerProps {
+  fullscreen?: boolean
   radius: number,
   duration: number,
   color: string
@@ -12,7 +13,7 @@ export interface LoadingSpinnerProps {
  * @param color String color of the element
  * @returns loading element
  */
-export function LoadingSpinner({ radius, duration = 3, color }: LoadingSpinnerProps) {
+export function LoadingSpinner({ radius, duration = 3, color, fullscreen = false }: LoadingSpinnerProps) {
   if (radius < 0) {
     radius = 15;
   }
@@ -27,9 +28,11 @@ export function LoadingSpinner({ radius, duration = 3, color }: LoadingSpinnerPr
   _radius = radius + 'px';
   _duration = duration + 's';
 
+  const classes = fullscreen ? `fullscreen ` : ``;
+
   return (
     <div
-      className='loading-container'
+      className={`${classes}loading-container`}
       style={{
         '--radius': _radius,
         '--sub-elem-radius': sub_radius,
