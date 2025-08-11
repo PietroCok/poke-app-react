@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faCartShopping, faShareNodes, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
@@ -60,15 +59,12 @@ export function MainMenu() {
             setMenuId={setSubMenuId}
           />
 
-          <NavLink
-            to={"/favorites"}
-          >
-            <ButtonIcon
-              icon={<FontAwesomeIcon icon={faStar} />}
-              classes="gold border-r-10"
-              tooltip="Preferiti"
-            />
-          </NavLink>
+          <ButtonIcon
+            icon={<FontAwesomeIcon icon={faStar} />}
+            classes="gold border-r-10"
+            tooltip="Preferiti"
+            linkTo={"/favorites"}
+          />
 
           {/* The following are available only when the user is logged in */}
           {

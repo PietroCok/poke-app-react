@@ -1,4 +1,3 @@
-import { NavLink } from "react-router-dom";
 import type { AppConfig, Group } from "@/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
@@ -20,18 +19,15 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
   const groups = Object.entries(gruppi);
 
   return (
-    <div className="page-container sticky">
+    <div className="page-container">
       <PageHeader
         left={
-          <NavLink
-            to={"/cart"}
-          >
-            <ButtonIcon
-              icon={<FontAwesomeIcon icon={faCartShopping} />}
-              classes="gold border-r-10"
-              tooltip="Carrello"
-            />
-          </NavLink>
+          <ButtonIcon
+            icon={<FontAwesomeIcon icon={faCartShopping} />}
+            classes="gold border-r-10"
+            tooltip="Carrello"
+            linkTo={"/cart"}
+          />
         }
         right={
           <MainMenu />
