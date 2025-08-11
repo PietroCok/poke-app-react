@@ -1,14 +1,18 @@
 
 export interface PageHeaderProps {
+  classes?: string
   left?: React.ReactNode
   center?: React.ReactNode
   right?: React.ReactNode
 }
 
-export function PageHeader({ left, center, right }: PageHeaderProps) {
+export function PageHeader({ classes, left, center, right }: PageHeaderProps) {
+  let _classes = classes ? `${classes} ` : '';
 
   return (
-    <header className="page-header">
+    <header 
+      className={`${_classes}page-header`}
+    >
       {renderElement(left)}
       {renderElement(center)}
       {renderElement(right)}
