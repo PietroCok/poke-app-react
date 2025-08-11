@@ -25,14 +25,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isOffline, setIsOffline] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(firebaseAuth, async (user) => {
-      console.log('onAuthStateChanged', user);
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (_user) => {
+      console.log('onAuthStateChanged', _user);
 
-      if (user) {
-        setUser(user);
+      if (_user) {
+        setUser(_user);
         setIsOffline(false);
 
-        setProfile(await getUserProfile(user));
+        setProfile(await getUserProfile(_user));
       } else {
         setUser(null);
         setProfile(null);
@@ -43,6 +43,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     return () => unsubscribe();
   }, []);
+
+  console.log('User profile', profile);
 
   const login = async (email: string, password: string) => {
     return await firebaseSignIn(email, password);
