@@ -16,7 +16,7 @@ const createUserRecord = async (user: User): Promise<UserProfile | null> => {
     return null;
   }
 
-  const userRecord = {
+  const userRecord: Pick<UserProfile, 'email' | 'status' | 'createdAt'> = {
     email: user.email,
     status: 'pending',
     createdAt: new Date().toISOString()

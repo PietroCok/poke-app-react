@@ -30,12 +30,20 @@ export type SelectionContext = {
 
 
 export type UserProfile = {
+  createdAt: string
   email: string,
-  status: string,
+  status: UserStatus,
   role: string,
   carts: any[],
   uid: string
 }
+
+export type UserStatus = 'active' | 'pending' | 'disabled';
+export const UserStatusLevel: { [key in UserStatus]: number } = {
+  'disabled': 0,
+  'pending': 1,
+  'active': 3
+} as const;
 
 export type AuthContextType = {
   user: User | null,
