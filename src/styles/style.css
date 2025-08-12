@@ -18,6 +18,7 @@
 
   --accent-red: #df3939;
   --accent-gold: #bd8928;
+  --accent-green: #2B882B;
 }
 
 /*
@@ -52,6 +53,10 @@ a:not(.button),
 a:not(.button):visited,
 .fake-link {
   color: var(--primary-color);
+}
+
+a.disabled {
+    pointer-events: none;
 }
 
 .fake-link{
@@ -154,3 +159,23 @@ a:not(.button):visited,
 
 
 
+/* ADMIN PANEL - USERS */
+
+.users-list-element {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border: 1px solid var(--main-color);
+  border-radius: 10px;
+
+  padding: 1rem;
+}
+
+.user-status {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+}
+
+/* END ADMIN PANEL - USERS */

@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowsRotate, faX } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faCheck, faX } from "@fortawesome/free-solid-svg-icons";
+import type { User } from "firebase/auth";
 
 import type { UserProfile } from "@/types";
 
 import { PageHeader } from "../components/common/PageHeader";
 import { ButtonIcon } from "../components/common/ButtonIcon";
-import { getUsers } from "../firebase/db";
+import { getUsers, updateUserStatus } from "../firebase/db";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
-import { createPortal } from "react-dom";
+import { useAuth } from "../context/AuthContext";
 
 
 export function AdminUsersManagement() {
+  const { user } = useAuth();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -21,6 +24,22 @@ export function AdminUsersManagement() {
     setLoading(true);
     setUsers(await getUsers());
     setLoading(false);
+  }
+
+  const updateStatus = async (uid: string, newStatus: string) => {
+    const updateResult = await updateUserStatus(uid, newStatus);
+    if(updateResult) {
+      // client side only update
+      const updatedUser = structuredClone(users.find(user => user.uid === uid));
+      if(!updatedUser) return;
+
+      updatedUser.status = newStatus;
+
+      setUsers([
+        ...users.filter(user => user.uid != uid),
+        updatedUser
+      ])
+    }
   }
 
   useEffect(() => {
@@ -67,8 +86,9 @@ export function AdminUsersManagement() {
       {
         !loading &&
         <section
+          className="flex gap-1 flex-column padding-1"
         >
-          {renderUserList(users)}
+          {renderUserList(users, user!, updateStatus)}
         </section>
       }
 
@@ -76,16 +96,57 @@ export function AdminUsersManagement() {
   )
 }
 
-
-
-const renderUserList = (users: UserProfile[]) => {
+const renderUserList = (users: UserProfile[], currentUser: User, updateStatus: (uid: string, newStatus: string) => void) => {
   return users.map(user => {
+
+    const isCurrentUser = currentUser.uid === user.uid;
+
+    let activationClass = 'red-bg';
+    if (user.status === 'active') {
+      activationClass = 'green-bg';
+    } else if (user.status === 'pending') {
+      activationClass = 'gold-bg';
+    }
+
     return (
       <div
-        className="flex flex-center"
+        className="users-list-element"
         key={user.uid}
       >
-        {user.email}
+        <div>
+          {user.email}
+        </div>
+
+
+        <div className="flex align-center gap-05">
+          <div
+            className={`user-status ${activationClass}`}
+            title={user.status}
+          >
+            {/* colored indicator of user account status */}
+          </div>
+
+          {
+            user.status == 'active' ?
+              <ButtonIcon
+                icon={<FontAwesomeIcon color={`var(--accent-red)`} icon={faX} />}
+                tooltip="Disabilita utente"
+                classes="small border-round"
+                disabled={isCurrentUser}
+                clickHandler={() => updateStatus(user.uid, 'disabled')}
+                />
+                
+                :
+                
+                <ButtonIcon
+                icon={<FontAwesomeIcon color={`var(--primary-color)`} icon={faCheck} />}
+                tooltip="Abilita utente"
+                classes="small border-round"
+                disabled={isCurrentUser}
+                clickHandler={() => updateStatus(user.uid, 'active')}
+              />
+          }
+        </div>
       </div>
     )
   })

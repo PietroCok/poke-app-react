@@ -60,6 +60,14 @@
   color: var(--accent-gold);
 }
 
+.green-bg {
+  background-color: var(--accent-green);
+}
+
+.green {
+  color: var(--accent-green);
+}
+
 .transparent {
   color: transparent;
 }

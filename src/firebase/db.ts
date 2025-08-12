@@ -1,4 +1,4 @@
-import { get, getDatabase, ref, set } from "firebase/database";
+import { get, getDatabase, ref, set, update } from "firebase/database";
 import type { User } from "firebase/auth";
 
 import type { UserProfile } from "@/types";
@@ -66,11 +66,11 @@ export const getUserProfile = async (user: User): Promise<UserProfile | null> =>
 export const getUsers = async (): Promise<UserProfile[] | []> => {
   try {
     const snapshot = await get(ref(firebaseDatabase, `/users`));
-    if(snapshot.exists()) {
+    if (snapshot.exists()) {
       const users: FirebaseDbUser = snapshot.val();
 
       const parsedUsers = [];
-      for(const [uid, user] of Object.entries(users)){
+      for (const [uid, user] of Object.entries(users)) {
         parsedUsers.push({
           ...user,
           uid: uid
@@ -83,5 +83,24 @@ export const getUsers = async (): Promise<UserProfile[] | []> => {
   } catch (error) {
     console.warn(error);
     return [];
+  }
+}
+
+
+export const updateUserStatus = async (userUid: string, newStatus: string) => {
+  if (!userUid || !newStatus) {
+    console.warn(`updateUserStatus: One or more invalid parameters`)
+    return false;
+  }
+
+  try {
+    await update(ref(firebaseDatabase, `/users/${userUid}`), {
+      status: newStatus
+    });
+
+    return true;
+  } catch (error) {
+    console.warn(error);
+    return false;  
   }
 }
