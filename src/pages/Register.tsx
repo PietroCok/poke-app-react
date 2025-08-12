@@ -234,7 +234,7 @@ export function Registration({ }: RegistrationProps) {
                   type="submit"
                   tooltip="Registrati"
                   disabled={!canSignUp}
-                  classes="w-100"
+                  classes="primary-bg primary-contrast-color w-100"
                 />
               )
             }

@@ -225,7 +225,7 @@ export function Login() {
                   type="submit"
                   tooltip="Accedi"
                   disabled={!canLogin}
-                  classes="w-100"
+                  classes="primary-bg primary-contrast-color w-100"
                 />
               )
             }
