@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate, faCheck, faX } from "@fortawesome/free-solid-svg-icons";
 import type { User } from "firebase/auth";
 
-import type { UserProfile } from "@/types";
+import { UserStatusLevel, type UserProfile, type UserStatus } from "../types";
 
 import { PageHeader } from "../components/common/PageHeader";
 import { ButtonIcon } from "../components/common/ButtonIcon";
@@ -26,7 +26,7 @@ export function AdminUsersManagement() {
     setLoading(false);
   }
 
-  const updateStatus = async (uid: string, newStatus: string) => {
+  const updateStatus = async (uid: string, newStatus: UserStatus) => {
     const updateResult = await updateUserStatus(uid, newStatus);
     if(updateResult) {
       // client side only update
@@ -96,15 +96,26 @@ export function AdminUsersManagement() {
   )
 }
 
-const renderUserList = (users: UserProfile[], currentUser: User, updateStatus: (uid: string, newStatus: string) => void) => {
-  return users.map(user => {
+const sortUsers = (users: UserProfile[]): UserProfile[] => {
+  return users.slice().sort((userA: UserProfile, userB: UserProfile) => {
+    if (userA.status == userB.status) {
+      return userA.createdAt > userB.createdAt ? -1 : 1;
+    }
+
+    return UserStatusLevel[userA.status] - UserStatusLevel[userB.status];
+  })
+}
+
+const renderUserList = (users: UserProfile[], currentUser: User, updateStatus: (uid: string, newStatus: UserStatus) => void) => {
+
+  return sortUsers(users).map(user => {
 
     const isCurrentUser = currentUser.uid === user.uid;
 
     let activationClass = 'red-bg';
-    if (user.status === 'active') {
+    if (user.status == 'active') {
       activationClass = 'green-bg';
-    } else if (user.status === 'pending') {
+    } else if (user.status == 'pending') {
       activationClass = 'gold-bg';
     }
 
