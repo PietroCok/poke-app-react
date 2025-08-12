@@ -98,7 +98,7 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
 
   const groupExtraPrice = (groupId: string) => {
     const groupLimit = config.dimensioni[size]?.limiti[groupId];
-    if (groupCount(groupId) < groupLimit) return 0;
+    if (groupCount(groupId) <= groupLimit) return 0;
 
     // order selected ingredient based on extra price
     // NB: shallow copy, do NOT edit ingredients props from this array, as they still reference the original state
@@ -123,6 +123,17 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
     total -= deductedPrice;
 
     return total;
+  }
+
+  const getTotalPrice = () => {
+    const basePrice = config.dimensioni[size].prezzo;
+    let price = basePrice;
+
+    for(const group of Object.keys(ingredients)){
+      price += groupExtraPrice(group);
+    }
+
+    return price;
   }
 
   const selectSize = (newSelectedSize: string) => {
@@ -155,6 +166,7 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
       hasIngredients,
       groupCount,
       groupExtraPrice,
+      getTotalPrice,
       resetContext
     } as SelectionContext}>
       {children}

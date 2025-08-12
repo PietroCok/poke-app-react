@@ -24,6 +24,7 @@ export type SelectionContext = {
   hasIngredients: () => boolean,
   groupCount: (groupId: string) => number,
   groupExtraPrice: (groupId: string) => number,
+  getTotalPrice: () => number,
 
   resetContext: () => void,
 }
