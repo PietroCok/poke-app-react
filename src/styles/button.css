@@ -5,25 +5,24 @@
   border: 0 transparent;
 
   &:not(.disabled):active {
-    box-shadow: 0 0 2px 1px var(--main-color);
+    box-shadow: 0 0 2px 1px var(--primary-color);
   }
 }
 
 /* For devices that supports hover status */
 @media (hover: hover) {
   .button:not(.disabled):hover {
-    box-shadow: 0 0 2px 1px var(--main-color);
+    box-shadow: 0 0 2px 1px var(--primary-color);
   }
-}
-
-.button.disabled {
-  opacity: 1;
-  background-color: var(--alt-bg);
 }
 
 .icon-only {
   padding: .75rem;
   background-color: var(--alt-bg);
+}
+
+.icon-only.disabled {
+  opacity: .5;
 }
 
 .icon-only svg {
