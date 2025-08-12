@@ -1,22 +1,32 @@
 
 export interface PageFooterProps {
-  left: React.ReactNode,
-  right: React.ReactNode
-  solid?: boolean
+  left?: React.ReactNode
+  center?: React.ReactNode
+  right?: React.ReactNode
+  classes?: string
 }
 
-export function PageFooter({ left, right, solid }: PageFooterProps) {
-  const _classes = solid ? 'main-bg ' : '';
+export function PageFooter({ left, center, right, classes }: PageFooterProps) {
+  const _classes = classes ? `${classes} ` : '';
   return (
     <footer className={`${_classes}page-footer`}>
-      {renderElement(left)}
-      {renderElement(right)}
-    </footer>
-  )
-}
+      <div 
+        className="padding-1"
+      >
+        {left}
+      </div>
+      
+      <div 
+        className="padding-1-0"
+      >
+        {center}
+      </div>
 
-function renderElement(element: React.ReactNode) {
-  return (
-    <div className="padding-1" >{element}</div>
+      <div 
+        className="padding-1 flex just-end"
+      >
+        {right}
+      </div>
+    </footer>
   )
 }

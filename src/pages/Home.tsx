@@ -12,7 +12,7 @@ import { ButtonIcon } from "../components/common/ButtonIcon";
 import { MainMenu } from "../components/common/MainMenu";
 
 export function Home({ dimensioni, gruppi }: AppConfig) {
-  const { resetContext, hasIngredients } = useSelection();
+  const { resetContext, hasIngredients, getTotalPrice } = useSelection();
   const isEmpty = !hasIngredients();
 
   const dimensions = Object.entries(dimensioni);
@@ -45,22 +45,28 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
       <PageFooter
         left={
           <ButtonText
-            text="cancella"
+            text="svuota"
             classes="red-bg primary-contrast-color border-r-10"
             clickHandler={resetContext}
             disabled={isEmpty}
             tooltip="Rimuove la selezione attuale"
           />
         }
+        center={
+          <div className="flex flex-center h-100 gap-5">
+            Totale: <span>{getTotalPrice().toFixed(2)}</span> €
+          </div>
+        }
         right={
           <ButtonText
             text="salva"
             classes="primary-bg primary-contrast-color border-r-10"
+            clickHandler={() => alert('Coming soon!')}
             disabled={isEmpty}
             tooltip="Salva la selezione attuale"
           />
         }
-        solid={true}
+        classes={'main-bg'}
       />
     </div>
   )

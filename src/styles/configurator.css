@@ -47,8 +47,6 @@ input[type="checkbox"] {
 
 /* INGREDIENTS GROUP */
 
-.ingredient-group {}
-
 .ingredient-group-header {
   position: sticky;
   top: 0;

@@ -126,7 +126,8 @@ a.disabled {
 /* PAGE FOOTER */
 
 .page-footer {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   position: sticky;
   bottom: 0;
   z-index: 99;
