@@ -19,6 +19,10 @@ export function Button({ children, style, classes, tooltip, disabled, type, link
     _classes += 'disabled '
   }
 
+  const clickCallback = (event: ButtonClickEvent) => {
+    return clickHandler ? clickHandler(event) : '';
+  }
+
   if(linkTo) {
     return (
       <NavLink
@@ -34,10 +38,11 @@ export function Button({ children, style, classes, tooltip, disabled, type, link
     return (
       <button
         className={`${_classes}button`}
-        onClick={(event: ButtonClickEvent) => clickHandler ? clickHandler(event): ''}
+        onClick={clickCallback}
         title={tooltip}
         style={style}
         type={type}
+        disabled={disabled}
       >
         {children}
       </button>

@@ -16,6 +16,11 @@
   }
 }
 
+.button.disabled {
+  opacity: 1;
+  background-color: var(--alt-bg);
+}
+
 .icon-only {
   padding: .75rem;
   background-color: var(--alt-bg);
@@ -47,4 +52,13 @@
   font-size: large;
   text-transform: capitalize;
   padding: .75rem;
+}
+
+.icon-only.small {
+  padding: .5rem;
+
+  & svg{
+    width: 1rem;
+    height: 1rem;
+  }
 }
