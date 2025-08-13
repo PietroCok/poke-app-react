@@ -1,7 +1,7 @@
-import { get, getDatabase, ref, set, update } from "firebase/database";
+import { get, getDatabase, onValue, ref, remove, set, update } from "firebase/database";
 import type { User } from "firebase/auth";
 
-import type { UserProfile } from "@/types";
+import type { Cart, Poke, UserProfile } from "@/types";
 import { firebaseApp } from "./index";
 
 
@@ -34,7 +34,6 @@ const createUserRecord = async (user: User): Promise<UserProfile | null> => {
   const profile = {
     ...userRecord,
     role: 'basic',
-    carts: [],
     uid: user.uid
   }
 
@@ -49,8 +48,12 @@ export const getUserProfile = async (user: User): Promise<UserProfile | null> =>
   try {
     const snapshot = await get(ref(firebaseDatabase, `/users/${user.uid}`));
     if (snapshot.exists()) {
+      const { email, role, status, createdAt } = snapshot.val();
       return {
-        ...snapshot.val(),
+        email,
+        role,
+        status,
+        createdAt,
         uid: user.uid
       }
     } else {
@@ -101,6 +104,140 @@ export const updateUserStatus = async (userUid: string, newStatus: string) => {
     return true;
   } catch (error) {
     console.warn(error);
-    return false;  
+    return false;
   }
 }
+
+export const createCart = async (cart: Cart): Promise<boolean> => {
+  // Update multiple parts in a single "transaction"
+  const updates: any = {};
+  updates[`/shared-carts/cart-${cart.id}`] = cart;
+  updates[`/users/${cart.createdBy}/carts/cart-${cart.id}`] = true;
+
+  try {
+    await update(ref(firebaseDatabase), updates);
+    return true;
+  } catch (error) {
+    console.warn(error);
+  }
+
+  return false;
+}
+
+export const getCart = async (cartId: string): Promise<Cart | null> => {
+  try {
+    const snapshot = await get(ref(firebaseDatabase, `/shared-carts/cart-${cartId}`));
+    if (snapshot.exists()) return snapshot.val();
+  } catch (error) {
+    console.warn(error);
+  }
+  return null;
+}
+
+export const getCarts = async (userUid: string): Promise<Cart[] | null> => {
+  // Read the list of carts id
+  let cartIds = {};
+  try {
+    const snapshot = await get(ref(firebaseDatabase, `users/${userUid}/carts/`));
+    if (snapshot.exists()) {
+      cartIds = snapshot.val();
+    }
+  } catch (error) {
+    return null;
+  }
+
+  // Retrieve carts from ids
+  const carts = [];
+  for (const cartId in cartIds) {
+    try {
+      const snapshot = await get(ref(firebaseDatabase, `shared-carts/cart-${cartId}/`));
+      if (snapshot.exists()) {
+        carts.push(snapshot.val());
+      } else {
+        // If a cart is not found remove it from the list of carts
+        removeCartUser(cartId, userUid);
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  }
+
+  return carts;
+}
+
+export const addCartUser = async (cartId: string, userUid: string): Promise<boolean> => {
+  // Add cart id to user cart list
+  try {
+    await update(ref(firebaseDatabase, `/users/${userUid}/carts/cart-${cartId}`), {
+      [cartId]: true
+    })
+    return true;
+  } catch (error) {
+    console.warn(error);
+  }
+  return false;
+}
+
+export const removeCartUser = async (cartId: string, userUid: string): Promise<boolean> => {
+  try {
+    update(ref(firebaseDatabase, `/users/${userUid}/carts`), {
+      [cartId]: null
+    })
+    console.log('Removed deleted cart from list');
+    return true;
+  } catch (error) {
+    console.warn(error);
+  }
+  return false;
+}
+
+export const addCartItem = async (cartId: string, item: Poke): Promise<boolean> => {
+  try {
+    await set(ref(firebaseDatabase, `/shared-carts/cart-${cartId}/items/${item.id}`), item);
+    return true;
+  } catch (error) {
+    console.warn(error);
+  }
+  return false;
+}
+
+export const removeCartItem = async (cartId: string, itemId: string): Promise<boolean> => {
+  try {
+    await remove(ref(firebaseDatabase, `/shared-carts/cart-${cartId}/items/${itemId}`),);
+    return true;
+  } catch (error) {
+    console.warn(error);
+  }
+  return false;
+}
+
+export const deleteCart = async (cartId: string): Promise<boolean> => {
+  try {
+    await remove(ref(firebaseDatabase, `/shared-carts/cart-${cartId}`));
+    return true;
+  } catch (error) {
+    console.warn(error);
+  }
+  return false;
+}
+
+
+export const observeCart = (cartId: string, callback: (cart: Cart | null) => void) => {
+  return onValue(ref(firebaseDatabase, `/shared-carts/cart-${cartId}`), (snapshot) => {
+
+    if(!snapshot.exists()) {
+      callback(null);
+      return;
+    };
+
+    const cart = snapshot.val();
+    if(!cart) {
+      callback(null);
+      return;
+    };
+
+    callback(cart);
+  })
+}
+
+

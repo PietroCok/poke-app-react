@@ -1,14 +1,15 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
+import { Outlet } from "react-router-dom";
 
 import type { AppConfig, ContextIngredient, IngredientsState, SelectionContext } from "@/types";
 
 import appConfig from '../../../config.json';
 import { ingredientIdToName } from "../../scripts/utils";
 import { ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
-import { useLocalStorage } from "../../hooks/localStorage";
+import { useLocalStorage } from "../../hooks/useLocalStorage";
 
 export interface SelectionProviderProps {
-  children: React.ReactNode
+
 }
 
 export const ingredientsStorageKey = 'poke-ingredients';
@@ -39,7 +40,7 @@ const getIngredientsFromLocalstorage = (): IngredientsState => {
   return emptyIngredients;
 }
 
-export function SelectionProvider({ children }: SelectionProviderProps) {
+export function SelectionProvider({  }: SelectionProviderProps) {
   const [size, setSize] = useLocalStorage(sizeStorageKey, defaultSize);
   const [ingredients, dispatch] = useReducer(
     selectionReducer,
@@ -169,7 +170,7 @@ export function SelectionProvider({ children }: SelectionProviderProps) {
       getTotalPrice,
       resetContext
     } as SelectionContext}>
-      {children}
+      <Outlet />
     </SelectionContext.Provider>
   );
 }

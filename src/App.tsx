@@ -17,6 +17,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { Registration } from './pages/Register';
 import { NotFound } from './pages/NotFound';
 import { AdminUsersManagement } from './pages/AdminUsersManagement';
+import { CartProvider } from './context/CartContext';
 
 const config: AppConfig = appConfig;
 
@@ -31,12 +32,18 @@ export default function App() {
 
             <Route element={<ProtectedRoute />}>
 
-              <Route path="/" element={
-                <SelectionProvider>
-                  <Home {...config} />
-                </SelectionProvider>
-              } />
-              <Route path="/cart" element={<Cart />} />
+              <Route 
+                element={<CartProvider />}
+              >
+
+                <Route element={<SelectionProvider />}>
+                  <Route path="/" element={<Home {...config} />} />
+                </Route>
+
+                <Route path="/cart" element={<Cart />} />
+
+              </Route>
+
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/remote-carts" element={<RemoteCarts />} />
               <Route path="/personal" element={<PersonalArea />} />

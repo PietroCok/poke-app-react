@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect } from "react";
 
 import { faA, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
-import { useLocalStorage } from "../hooks/localStorage";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const darkModeSaturation = '60%';
 const darkModeLightness = '50%';

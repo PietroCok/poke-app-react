@@ -1,5 +1,6 @@
 import type { FirebaseError } from "firebase/app"
 import type { User, UserCredential } from "firebase/auth"
+import type { Cart, Poke } from "./common"
 
 export type ContextIngredient = {
   id: string,
@@ -35,7 +36,6 @@ export type UserProfile = {
   email: string,
   status: UserStatus,
   role: string,
-  carts: any[],
   uid: string
 }
 
@@ -55,4 +55,14 @@ export type AuthContextType = {
   logout: () => Promise<void>,
   setOffline: (value: boolean) => void,
   deleteAccount: () => void
+}
+
+
+
+export type CartContextType = {
+  cart: Cart,
+  updateCartName: (newName: string) => void,
+  addItem: (item: Poke) => void,
+  duplicateItem: (itemId: string) => void,
+  deleteItem: (itemId: string) => void
 }
