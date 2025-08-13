@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import type { User } from "firebase/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate, faCheck, faX } from "@fortawesome/free-solid-svg-icons";
-import type { User } from "firebase/auth";
+import { faHouse } from "@fortawesome/free-regular-svg-icons";
 
 import { UserStatusLevel, type UserProfile, type UserStatus } from "../types";
 
@@ -52,8 +53,8 @@ export function AdminUsersManagement() {
         classes="main-bg"
         left={
           <ButtonIcon
-            icon={<FontAwesomeIcon color={`var(--accent-red)`} icon={faX} />}
-            classes="border-r-10"
+            icon={<FontAwesomeIcon icon={faHouse} />}
+            classes="primary-color border-r-10"
             tooltip="Indietro"
             linkTo="/"
           />

@@ -2,8 +2,8 @@ import { faSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import type { SubMenuProps } from "@/types";
-import { ButtonIcon } from "./ButtonIcon";
-import { useTheme } from "../../context/ThemeContext";
+import { ButtonIcon } from "./common/ButtonIcon";
+import { useTheme } from "../context/ThemeContext";
 
 // red, orange, acquagreen, cyan, pink
 const hues = [0, 30, 150, 210, 310];

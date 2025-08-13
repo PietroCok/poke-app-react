@@ -6,11 +6,15 @@ import { faBars, faCartShopping, faShareNodes, faStar, faX } from "@fortawesome/
 import { ButtonIcon } from "./ButtonIcon";
 import { useAuth } from "../../context/AuthContext";
 import { StackedIcons } from "./StackedIcons";
-import { UserMenu } from "./UserMenu";
-import { ThemeModeSwitcher } from "./ThemeModeSwitcher";
-import { ThemeColorSwitcher } from "./ThemeColorSwitcher";
+import { UserMenu } from "../UserMenu";
+import { ThemeModeSwitcher } from "../ThemeModeSwitcher";
+import { ThemeColorSwitcher } from "../ThemeColorSwitcher";
 
-export function MainMenu() {
+export interface MainMenuProps {
+  extraMenuItems?: React.ReactNode
+}
+
+export function MainMenu({ extraMenuItems }: MainMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
 
@@ -47,13 +51,13 @@ export function MainMenu() {
             tooltip="Chiudi"
           />
 
-          <ThemeModeSwitcher 
+          <ThemeModeSwitcher
             menuId={'theme-mode'}
             openMenuId={openMenuId}
             setMenuId={setSubMenuId}
           />
 
-          <ThemeColorSwitcher 
+          <ThemeColorSwitcher
             menuId={'theme-colorcolor'}
             openMenuId={openMenuId}
             setMenuId={setSubMenuId}
@@ -81,13 +85,15 @@ export function MainMenu() {
                 tooltip="Carrelli condivisi"
               />
 
-              <UserMenu 
+              <UserMenu
                 menuId={'user-menu'}
                 openMenuId={openMenuId}
                 setMenuId={setSubMenuId}
               />
             </>
           }
+
+          {extraMenuItems}
 
         </div>
       </div>

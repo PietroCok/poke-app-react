@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { type Theme } from "../../context/ThemeContext";
 import type { SubMenuProps } from "@/types";
-import { ButtonIcon } from "./ButtonIcon";
-import { iconMapping, useTheme, themeOptions } from "../../context/ThemeContext";
+import { type Theme } from "../context/ThemeContext";
+import { ButtonIcon } from "./common/ButtonIcon";
+import { iconMapping, useTheme, themeOptions } from "../context/ThemeContext";
 
 
 export interface ThemeModeSwitcherProps extends SubMenuProps {

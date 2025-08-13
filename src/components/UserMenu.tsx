@@ -2,9 +2,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRightFromBracket, faShield, faTrash, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 
 import type { SubMenuProps } from "@/types";
-import { ButtonIcon } from "./ButtonIcon";
-import { useAuth } from "../../context/AuthContext";
-import { StackedIcons } from "./StackedIcons";
+import { ButtonIcon } from "./common/ButtonIcon";
+import { useAuth } from "../context/AuthContext";
+import { StackedIcons } from "./common/StackedIcons";
 
 
 export interface UserMenuProps extends SubMenuProps {
