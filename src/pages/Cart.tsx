@@ -47,17 +47,21 @@ export function Cart() {
         classes="main-bg"
       />
 
-      <section
-        id="invite-link"
-        className="text-center"
-      >
-        <span
-          className="fake-link"
-          onClick={generateInviteLink}
+
+      {
+        cart.isShared && 
+        <section
+          id="invite-link"
+          className="text-center"
         >
-          Genera link di invito
-        </span>
-      </section>
+          <span
+            className="fake-link"
+            onClick={generateInviteLink}
+          >
+            Genera link di invito
+          </span>
+        </section>
+      }
 
       <section
         className="flex flex-column flex-1 padding-1 gap-1 scroll
