@@ -133,6 +133,10 @@ export function CartProvider({ }: CartProviderProps) {
       return;
     }
 
+    if (!confirm(`Confermare la cancellazione di tutti gli elementi del carrello?`)) {
+      return;
+    }
+
     if(user && cart.shared){
       if(!cart?.id){
         return;
