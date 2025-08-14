@@ -23,7 +23,7 @@ const emptyCart = (userUid?: string, name?: string) => {
     name: name ?? 'Carrello',
     createdBy: userUid ?? '',
     items: {},
-    shared: false
+    isShared: false
   }
 }
 
@@ -37,7 +37,7 @@ export function CartProvider({ }: CartProviderProps) {
 
   useEffect(() => {
     const setup = async () => {
-      if (!user || !cart.shared) return;
+      if (!user || !cart.isShared) return;
 
       const remoteCart = await getCart(cart.id);
       if (remoteCart) {
@@ -76,17 +76,17 @@ export function CartProvider({ }: CartProviderProps) {
     alert('coming soon!');
   }
 
-  const _createSharedCart = async (name?: string) => {
+  const _createisSharedCart = async (name?: string) => {
     const newCart = emptyCart(userUid, name);
     createCart(newCart);
   }
 
-  const _deleteSharedCart = async (cartId: string) => {
+  const _deleteisSharedCart = async (cartId: string) => {
     await deleteCart(cartId);
   }
 
   const addItem = (item: Poke) => {
-    if (user && cart.shared) {
+    if (user && cart.isShared) {
       addCartItem(cart.id, item);
     } else {
       const newItems = cart.items || {};
@@ -116,7 +116,7 @@ export function CartProvider({ }: CartProviderProps) {
       return;
     }
 
-    if (user  && cart.shared) {
+    if (user  && cart.isShared) {
       removeCartItem(cart.id, itemId);
     } else {
       const newItems = cart.items || {};
@@ -137,7 +137,7 @@ export function CartProvider({ }: CartProviderProps) {
       return;
     }
 
-    if(user && cart.shared){
+    if(user && cart.isShared){
       if(!cart?.id){
         return;
       }
@@ -152,7 +152,7 @@ export function CartProvider({ }: CartProviderProps) {
 
   return (
     <CartContext.Provider
-      value={{ cart, updateCartName, addItem, duplicateItem, deleteItem, createCart: _createSharedCart, deleteCart: _deleteSharedCart, deleteAllItems }}
+      value={{ cart, updateCartName, addItem, duplicateItem, deleteItem, createCart: _createisSharedCart, deleteCart: _deleteisSharedCart, deleteAllItems }}
     >
       <Outlet />
     </CartContext.Provider>
