@@ -100,8 +100,8 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
     )
   }
 
-  if (!isOpen) {
-    return (
+  return (
+    <>
       <div id="main-menu">
         <ButtonIcon
           icon={<FontAwesomeIcon icon={faBars} />}
@@ -110,17 +110,13 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
           tooltip="Apri menu"
         />
       </div>
-    )
-  } else {
-    return (
-      <>
-        {createPortal(
-          renderMenuOptions(),
-          document.getElementById('root')!
-        )}
-      </>
-    )
-  }
+
+      {isOpen && createPortal(
+        renderMenuOptions(),
+        document.getElementById('root')!
+      )}
+    </>
+  )
 }
 
 
