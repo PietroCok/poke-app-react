@@ -67,7 +67,8 @@
           "name": "uova al tegamino",
           "prezzo": 1.5
         }
-      ]
+      ],
+      "order": 0
     },
     "condimenti": {
       "extras": "extra € 0.50",
@@ -128,7 +129,8 @@
           "name": "olive nere",
           "prezzo": 0.5
         }
-      ]
+      ],
+      "order": 1
     },
     "croccantini": {
       "extras": "extra € 0.50",
@@ -169,7 +171,8 @@
           "name" : "pistacchio",
           "prezzo": 0.5
         }
-      ]
+      ],
+      "order": 2
     },
     "salse": {
       "extras": "extra € 0.50",
@@ -226,7 +229,8 @@
           "name" : "salsa yogurt",
           "prezzo": 0.5
         }
-      ]
+      ],
+      "order": 3
     }
   },
   "numero_telefono": "",
