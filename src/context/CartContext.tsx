@@ -17,16 +17,19 @@ export const useCart = () => {
   return ctx;
 };
 
-export function CartProvider({ }: CartProviderProps) {
-  const { user } = useAuth();
-  const emptyCart = {
+const emptyCart = (userUid?: string, name?: string) => {
+  return {
     id: crypto.randomUUID(),
-    name: 'Carrello',
-    createdBy: user?.uid ?? '',
+    name: name ?? 'Carrello',
+    createdBy: userUid ?? '',
     items: {}
   }
+}
 
-  const [cart, setCart] = useLocalStorage<Cart>('poke-cart', emptyCart);
+export function CartProvider({ }: CartProviderProps) {
+  const { user } = useAuth();
+
+  const [cart, setCart] = useLocalStorage<Cart>('poke-cart', emptyCart());
   const { id, name, items, createdBy } = cart;
 
   useEffect(() => {
@@ -34,6 +37,7 @@ export function CartProvider({ }: CartProviderProps) {
 
     const setup = async () => {
       if (!cart.createdBy) {
+        // Local cart to remote cart  
         const updatedCart = structuredClone(cart);
         updatedCart.createdBy = user.uid;
         await createCart(updatedCart);
