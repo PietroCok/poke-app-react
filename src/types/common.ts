@@ -29,5 +29,6 @@ export type Cart = {
     [id: string]: Poke
   },
   name: string,
-  createdBy: string
+  createdBy: string,
+  shared: boolean
 }

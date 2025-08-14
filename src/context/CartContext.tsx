@@ -22,7 +22,8 @@ const emptyCart = (userUid?: string, name?: string) => {
     id: crypto.randomUUID(),
     name: name ?? 'Carrello',
     createdBy: userUid ?? '',
-    items: {}
+    items: {},
+    shared: false
   }
 }
 
@@ -36,7 +37,7 @@ export function CartProvider({ }: CartProviderProps) {
 
   useEffect(() => {
     const setup = async () => {
-      if (!user) return;
+      if (!user || !cart.shared) return;
 
       const remoteCart = await getCart(cart.id);
       if (remoteCart) {
@@ -75,20 +76,17 @@ export function CartProvider({ }: CartProviderProps) {
     alert('coming soon!');
   }
 
-  const _createCart = async (name?: string) => {
+  const _createSharedCart = async (name?: string) => {
     const newCart = emptyCart(userUid, name);
     createCart(newCart);
   }
 
-  const _deleteCart = async (cartId: string) => {
-    const deleteResult = await deleteCart(cartId);
-    if (deleteResult) {
-      _createCart();
-    }
+  const _deleteSharedCart = async (cartId: string) => {
+    await deleteCart(cartId);
   }
 
   const addItem = (item: Poke) => {
-    if (user) {
+    if (user && cart.shared) {
       addCartItem(cart.id, item);
     } else {
       const newItems = cart.items || {};
@@ -118,7 +116,7 @@ export function CartProvider({ }: CartProviderProps) {
       return;
     }
 
-    if (user) {
+    if (user  && cart.shared) {
       removeCartItem(cart.id, itemId);
     } else {
       const newItems = cart.items || {};
@@ -135,7 +133,7 @@ export function CartProvider({ }: CartProviderProps) {
       return;
     }
 
-    if(user){
+    if(user && cart.shared){
       if(!cart?.id){
         return;
       }
@@ -150,7 +148,7 @@ export function CartProvider({ }: CartProviderProps) {
 
   return (
     <CartContext.Provider
-      value={{ cart, updateCartName, addItem, duplicateItem, deleteItem, createCart: _createCart, deleteCart: _deleteCart, deleteAllItems }}
+      value={{ cart, updateCartName, addItem, duplicateItem, deleteItem, createCart: _createSharedCart, deleteCart: _deleteSharedCart, deleteAllItems }}
     >
       <Outlet />
     </CartContext.Provider>
