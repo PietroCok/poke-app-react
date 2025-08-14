@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { AppConfig, Group } from "@/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
@@ -10,8 +11,10 @@ import { useSelection } from "../context/configurator/SelectionContext";
 import { PageHeader } from "../components/common/PageHeader";
 import { ButtonIcon } from "../components/common/ButtonIcon";
 import { MainMenu } from "../components/common/MainMenu";
+import { SaveSelectionModal } from "../components/SaveSelectionModal";
 
 export function Home({ dimensioni, gruppi }: AppConfig) {
+  const [isSaveOpen, setIsSaveOpen] = useState(false);
   const { resetContext, hasIngredients, getTotalPrice } = useSelection();
   const isEmpty = !hasIngredients();
 
@@ -29,9 +32,9 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
             linkTo={"/cart"}
           />
         }
-        right={
-          <MainMenu />
-        }
+      right={
+        <MainMenu />
+      }
       />
 
       <h2 id="page-title">crea la tua poke bowl</h2>
@@ -61,13 +64,21 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
           <ButtonText
             text="salva"
             classes="primary-bg primary-contrast-color border-r-10"
-            clickHandler={() => alert('Coming soon!')}
             disabled={isEmpty}
             tooltip="Salva la selezione attuale"
+            clickHandler={() => setIsSaveOpen(true)}
           />
         }
         classes={'main-bg'}
       />
+
+      {
+        isSaveOpen &&
+        <SaveSelectionModal
+          setIsOpen={setIsSaveOpen}
+        />
+      }
+
     </div>
   )
 }

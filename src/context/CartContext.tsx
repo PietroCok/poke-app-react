@@ -2,9 +2,9 @@ import { createContext, useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 import type { Cart, CartContextType, Poke } from "@/types";
+import { addCartItem, createCart, deleteCart, getCart, observeCart, removeAllCartItems, removeCartItem } from "../firebase/db";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useAuth } from "./AuthContext";
-import { addCartItem, createCart, observeCart } from "../firebase/db";
 
 export interface CartProviderProps {
 
@@ -29,69 +29,128 @@ const emptyCart = (userUid?: string, name?: string) => {
 export function CartProvider({ }: CartProviderProps) {
   const { user } = useAuth();
 
-  const [cart, setCart] = useLocalStorage<Cart>('poke-cart', emptyCart());
-  const { id, name, items, createdBy } = cart;
+  const userUid = user?.uid || '';
+  const localStorageKey = userUid ? `poke-cart-${userUid}` : `poke-cart`;
+
+  const [cart, setCart] = useLocalStorage<Cart>(localStorageKey, emptyCart(userUid));
 
   useEffect(() => {
-    if (!user) return;
-
     const setup = async () => {
-      if (!cart.createdBy) {
-        // Local cart to remote cart  
-        const updatedCart = structuredClone(cart);
-        updatedCart.createdBy = user.uid;
-        await createCart(updatedCart);
+      if (!user) return;
+
+      const remoteCart = await getCart(cart.id);
+      if (remoteCart) {
+        handleFirebaseUpdate(remoteCart);
       }
 
-      const unsubscribe = observeCart(id, handleFirebaseUpdate);
+      const unsubscribe = observeCart(cart.id, handleFirebaseUpdate);
       return unsubscribe;
     }
 
     const unsubscribePromise = setup();
 
-    return () => {unsubscribePromise.then(unsubscribe => unsubscribe && unsubscribe())};
-  }, [user, id]);
+    return () => { unsubscribePromise.then(unsubscribe => unsubscribe && unsubscribe()) };
+  }, [user, cart.id]);
 
-  const handleFirebaseUpdate = (cart: Cart | null) => {
-    console.log(cart);
-    
-    if (cart) {
-      if(!cart.items) {
-        cart.items = {};
+  const handleFirebaseUpdate = (remoteCart: Cart | null) => {
+    console.log('Cart update', remoteCart);
+
+    if (remoteCart) {
+      if (!remoteCart.items) {
+        remoteCart.items = {};
       }
-      setCart(cart)
+
+      setCart(remoteCart);
+    } else {
+      const newCart = structuredClone(cart);
+      if (!newCart.createdBy) {
+        newCart.createdBy = user?.uid || '';
+      }
+      createCart(newCart);
     }
   }
 
   const updateCartName = (newName: string) => {
     if (!newName) return;
+    alert('coming soon!');
+  }
 
-    const updatedCart = structuredClone(cart);
-    updatedCart.name = newName;
-    setCart(updatedCart);
+  const _createCart = async (name?: string) => {
+    const newCart = emptyCart(userUid, name);
+    createCart(newCart);
+  }
+
+  const _deleteCart = async (cartId: string) => {
+    const deleteResult = await deleteCart(cartId);
+    if (deleteResult) {
+      _createCart();
+    }
   }
 
   const addItem = (item: Poke) => {
     if (user) {
       addCartItem(cart.id, item);
     } else {
-      const updatedCart = structuredClone(cart);
-      updatedCart.items[item.id] = item;
-      setCart(updatedCart);
+      const newItems = cart.items || {};
+      newItems[item.id] = item;
+      setCart({
+        ...cart,
+        items: newItems
+      })
     }
   }
 
   const duplicateItem = (itemId: string) => {
-    alert('coming soon!');
+    const oldItem = cart.items[itemId];
+    if (!oldItem) {
+      alert('Elemento non trovato');
+      return;
+    }
+
+    const newItem = structuredClone(oldItem);
+    newItem.createdBy = userUid;
+    newItem.id = crypto.randomUUID();
+    addItem(newItem);
   }
 
-  const deleteItem = (itemId: string) => {
-    alert('coming soon!');
+  const deleteItem = (itemId: string, itemName: string) => {
+    if (!confirm(`Confermare la cancellazione dell'elemento: ${itemName}?`)) {
+      return;
+    }
+
+    if (user) {
+      removeCartItem(cart.id, itemId);
+    } else {
+      const newItems = cart.items || {};
+      delete newItems[itemId];
+      setCart({
+        ...cart,
+        items: newItems
+      })
+    }
+  }
+
+  const deleteAllItems = () => {
+    if(Object.values(cart.items || {}).length == 0){
+      return;
+    }
+
+    if(user){
+      if(!cart?.id){
+        return;
+      }
+      removeAllCartItems(cart.id);
+    } else {
+      setCart({
+        ...cart,
+        items: {}
+      })
+    }
   }
 
   return (
     <CartContext.Provider
-      value={{ cart, updateCartName, addItem, duplicateItem, deleteItem }}
+      value={{ cart, updateCartName, addItem, duplicateItem, deleteItem, createCart: _createCart, deleteCart: _deleteCart, deleteAllItems }}
     >
       <Outlet />
     </CartContext.Provider>

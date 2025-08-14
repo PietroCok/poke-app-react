@@ -112,7 +112,7 @@ export const createCart = async (cart: Cart): Promise<boolean> => {
   // Update multiple parts in a single "transaction"
   const updates: any = {};
   updates[`/shared-carts/cart-${cart.id}`] = cart;
-  updates[`/users/${cart.createdBy}/carts/cart-${cart.id}`] = true;
+  updates[`/users/${cart.createdBy}/carts/cart-${cart.id}/`] = true;
 
   try {
     await update(ref(firebaseDatabase), updates);
@@ -126,7 +126,7 @@ export const createCart = async (cart: Cart): Promise<boolean> => {
 
 export const getCart = async (cartId: string): Promise<Cart | null> => {
   try {
-    const snapshot = await get(ref(firebaseDatabase, `/shared-carts/cart-${cartId}`));
+    const snapshot = await get(ref(firebaseDatabase, `/shared-carts/cart-${cartId}/`));
     if (snapshot.exists()) return snapshot.val();
   } catch (error) {
     console.warn(error);
@@ -201,6 +201,16 @@ export const addCartItem = async (cartId: string, item: Poke): Promise<boolean> 
   return false;
 }
 
+export const removeAllCartItems = async (cartId: string) => {
+  try {
+    await set(ref(firebaseDatabase, `/shared-carts/cart-${cartId}/items`), {})
+    return true;
+  } catch (error) {
+    console.warn(error);
+    return false
+  }
+}
+
 export const removeCartItem = async (cartId: string, itemId: string): Promise<boolean> => {
   try {
     await remove(ref(firebaseDatabase, `/shared-carts/cart-${cartId}/items/${itemId}`),);
@@ -223,7 +233,7 @@ export const deleteCart = async (cartId: string): Promise<boolean> => {
 
 
 export const observeCart = (cartId: string, callback: (cart: Cart | null) => void) => {
-  return onValue(ref(firebaseDatabase, `/shared-carts/cart-${cartId}`), (snapshot) => {
+  const unsubscribe = onValue(ref(firebaseDatabase, `/shared-carts/cart-${cartId}`), (snapshot) => {
 
     if(!snapshot.exists()) {
       callback(null);
@@ -237,7 +247,10 @@ export const observeCart = (cartId: string, callback: (cart: Cart | null) => voi
     };
 
     callback(cart);
-  })
+  },
+  (error) => console.warn(error)
+  )
+  return unsubscribe;
 }
 
 

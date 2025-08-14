@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-regular-svg-icons";
 
-import type { Poke } from "@/types";
+import type { Cart, Poke } from "@/types";
 import { ButtonIcon } from "../components/common/ButtonIcon";
 import { MainMenu } from "../components/common/MainMenu";
 import { PageHeader } from "../components/common/PageHeader";
@@ -13,8 +13,10 @@ import { useAuth } from "../context/AuthContext";
 
 
 export function Cart() {
+  const { cart, deleteAllItems } = useCart();
   const { user } = useAuth();
-  const { cart } = useCart();
+
+  const userUid = user?.uid || '';
 
   const generateInviteLink = () => {
     alert('Coming soon');
@@ -34,7 +36,7 @@ export function Cart() {
         center={
           <h3
             className="h-100 flex flex-center text-center"
-          // contentEditable={"plaintext-only"}
+            // contentEditable={"plaintext-only"}
           >
             {cart.name}
           </h3>
@@ -45,24 +47,23 @@ export function Cart() {
         classes="main-bg"
       />
 
-      {
-        user &&
-        <section
-          className="text-center"
+      <section
+        id="invite-link"
+        className="text-center"
+      >
+        <span
+          className="fake-link"
+          onClick={generateInviteLink}
         >
-          <span
-            className="fake-link"
-            onClick={generateInviteLink}
-          >
-            Genera link di invito
-          </span>
-        </section>
-      }
+          Genera link di invito
+        </span>
+      </section>
 
       <section
-        className="flex-1 padding-1"
+        className="flex flex-column flex-1 padding-1 gap-1 scroll
+        "
       >
-        {renderItems(cart.items)}
+        {renderItems(cart, userUid)}
       </section>
 
       <PageFooter
@@ -70,7 +71,8 @@ export function Cart() {
           <ButtonText
             text="svuota"
             classes="red-bg primary-contrast-color border-r-10"
-            clickHandler={() => alert('Coming soon!')}
+            clickHandler={() => deleteAllItems()}
+            disabled={userUid != cart.createdBy || Object.keys(cart.items || {}).length == 0}
           />
         }
 
@@ -79,23 +81,33 @@ export function Cart() {
             text="Preview"
             classes="primary-bg primary-contrast-color border-r-10"
             clickHandler={() => alert('Coming soon!')}
+            disabled={userUid != cart.createdBy || Object.keys(cart.items || {}).length == 0}
           />
         }
+
+        classes="main-bg"
       />
     </div>
   )
 }
 
-const renderItems = (items: { [id: string]: Poke }) => {
+const renderItems = (cart: Cart, userUid: string) => {
+  const items = cart.items;
   if (Object.keys(items).length == 0) {
     return <span className="flex flex-center h-100">Il carrello è vuoto</span>
   }
 
-  return Object.entries(items).map(entry => {
-    const [_, item] = entry;
+  // sort by cart name
+  const sortedItems: Poke[] = Object.values(items).sort((itemA: Poke, itemB: Poke) => {
+    return itemA.name > itemB.name ? 1 : -1;
+  })
+
+  return sortedItems.map(item => {
     return (
       <Item
+        key={item.id}
         item={item}
+        disabled={item.createdBy != userUid && cart.createdBy != userUid}
       />
     )
   })

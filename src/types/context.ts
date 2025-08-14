@@ -61,8 +61,13 @@ export type AuthContextType = {
 
 export type CartContextType = {
   cart: Cart,
+
+  createCart: (name: string) => void,
+  deleteCart: (cartId: string) => void,
   updateCartName: (newName: string) => void,
+  
   addItem: (item: Poke) => void,
   duplicateItem: (itemId: string) => void,
-  deleteItem: (itemId: string) => void
+  deleteItem: (itemId: string, itemName: string) => void
+  deleteAllItems: () => void
 }
