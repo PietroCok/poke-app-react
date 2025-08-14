@@ -19,5 +19,6 @@ export type Group = {
   opzioni: {
     name: string,
     prezzo: number
-  }[]
+  }[],
+  order: number
 }
