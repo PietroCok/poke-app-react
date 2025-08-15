@@ -191,6 +191,10 @@
   border-radius: 50%;
 }
 
+.border-primary{
+  border-color: var(--primary-color) !important;
+}
+
 .padding-0 {
   padding: 0;
 }

@@ -81,7 +81,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
           </div>
 
           <div
-            className="save-selection-modal-controls flex just-between"
+            className="modal-controls flex just-between"
           >
 
             <ButtonIcon

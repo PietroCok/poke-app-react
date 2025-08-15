@@ -72,6 +72,18 @@ details summary {
   list-style: none;
 }
 
+.checkbox {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--primary-color);
+  border-radius: 5px;
+}
+
+.checkbox.checked {
+  background-color: var(--primary-color);
+}
+
 /* PAGE HEADER */
 
 .page-header {
@@ -213,6 +225,10 @@ details summary {
   min-width: 300px;
 }
 
+.modal-controls {
+  padding-top: 1rem;
+}
+
 
 /* END CUSTOM MODAL */
 
@@ -225,9 +241,8 @@ input {
   border-radius: 5px;
 }
 
-#payment-toogle-container{
+#payment-toogle-container {
   padding: 1rem;
-  padding-bottom: 2rem;
 }
 
 #payment-method-selection {
@@ -285,19 +300,25 @@ input:checked~.toggle-right {
   padding-bottom: 1rem;
 }
 
-.cart-item-container{
+.cart-item-container {
   border: 1px solid var(--main-color);
   border-radius: 10px;
   padding: 1rem;
   cursor: pointer;
 }
 
-.cart-item-container.item-disabled{
+.cart-item-container.item-disabled {
   border-color: var(--alt-bg);
 }
 
 .cart-item-pay {
   margin-right: 5px;
+}
+
+.shared-cart {
+  border: 1px solid var(--main-color);
+  border-radius: 10px;
+  padding: 1rem;
 }
 
 
