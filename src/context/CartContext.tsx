@@ -17,13 +17,13 @@ export const useCart = () => {
   return ctx;
 };
 
-const emptyCart = (userUid?: string, name?: string) => {
+const emptyCart = (userUid?: string, name?: string, isShared?: boolean) => {
   return {
     id: crypto.randomUUID(),
     name: name ?? 'Carrello',
     createdBy: userUid ?? '',
     items: {},
-    isShared: false
+    isShared: isShared || false
   }
 }
 
@@ -63,11 +63,9 @@ export function CartProvider({ }: CartProviderProps) {
 
       setCart(remoteCart);
     } else {
-      const newCart = structuredClone(cart);
-      if (!newCart.createdBy) {
-        newCart.createdBy = user?.uid || '';
-      }
-      createCart(newCart);
+      // Remote cart has been deleted => reset local cart
+      const newCart = emptyCart();
+      setCart(newCart);
     }
   }
 
@@ -76,13 +74,29 @@ export function CartProvider({ }: CartProviderProps) {
     alert('coming soon!');
   }
 
-  const _createisSharedCart = async (name?: string) => {
-    const newCart = emptyCart(userUid, name);
-    createCart(newCart);
+  const _createSharedCart = async (name: string, copyActiveCart: boolean) => {
+    if (!user) return false;
+
+    let newCart: Cart;
+    if (copyActiveCart) {
+      newCart = structuredClone(cart);
+      newCart.id = crypto.randomUUID();
+      newCart.createdBy = userUid;
+      newCart.name = name;
+      newCart.isShared = true;
+    } else {
+      newCart = emptyCart(userUid, name, true);
+    }
+
+    const creationReusult = await createCart(newCart);
+    if (creationReusult) {
+      setCart(newCart);
+    }
+    return creationReusult;
   }
 
-  const _deleteisSharedCart = async (cartId: string) => {
-    await deleteCart(cartId);
+  const _deleteSharedCart = async (cartId: string) => {
+    return await deleteCart(cartId);
   }
 
   const addItem = (item: Poke) => {
@@ -116,7 +130,7 @@ export function CartProvider({ }: CartProviderProps) {
       return;
     }
 
-    if (user  && cart.isShared) {
+    if (user && cart.isShared) {
       removeCartItem(cart.id, itemId);
     } else {
       const newItems = cart.items || {};
@@ -129,7 +143,7 @@ export function CartProvider({ }: CartProviderProps) {
   }
 
   const deleteAllItems = () => {
-    if(Object.values(cart.items || {}).length == 0){
+    if (Object.values(cart.items || {}).length == 0) {
       return;
     }
 
@@ -137,8 +151,8 @@ export function CartProvider({ }: CartProviderProps) {
       return;
     }
 
-    if(user && cart.isShared){
-      if(!cart?.id){
+    if (user && cart.isShared) {
+      if (!cart?.id) {
         return;
       }
       removeAllCartItems(cart.id);
@@ -152,7 +166,19 @@ export function CartProvider({ }: CartProviderProps) {
 
   return (
     <CartContext.Provider
-      value={{ cart, updateCartName, addItem, duplicateItem, deleteItem, createCart: _createisSharedCart, deleteCart: _deleteisSharedCart, deleteAllItems }}
+      value={
+        {
+          cart,
+          setCart,
+          updateCartName,
+          addItem,
+          duplicateItem,
+          deleteItem,
+          createCart: _createSharedCart,
+          deleteCart: _deleteSharedCart,
+          deleteAllItems
+        }
+      }
     >
       <Outlet />
     </CartContext.Provider>

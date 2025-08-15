@@ -62,8 +62,9 @@ export type AuthContextType = {
 export type CartContextType = {
   cart: Cart,
 
-  createCart: (name: string) => void,
-  deleteCart: (cartId: string) => void,
+  setCart: (cart: Cart) => void,
+  createCart: (name: string, copyActiveCart: boolean) => Promise<boolean>,
+  deleteCart: (cartId: string) => Promise<boolean>,
   updateCartName: (newName: string) => void,
   
   addItem: (item: Poke) => void,
