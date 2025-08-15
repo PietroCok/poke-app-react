@@ -150,7 +150,7 @@ export const getCarts = async (userUid: string): Promise<Cart[] | null> => {
   const carts = [];
   for (const cartId in cartIds) {
     try {
-      const snapshot = await get(ref(firebaseDatabase, `shared-carts/cart-${cartId}/`));
+      const snapshot = await get(ref(firebaseDatabase, `shared-carts/${cartId}/`));
       if (snapshot.exists()) {
         carts.push(snapshot.val());
       } else {
