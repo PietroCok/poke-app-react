@@ -50,6 +50,7 @@ export type AuthContextType = {
   user: User | null,
   profile: UserProfile | null,
   isOffline: boolean,
+  isUserActive: () => boolean,
   login: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>,
   signUp: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>,
   logout: () => Promise<void>,

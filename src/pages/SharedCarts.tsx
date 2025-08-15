@@ -114,7 +114,7 @@ export function SharedCarts({ }: SharedCartsProps) {
           >
             {
               carts.length > 0 ?
-                renderSharedCartList(carts, cart.id, deleteSharedCart, loadCartAsActive, unlinkSharedCart)
+                renderSharedCartList(carts, cart.id, user?.uid || '', deleteSharedCart, loadCartAsActive, unlinkSharedCart)
                 :
                 <span
                   className="flex flex-center h-100"
@@ -160,6 +160,7 @@ export function SharedCarts({ }: SharedCartsProps) {
 const renderSharedCartList = (
   carts: Cart[],
   activeCartId: string,
+  userUid: string,
   deleteSharedCart: (cartId: string, cartName: string) => void,
   loadCartAsActive: (cartId: string) => void,
   unlinkSharedCart: () => void
@@ -184,6 +185,7 @@ const renderSharedCartList = (
             classes="small red border-r-10"
             tooltip="Cancella carrello"
             clickHandler={() => deleteSharedCart(cart.id, cart.name)}
+            disabled={cart.createdBy != userUid}
           />
 
           {

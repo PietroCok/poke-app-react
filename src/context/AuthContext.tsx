@@ -73,6 +73,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // ask confirmation
   }
 
+  const isUserActive = () => {
+    return user && profile && profile.status === 'active' || false;
+  }
+
   // Shows loading screen until we know the user is for sure logged or not
   if (loading) {
     return (
@@ -86,7 +90,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ user, profile, isOffline, login, logout, signUp, setOffline, deleteAccount }}
+      value={{ user, profile, isOffline, isUserActive, login, logout, signUp, setOffline, deleteAccount }}
     >
       {children}
     </AuthContext.Provider>

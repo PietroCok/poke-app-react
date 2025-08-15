@@ -28,7 +28,7 @@ const emptyCart = (userUid?: string, name?: string, isShared?: boolean) => {
 }
 
 export function CartProvider({ }: CartProviderProps) {
-  const { user } = useAuth();
+  const { user, isUserActive } = useAuth();
 
   const userUid = user?.uid || '';
   const localStorageKey = userUid ? `poke-cart-${userUid}` : `poke-cart`;
@@ -75,7 +75,7 @@ export function CartProvider({ }: CartProviderProps) {
   }
 
   const _createSharedCart = async (name: string, copyActiveCart: boolean) => {
-    if (!user) return false;
+    if (!isUserActive()) return false;
 
     let newCart: Cart;
     if (copyActiveCart) {
@@ -96,6 +96,7 @@ export function CartProvider({ }: CartProviderProps) {
   }
 
   const _deleteSharedCart = async (cartId: string) => {
+    if(!isUserActive()) return false;
     return await deleteCart(cartId);
   }
 
