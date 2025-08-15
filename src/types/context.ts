@@ -65,6 +65,7 @@ export type CartContextType = {
   setCart: (cart: Cart) => void,
   createCart: (name: string, copyActiveCart: boolean) => Promise<boolean>,
   deleteCart: (cartId: string) => Promise<boolean>,
+  unlinkCart: () => void,
   updateCartName: (newName: string) => void,
   
   addItem: (item: Poke) => void,

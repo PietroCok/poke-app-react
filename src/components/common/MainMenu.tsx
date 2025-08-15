@@ -83,6 +83,7 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
                 }
                 classes="primary-color border-r-10"
                 tooltip="Carrelli condivisi"
+                linkTo="/shared-carts"
               />
 
               <UserMenu

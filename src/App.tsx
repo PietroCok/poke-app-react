@@ -18,6 +18,7 @@ import { Registration } from './pages/Register';
 import { NotFound } from './pages/NotFound';
 import { AdminUsersManagement } from './pages/AdminUsersManagement';
 import { CartProvider } from './context/CartContext';
+import { SharedCarts } from './pages/SharedCarts';
 
 const config: AppConfig = appConfig;
 
@@ -41,6 +42,7 @@ export default function App() {
                 </Route>
 
                 <Route path="/cart" element={<Cart />} />
+                <Route path='/shared-carts' element={<SharedCarts />} />
 
               </Route>
 

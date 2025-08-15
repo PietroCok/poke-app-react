@@ -99,6 +99,12 @@ export function CartProvider({ }: CartProviderProps) {
     return await deleteCart(cartId);
   }
 
+  const unlinkCart = async () => {
+    // Create new empty cart and replace current cart
+    const newCart = emptyCart();
+    setCart(newCart);
+  }
+
   const addItem = (item: Poke) => {
     if (user && cart.isShared) {
       addCartItem(cart.id, item);
@@ -170,12 +176,13 @@ export function CartProvider({ }: CartProviderProps) {
         {
           cart,
           setCart,
+          createCart: _createSharedCart,
+          deleteCart: _deleteSharedCart,
+          unlinkCart,
           updateCartName,
           addItem,
           duplicateItem,
           deleteItem,
-          createCart: _createSharedCart,
-          deleteCart: _deleteSharedCart,
           deleteAllItems
         }
       }
