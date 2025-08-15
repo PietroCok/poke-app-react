@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-regular-svg-icons";
 
-import type { Cart, Poke } from "@/types";
+import type { Cart, Poke } from "../types";
 import { ButtonIcon } from "../components/common/ButtonIcon";
 import { MainMenu } from "../components/common/MainMenu";
 import { PageHeader } from "../components/common/PageHeader";
@@ -10,6 +10,7 @@ import { ButtonText } from "../components/common/ButtonText";
 import { Item } from "../components/cart/Item";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
 
 
 export function Cart() {
@@ -35,10 +36,19 @@ export function Cart() {
         }
         center={
           <h3
-            className="h-100 flex flex-center text-center"
-            // contentEditable={"plaintext-only"}
+            className="h-100 flex flex-center gap-05 text-center"
+          // contentEditable={"plaintext-only"}
           >
-            {cart.name}
+            {
+              cart.isShared && 
+              <FontAwesomeIcon 
+                icon={faLink} 
+                title="Carello condiviso"
+              />
+            }
+            <span>
+              {cart.name}
+            </span>
           </h3>
         }
         right={
@@ -49,7 +59,7 @@ export function Cart() {
 
 
       {
-        cart.isShared && 
+        cart.isShared &&
         <section
           id="invite-link"
           className="text-center"
@@ -97,7 +107,7 @@ export function Cart() {
 
 const renderItems = (cart: Cart, userUid: string) => {
   const items = cart.items;
-  if (Object.keys(items).length == 0) {
+  if (!items || Object.keys(items).length == 0) {
     return <span className="flex flex-center h-100">Il carrello è vuoto</span>
   }
 
