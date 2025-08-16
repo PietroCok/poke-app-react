@@ -21,11 +21,6 @@ function areEquals(prevProps: ItemProps, nextProps: ItemProps) {
   // Conditionally skip memoization checks
   if (!nextProps.useMemo) return false;
 
-  const start = performance.now();
-  isSameItem(prevProps.item, nextProps.item);
-  const duration = performance.now() - start;
-  console.log('compare duration', duration.toPrecision(10));
-
   return (
     isSameItem(prevProps.item, nextProps.item) &&
     prevProps.disabled === nextProps.disabled
@@ -77,8 +72,6 @@ function isSameItem(prevItem: Poke, nextItem: Poke){
 
 function _Item({ item, disabled, deleteItem, duplicateItem }: ItemProps) {
   const [isOpen, setIsOpen] = useState(false);
-
-  console.log('render', item.id);
 
   const handleToggle = (event: ToggleEvent<HTMLDetailsElement>) => {
     const target = event.target as HTMLDetailsElement;
