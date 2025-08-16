@@ -9,14 +9,15 @@ export interface ButtonProps {
   tooltip?: string
   disabled?: boolean
   type?: "submit" | "reset" | "button" | undefined
-  linkTo?: string                              
+  linkTo?: string | undefined                              
   clickHandler?: (event: ButtonClickEvent) => void
+  [key: `data-${string}`]: string | number | undefined;
 }
 
-export function Button({ children, style, classes, tooltip, disabled, type, linkTo, clickHandler }: ButtonProps) {
+export function Button({ children, style, classes, tooltip, disabled, type, linkTo, clickHandler, ...rest }: ButtonProps) {
   let _classes = classes ? `${classes} ` : '';
   if (disabled) {
-    _classes += 'disabled '
+    _classes += 'disabled ';
   }
 
   const clickCallback = (event: ButtonClickEvent) => {
@@ -30,6 +31,7 @@ export function Button({ children, style, classes, tooltip, disabled, type, link
         className={`${_classes}button`}
         title={tooltip}
         style={style}
+        {...rest}
       >
         {children}
       </NavLink>
@@ -37,12 +39,13 @@ export function Button({ children, style, classes, tooltip, disabled, type, link
   } else {
     return (
       <button
-        className={`${_classes}button`}
         onClick={clickCallback}
+        className={`${_classes}button`}
         title={tooltip}
         style={style}
         type={type}
         disabled={disabled}
+        {...rest}
       >
         {children}
       </button>
