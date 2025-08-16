@@ -321,5 +321,18 @@ input:checked~.toggle-right {
   padding: 1rem;
 }
 
+[data-cart-count] {
+  position: relative;
+}
+
+[data-cart-count]::after {
+  content: attr(data-cart-count);
+  font-weight: bolder;
+  position: absolute;
+  top: 0;
+  right: 5px;
+  transform: translate(100%);
+  color: var(--main-color);
+}
 
 /* END CART */

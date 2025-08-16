@@ -73,4 +73,5 @@ export type CartContextType = {
   duplicateItem: (itemId: string) => void,
   deleteItem: (itemId: string, itemName: string) => void
   deleteAllItems: () => void
+  getItemsCount: () => number
 }

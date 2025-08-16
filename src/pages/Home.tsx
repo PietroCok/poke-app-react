@@ -12,11 +12,13 @@ import { PageHeader } from "../components/common/PageHeader";
 import { ButtonIcon } from "../components/common/ButtonIcon";
 import { MainMenu } from "../components/common/MainMenu";
 import { SaveSelectionModal } from "../components/SaveSelectionModal";
+import { useCart } from "@/context/CartContext";
 
 export function Home({ dimensioni, gruppi }: AppConfig) {
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const { resetContext, hasIngredients, getTotalPrice } = useSelection();
   const isEmpty = !hasIngredients();
+  const { getItemsCount } = useCart();
 
   const dimensions = Object.entries(dimensioni);
   const groups = Object.entries(gruppi);
@@ -30,6 +32,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
             classes="gold border-r-10"
             tooltip="Carrello"
             linkTo={"/cart"}
+            data-cart-count={getItemsCount() || null}
           />
         }
       right={

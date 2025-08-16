@@ -171,6 +171,10 @@ export function CartProvider({ }: CartProviderProps) {
     }
   }
 
+  const getItemsCount = () => {
+    return Object.keys(cart.items || {}).length;
+  }
+
   return (
     <CartContext.Provider
       value={
@@ -184,7 +188,8 @@ export function CartProvider({ }: CartProviderProps) {
           addItem,
           duplicateItem,
           deleteItem,
-          deleteAllItems
+          deleteAllItems,
+          getItemsCount
         }
       }
     >
