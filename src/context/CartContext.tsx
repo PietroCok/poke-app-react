@@ -133,6 +133,14 @@ export function CartProvider({ }: CartProviderProps) {
     addItem(newItem);
   }
 
+  const updateItemFromEditing = (item: Poke) => {
+    // If old item does not exists create a new cart item
+    const oldItem = cart.items[item.id];
+    if(!oldItem) addItem(item);
+
+    addItem(structuredClone(item));
+  }
+
   const deleteItem = (itemId: string, itemName: string) => {
     if (!confirm(`Confermare la cancellazione dell'elemento: ${itemName}?`)) {
       return;
@@ -187,6 +195,7 @@ export function CartProvider({ }: CartProviderProps) {
           updateCartName,
           addItem,
           duplicateItem,
+          updateItemFromEditing,
           deleteItem,
           deleteAllItems,
           getItemsCount

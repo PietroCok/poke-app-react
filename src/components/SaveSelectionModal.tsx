@@ -16,15 +16,18 @@ export interface SaveSelectionModalProps {
 
 export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
   const { user } = useAuth();
-  const { addItem } = useCart();
+  const { addItem, updateItemFromEditing } = useCart();
   const { 
-    ingredients, 
+    ingredients,
+    resetContext: resetSelection,
     size, 
     getTotalPrice, 
     name, 
     setName, 
     paymentMethod, 
-    setPaymentMethod 
+    setPaymentMethod,
+    editingId,
+    setEditingId
   } = useSelection();
 
   const changePaymentMethod = (event: ChangeEvent) => {
@@ -43,7 +46,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
 
   const saveCart = () => {
     const item: Poke = {
-      id: crypto.randomUUID(),
+      id: editingId || crypto.randomUUID(),
       name: name,
       ingredients: ingredients,
       createdBy: user?.uid || '',
@@ -52,7 +55,14 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
       price: getTotalPrice()
     }
 
-    addItem(item);
+    if(editingId) {
+      updateItemFromEditing(item);
+      setEditingId('');
+    } else {
+      addItem(item);
+    }
+
+    resetSelection();
 
     setIsOpen(false);
   }

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type IngredientsState, type PaymentMethod, type Poke, type SelectionContext } from "@/types";
@@ -49,6 +49,7 @@ export function SelectionProvider({ }: SelectionProviderProps) {
   );
   const [paymentMethod, setPaymentMethod] = useLocalStorage<PaymentMethod>('poke-payment-method', PAYMENT_METHODS.CASH);
   const [name, setName] = useLocalStorage('poke-save-name', '');
+  const [editingId, setEditingId] = useState('');
 
   useEffect(() => {
     localStorage.setItem(ingredientsStorageKey, JSON.stringify(ingredients));
@@ -170,6 +171,8 @@ export function SelectionProvider({ }: SelectionProviderProps) {
     setName(item.name);
 
     setPaymentMethod(item.paymentMethod || PAYMENT_METHODS.CASH);
+
+    setEditingId(item.id);
   }
 
   return (
@@ -194,7 +197,10 @@ export function SelectionProvider({ }: SelectionProviderProps) {
       setName,
 
       paymentMethod,
-      setPaymentMethod
+      setPaymentMethod,
+
+      editingId,
+      setEditingId
     } as SelectionContext}>
       <Outlet />
     </SelectionContext.Provider>

@@ -34,7 +34,10 @@ export type SelectionContext = {
   setName: (name: string) => void,
 
   paymentMethod: PaymentMethod, 
-  setPaymentMethod: (paymentMethod: PaymentMethod) => void
+  setPaymentMethod: (paymentMethod: PaymentMethod) => void,
+
+  editingId: string,
+  setEditingId: (itemId: string) => void
 }
 
 
@@ -79,6 +82,8 @@ export type CartContextType = {
   addItem: (item: Poke) => void,
   duplicateItem: (itemId: string) => void,
   deleteItem: (itemId: string, itemName: string) => void
+  updateItemFromEditing: (item: Poke) => void,
   deleteAllItems: () => void
   getItemsCount: () => number
+
 }
