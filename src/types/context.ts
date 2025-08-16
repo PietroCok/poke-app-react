@@ -1,6 +1,6 @@
 import type { FirebaseError } from "firebase/app"
 import type { User, UserCredential } from "firebase/auth"
-import type { Cart, Poke } from "./common"
+import type { Cart, PaymentMethod, Poke } from "./common"
 
 export type ContextIngredient = {
   id: string,
@@ -26,8 +26,15 @@ export type SelectionContext = {
   groupCount: (groupId: string) => number,
   groupExtraPrice: (groupId: string) => number,
   getTotalPrice: () => number,
+  loadItemIntoConfigurator: (item: Poke) => void,
 
   resetContext: () => void,
+
+  name: string, 
+  setName: (name: string) => void,
+
+  paymentMethod: PaymentMethod, 
+  setPaymentMethod: (paymentMethod: PaymentMethod) => void
 }
 
 

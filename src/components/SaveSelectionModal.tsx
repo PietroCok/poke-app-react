@@ -3,9 +3,8 @@ import { createPortal } from "react-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
-import { PAYMENT_METHODS, type PaymentMethod, type Poke } from "../types";
+import { PAYMENT_METHODS, type Poke } from "../types";
 import { ButtonIcon } from "./common/ButtonIcon";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { useCart } from "../context/CartContext";
 import { useSelection } from "../context/configurator/SelectionContext";
 import { useAuth } from "../context/AuthContext";
@@ -16,11 +15,17 @@ export interface SaveSelectionModalProps {
 }
 
 export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
-  const [paymentMethod, setPaymentMethod] = useLocalStorage<PaymentMethod>('poke-payment-method', PAYMENT_METHODS.CASH);
-  const [name, setName] = useLocalStorage('poke-save-name','');
   const { user } = useAuth();
   const { addItem } = useCart();
-  const { ingredients, size, getTotalPrice } = useSelection();
+  const { 
+    ingredients, 
+    size, 
+    getTotalPrice, 
+    name, 
+    setName, 
+    paymentMethod, 
+    setPaymentMethod 
+  } = useSelection();
 
   const changePaymentMethod = (event: ChangeEvent) => {
     const target = event.target as HTMLInputElement;
@@ -31,7 +36,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
 
   const handleClickOut = (event: React.MouseEvent) => {
     const target = event.target as HTMLDivElement;
-    if(target.id === 'save-modal-backdrop'){
+    if (target.id === 'save-modal-backdrop') {
       setIsOpen(false);
     }
   }
@@ -75,9 +80,9 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
 
           <div id="payment-toogle-container" className="flex align-center just-center">
             <input type="checkbox" name="payment-method" id="payment-method" className="custom-toggle-input" onChange={changePaymentMethod} checked={paymentMethod === PAYMENT_METHODS.PAYPAL} />
-              <label id="cash" htmlFor="payment-method" className="pointer flex-1 toggle toggle-left text-center disabled">Contanti</label>
-              <label className="custom-toogle pointer" htmlFor="payment-method"></label>
-              <label id="paypal" htmlFor="payment-method" className="pointer flex-1 toggle toggle-right text-center disabled">PayPal</label>
+            <label id="cash" htmlFor="payment-method" className="pointer flex-1 toggle toggle-left text-center disabled">Contanti</label>
+            <label className="custom-toogle pointer" htmlFor="payment-method"></label>
+            <label id="paypal" htmlFor="payment-method" className="pointer flex-1 toggle toggle-right text-center disabled">PayPal</label>
           </div>
 
           <div

@@ -39,9 +39,9 @@ export default function App() {
 
                 <Route element={<SelectionProvider />}>
                   <Route path="/" element={<Home {...config} />} />
+                  <Route path="/cart" element={<Cart />} />
                 </Route>
 
-                <Route path="/cart" element={<Cart />} />
                 <Route path='/shared-carts' element={<SharedCarts />} />
 
               </Route>

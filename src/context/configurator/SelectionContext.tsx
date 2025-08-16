@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { Outlet } from "react-router-dom";
 
-import type { AppConfig, ContextIngredient, IngredientsState, SelectionContext } from "@/types";
+import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type IngredientsState, type PaymentMethod, type Poke, type SelectionContext } from "@/types";
 
 import appConfig from '../../../config.json';
 import { ingredientIdToName } from "../../scripts/utils";
@@ -40,13 +40,15 @@ const getIngredientsFromLocalstorage = (): IngredientsState => {
   return emptyIngredients;
 }
 
-export function SelectionProvider({  }: SelectionProviderProps) {
+export function SelectionProvider({ }: SelectionProviderProps) {
   const [size, setSize] = useLocalStorage(sizeStorageKey, defaultSize);
   const [ingredients, dispatch] = useReducer(
     selectionReducer,
     emptyIngredients,
     getIngredientsFromLocalstorage
   );
+  const [paymentMethod, setPaymentMethod] = useLocalStorage<PaymentMethod>('poke-payment-method', PAYMENT_METHODS.CASH);
+  const [name, setName] = useLocalStorage('poke-save-name', '');
 
   useEffect(() => {
     localStorage.setItem(ingredientsStorageKey, JSON.stringify(ingredients));
@@ -130,7 +132,7 @@ export function SelectionProvider({  }: SelectionProviderProps) {
     const basePrice = config.dimensioni[size].prezzo;
     let price = basePrice;
 
-    for(const group of Object.keys(ingredients)){
+    for (const group of Object.keys(ingredients)) {
       price += groupExtraPrice(group);
     }
 
@@ -155,11 +157,27 @@ export function SelectionProvider({  }: SelectionProviderProps) {
     })
   }
 
+  const loadItemIntoConfigurator = (item: Poke) => {
+    const newIngredients = structuredClone(item.ingredients) || {};
+
+    dispatch({
+      type: ACTIONS.SET_INGREDIENTS,
+      payload: { ingredients: newIngredients }
+    });
+
+    setSize(item.size);
+
+    setName(item.name);
+
+    setPaymentMethod(item.paymentMethod || PAYMENT_METHODS.CASH);
+  }
+
   return (
     <SelectionContext.Provider value={{
       size,
       selectSize,
       getLimit,
+
       ingredients,
       addIngredient,
       removeIngredient,
@@ -168,7 +186,15 @@ export function SelectionProvider({  }: SelectionProviderProps) {
       groupCount,
       groupExtraPrice,
       getTotalPrice,
-      resetContext
+      resetContext,
+
+      loadItemIntoConfigurator,
+
+      name,
+      setName,
+
+      paymentMethod,
+      setPaymentMethod
     } as SelectionContext}>
       <Outlet />
     </SelectionContext.Provider>

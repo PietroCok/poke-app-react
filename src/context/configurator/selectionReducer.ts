@@ -14,6 +14,7 @@ export const ACTIONS = {
   ADD_INGREDIENT: 'add_ingredient',
   REMOVE_INGREDIENT: 'remove_ingredient',
   INCREMENT_QUANTITY: 'increment_quantity',
+  SET_INGREDIENTS: 'set_ingredients',
   RESET: 'reset',
 } as const;
 
@@ -47,6 +48,16 @@ export function selectionReducer(state: IngredientsState, action: Action): Ingre
         )
       }
       return updatedState;
+    }
+
+    case ACTIONS.SET_INGREDIENTS: {
+      const { ingredients } = action.payload;
+      if(!ingredients) return state;
+
+      return {
+        ...emptyIngredients,
+        ...ingredients
+      }
     }
 
     case ACTIONS.RESET: {
