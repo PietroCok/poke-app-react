@@ -11,11 +11,13 @@ import { ButtonText } from "../components/common/ButtonText";
 import { Item } from "../components/cart/Item";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { useSelection } from "@/context/configurator/SelectionContext";
 
 const ITEM_MEMO_THRESHOLD = 10;
 
 export function Cart() {
   const { cart, deleteAllItems, deleteItem, duplicateItem } = useCart();
+  const { loadItemIntoConfigurator } = useSelection();
   const { user } = useAuth();
 
   const userUid = user?.uid || '';
@@ -80,7 +82,7 @@ export function Cart() {
         className="flex flex-column flex-1 padding-1 gap-1 scroll
         "
       >
-        {renderItems(cart, userUid, deleteItem, duplicateItem)}
+        {renderItems(cart, userUid, deleteItem, duplicateItem, loadItemIntoConfigurator)}
       </section>
 
       <PageFooter
@@ -112,12 +114,13 @@ const renderItems = (
   cart: Cart,
   userUid: string,
   deleteItem: (itemId: string, itemName: string) => void,
-  duplicateItem: (itemId: string) => void
+  duplicateItem: (itemId: string) => void,
+  loadItemIntoConfigurator: (item: Poke) => void
 ) => {
 
   const items = cart.items;
   const itemsCount = Object.keys(items).length;
-  
+
   if (!items || itemsCount == 0) {
     return <span className="flex flex-center h-100">Il carrello è vuoto</span>
   }
@@ -135,6 +138,7 @@ const renderItems = (
         disabled={item.createdBy != userUid && cart.createdBy != userUid}
         deleteItem={deleteItem}
         duplicateItem={duplicateItem}
+        editItem={loadItemIntoConfigurator}
         useMemo={itemsCount > ITEM_MEMO_THRESHOLD}
       />
     )

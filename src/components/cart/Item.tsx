@@ -6,12 +6,14 @@ import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import { PAYMENT_METHODS, type Poke } from "../../types";
 import { ButtonIcon } from "../common/ButtonIcon";
 import { itemToString, shallowEqual } from "../../scripts/utils";
+import { useNavigate } from "react-router-dom";
 
 export interface ItemProps {
   item: Poke,
   disabled: boolean,
   deleteItem: (itemId: string, itemName: string) => void,
   duplicateItem: (itemId: string) => void,
+  editItem: (item: Poke) => void,
   useMemo?: boolean
 }
 
@@ -70,15 +72,22 @@ function isSameItem(prevItem: Poke, nextItem: Poke){
   return true;
 }
 
-function _Item({ item, disabled, deleteItem, duplicateItem }: ItemProps) {
+function _Item({ item, disabled, deleteItem, duplicateItem, editItem }: ItemProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleToggle = (event: ToggleEvent<HTMLDetailsElement>) => {
     const target = event.target as HTMLDetailsElement;
     setIsOpen(target.open);
   }
 
-  const classes = disabled ? 'item-disabled ' : ''
+  const classes = disabled ? 'item-disabled ' : '';
+
+  const _editItem = () => {
+    editItem(item);
+
+    navigate('/');
+  }
 
   return (
     <div
@@ -123,7 +132,7 @@ function _Item({ item, disabled, deleteItem, duplicateItem }: ItemProps) {
               icon={<FontAwesomeIcon icon={faPen} />}
               classes="small border-r-10 primary-color"
               disabled={disabled}
-              clickHandler={() => alert('coming soon')}
+              clickHandler={_editItem}
             />
             <ButtonIcon
               tooltip="Aggiungi ai preferiti"
