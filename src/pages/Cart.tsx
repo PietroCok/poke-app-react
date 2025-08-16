@@ -21,8 +21,8 @@ export function Cart() {
   const { user } = useAuth();
 
   const userUid = user?.uid || '';
-
-  // console.log(Object.keys(cart.items || {}).length);
+  const hasItems = Object.keys(cart.items || {}).length == 0;
+  const isCartOwner = cart.isShared && userUid != cart.createdBy;
 
   const generateInviteLink = () => {
     alert('Coming soon');
@@ -91,7 +91,7 @@ export function Cart() {
             text="svuota"
             classes="red-bg primary-contrast-color border-r-10"
             clickHandler={() => deleteAllItems()}
-            disabled={(cart.isShared && userUid != cart.createdBy) || Object.keys(cart.items || {}).length == 0}
+            disabled={!isCartOwner || !hasItems}
           />
         }
 
@@ -100,7 +100,7 @@ export function Cart() {
             text="Preview"
             classes="primary-bg primary-contrast-color border-r-10"
             clickHandler={() => alert('Coming soon!')}
-            disabled={(cart.isShared && userUid != cart.createdBy) || Object.keys(cart.items || {}).length == 0}
+            disabled={!isCartOwner || !hasItems}
           />
         }
 
@@ -118,10 +118,10 @@ const renderItems = (
   loadItemIntoConfigurator: (item: Poke) => void
 ) => {
 
-  const items = cart.items;
+  const items = cart.items || {};
   const itemsCount = Object.keys(items).length;
 
-  if (!items || itemsCount == 0) {
+  if (itemsCount == 0) {
     return <span className="flex flex-center h-100">Il carrello è vuoto</span>
   }
 
