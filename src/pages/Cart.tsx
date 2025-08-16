@@ -1,5 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-regular-svg-icons";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
 
 import type { Cart, Poke } from "../types";
 import { ButtonIcon } from "../components/common/ButtonIcon";
@@ -10,14 +11,16 @@ import { ButtonText } from "../components/common/ButtonText";
 import { Item } from "../components/cart/Item";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
 
+const ITEM_MEMO_THRESHOLD = 10;
 
 export function Cart() {
-  const { cart, deleteAllItems } = useCart();
+  const { cart, deleteAllItems, deleteItem, duplicateItem } = useCart();
   const { user } = useAuth();
 
   const userUid = user?.uid || '';
+
+  // console.log(Object.keys(cart.items || {}).length);
 
   const generateInviteLink = () => {
     alert('Coming soon');
@@ -40,9 +43,9 @@ export function Cart() {
           // contentEditable={"plaintext-only"}
           >
             {
-              cart.isShared && 
-              <FontAwesomeIcon 
-                icon={faLink} 
+              cart.isShared &&
+              <FontAwesomeIcon
+                icon={faLink}
                 title="Carello condiviso"
               />
             }
@@ -77,7 +80,7 @@ export function Cart() {
         className="flex flex-column flex-1 padding-1 gap-1 scroll
         "
       >
-        {renderItems(cart, userUid)}
+        {renderItems(cart, userUid, deleteItem, duplicateItem)}
       </section>
 
       <PageFooter
@@ -86,7 +89,7 @@ export function Cart() {
             text="svuota"
             classes="red-bg primary-contrast-color border-r-10"
             clickHandler={() => deleteAllItems()}
-            disabled={userUid != cart.createdBy || Object.keys(cart.items || {}).length == 0}
+            disabled={(cart.isShared && userUid != cart.createdBy) || Object.keys(cart.items || {}).length == 0}
           />
         }
 
@@ -95,7 +98,7 @@ export function Cart() {
             text="Preview"
             classes="primary-bg primary-contrast-color border-r-10"
             clickHandler={() => alert('Coming soon!')}
-            disabled={userUid != cart.createdBy || Object.keys(cart.items || {}).length == 0}
+            disabled={(cart.isShared && userUid != cart.createdBy) || Object.keys(cart.items || {}).length == 0}
           />
         }
 
@@ -105,9 +108,17 @@ export function Cart() {
   )
 }
 
-const renderItems = (cart: Cart, userUid: string) => {
+const renderItems = (
+  cart: Cart,
+  userUid: string,
+  deleteItem: (itemId: string, itemName: string) => void,
+  duplicateItem: (itemId: string) => void
+) => {
+
   const items = cart.items;
-  if (!items || Object.keys(items).length == 0) {
+  const itemsCount = Object.keys(items).length;
+  
+  if (!items || itemsCount == 0) {
     return <span className="flex flex-center h-100">Il carrello è vuoto</span>
   }
 
@@ -122,6 +133,9 @@ const renderItems = (cart: Cart, userUid: string) => {
         key={item.id}
         item={item}
         disabled={item.createdBy != userUid && cart.createdBy != userUid}
+        deleteItem={deleteItem}
+        duplicateItem={duplicateItem}
+        useMemo={itemsCount > ITEM_MEMO_THRESHOLD}
       />
     )
   })

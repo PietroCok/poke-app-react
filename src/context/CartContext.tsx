@@ -96,7 +96,7 @@ export function CartProvider({ }: CartProviderProps) {
   }
 
   const _deleteSharedCart = async (cartId: string) => {
-    if(!isUserActive()) return false;
+    if (!isUserActive()) return false;
     return await deleteCart(cartId);
   }
 
@@ -110,12 +110,13 @@ export function CartProvider({ }: CartProviderProps) {
     if (user && cart.isShared) {
       addCartItem(cart.id, item);
     } else {
-      const newItems = cart.items || {};
-      newItems[item.id] = item;
-      setCart({
-        ...cart,
-        items: newItems
-      })
+      setCart((prevCart: Cart) => ({
+        ...prevCart,
+        items: {
+          ...prevCart.items,
+          [item.id]: item
+        }
+      }));
     }
   }
 
@@ -140,12 +141,11 @@ export function CartProvider({ }: CartProviderProps) {
     if (user && cart.isShared) {
       removeCartItem(cart.id, itemId);
     } else {
-      const newItems = cart.items || {};
-      delete newItems[itemId];
-      setCart({
-        ...cart,
-        items: newItems
-      })
+      setCart(prevCart => {
+        const newItems = { ...prevCart.items };
+        delete newItems[itemId];
+        return { ...prevCart, items: newItems };
+      });
     }
   }
 

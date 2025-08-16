@@ -1,21 +1,84 @@
+import { memo, useState, type ToggleEvent } from "react";
 import { faCoins, faCopy, faPen, faStar, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 
 import { PAYMENT_METHODS, type Poke } from "../../types";
 import { ButtonIcon } from "../common/ButtonIcon";
-import { useCart } from "../../context/CartContext";
-import { itemToString } from "../../scripts/utils";
-import { useState, type ToggleEvent } from "react";
+import { itemToString, shallowEqual } from "../../scripts/utils";
 
 export interface ItemProps {
   item: Poke,
-  disabled: boolean
+  disabled: boolean,
+  deleteItem: (itemId: string, itemName: string) => void,
+  duplicateItem: (itemId: string) => void,
+  useMemo?: boolean
 }
 
-export function Item({ item, disabled }: ItemProps) {
-  const { deleteItem, duplicateItem } = useCart();
+export const Item = memo(_Item, areEquals);
+
+function areEquals(prevProps: ItemProps, nextProps: ItemProps) {
+  // Conditionally skip memoization checks
+  if (!nextProps.useMemo) return false;
+
+  const start = performance.now();
+  isSameItem(prevProps.item, nextProps.item);
+  const duration = performance.now() - start;
+  console.log('compare duration', duration.toPrecision(10));
+
+  return (
+    isSameItem(prevProps.item, nextProps.item) &&
+    prevProps.disabled === nextProps.disabled
+  );
+}
+
+function isSameItem(prevItem: Poke, nextItem: Poke){
+  const {
+    ingredients: prevIngredientsGroup,
+    ...prevOthers
+  } = prevItem;
+
+  const {
+    ingredients: nextIngredientsGroup,
+    ...nextOthers
+  } = nextItem;
+
+  // Compare fist level properties
+  if(!shallowEqual(prevOthers, nextOthers)) return false;
+
+  const prevGroupsKeys = Object.keys(prevIngredientsGroup);
+  const nextGroupsKeys = Object.keys(nextIngredientsGroup);
+
+  // Compares items groups number
+  if(prevGroupsKeys.length != nextGroupsKeys.length) return false;
+
+  // Compare each group
+  for(const groupKey of prevGroupsKeys){
+    const prevIngredients = prevIngredientsGroup[groupKey]
+    const nextIngredients = nextIngredientsGroup[groupKey]
+
+    if(prevIngredients.length != nextIngredients.length) return false;
+
+    const sortedPrevIngredients = [...prevIngredients].sort((a, b) => a.id.localeCompare(b.id));
+    const sortedNextIngredients = [...nextIngredients].sort((a, b) => a.id.localeCompare(b.id));
+
+    for(let i = 0; i < sortedPrevIngredients.length; i++){
+      if(
+        sortedPrevIngredients[i].id !== sortedNextIngredients[i].id ||
+        sortedPrevIngredients[i].quantity !== sortedNextIngredients[i].quantity ||
+        sortedPrevIngredients[i].price !== sortedNextIngredients[i].price
+      ) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+function _Item({ item, disabled, deleteItem, duplicateItem }: ItemProps) {
   const [isOpen, setIsOpen] = useState(false);
+
+  console.log('render', item.id);
 
   const handleToggle = (event: ToggleEvent<HTMLDetailsElement>) => {
     const target = event.target as HTMLDetailsElement;
@@ -26,7 +89,6 @@ export function Item({ item, disabled }: ItemProps) {
 
   return (
     <div
-      key={item.id}
       className={`${classes}cart-item-container`}
     >
       <details
