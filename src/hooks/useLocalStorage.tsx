@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export function useLocalStorage<T>(
   storageKey: string, 
   initialValue: T
-): [T, (newState: T) => void] {
+): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [value, setValue] = useState<T>(() => {
     const storageValue = localStorage.getItem(storageKey);
     try {
