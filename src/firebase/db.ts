@@ -168,8 +168,8 @@ export const getCarts = async (userUid: string): Promise<Cart[] | null> => {
 export const addCartUser = async (cartId: string, userUid: string): Promise<boolean> => {
   // Add cart id to user cart list
   try {
-    await update(ref(firebaseDatabase, `/users/${userUid}/carts/cart-${cartId}`), {
-      [cartId]: true
+    await update(ref(firebaseDatabase, `/users/${userUid}/carts/`), {
+      [`cart-${cartId}`]: true
     })
     return true;
   } catch (error) {
@@ -185,6 +185,18 @@ export const removeCartUser = async (cartId: string, userUid: string): Promise<b
     })
     console.log('Removed deleted cart from list');
     return true;
+  } catch (error) {
+    console.warn(error);
+  }
+  return false;
+}
+
+export const hasCartUser = async (cartId: string, userUid: string): Promise<boolean> => {
+  try {
+    const snapshot = await get(ref(firebaseDatabase, `users/${userUid}/carts/cart-${cartId}`));
+    if (snapshot.exists()) {
+      return !!snapshot.val();
+    }
   } catch (error) {
     console.warn(error);
   }
@@ -235,20 +247,20 @@ export const deleteCart = async (cartId: string): Promise<boolean> => {
 export const observeCart = (cartId: string, callback: (cart: Cart | null) => void) => {
   const unsubscribe = onValue(ref(firebaseDatabase, `/shared-carts/cart-${cartId}`), (snapshot) => {
 
-    if(!snapshot.exists()) {
+    if (!snapshot.exists()) {
       callback(null);
       return;
     };
 
     const cart = snapshot.val();
-    if(!cart) {
+    if (!cart) {
       callback(null);
       return;
     };
 
     callback(cart);
   },
-  (error) => console.warn(error)
+    (error) => console.warn(error)
   )
   return unsubscribe;
 }
