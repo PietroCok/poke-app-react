@@ -53,6 +53,11 @@
   padding: .75rem;
 }
 
+a.button-text {
+  text-decoration: none;
+  width: fit-content;
+}
+
 .icon-only.small {
   padding: .5rem;
 
