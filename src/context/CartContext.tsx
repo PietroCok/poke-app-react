@@ -2,9 +2,10 @@ import { createContext, useContext, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
 import type { Cart, CartContextType, Poke } from "@/types";
-import { addCartItem, createCart, deleteCart, getCart, observeCart, removeAllCartItems, removeCartItem } from "../firebase/db";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { addCartItem, createCart, deleteCart, observeCart, removeAllCartItems, removeCartItem } from "../firebase/db";
+import { useLocalStorageReducer } from "../hooks/useLocalStorage";
 import { useAuth } from "./AuthContext";
+import { CART_ACTIONS, cartReducer } from "./CartReducer";
 
 export interface CartProviderProps {
 
@@ -33,24 +34,12 @@ export function CartProvider({ }: CartProviderProps) {
   const userUid = user?.uid || '';
   const localStorageKey = userUid ? `poke-cart-${userUid}` : `poke-cart`;
 
-  const [cart, setCart] = useLocalStorage<Cart>(localStorageKey, emptyCart(userUid));
+  const [cart, dispatch] = useLocalStorageReducer(localStorageKey, cartReducer, emptyCart(userUid));
 
   useEffect(() => {
-    const setup = async () => {
-      if (!user || !cart.isShared) return;
-
-      const remoteCart = await getCart(cart.id);
-      if (remoteCart) {
-        handleFirebaseUpdate(remoteCart);
-      }
-
-      const unsubscribe = observeCart(cart.id, handleFirebaseUpdate);
-      return unsubscribe;
-    }
-
-    const unsubscribePromise = setup();
-
-    return () => { unsubscribePromise.then(unsubscribe => unsubscribe && unsubscribe()) };
+    if (!user || !cart.isShared) return;
+    const unsubscribe = observeCart(cart.id, handleFirebaseUpdate);
+    return () => unsubscribe();
   }, [user, cart.id]);
 
   const handleFirebaseUpdate = (remoteCart: Cart | null) => {
@@ -61,12 +50,20 @@ export function CartProvider({ }: CartProviderProps) {
         remoteCart.items = {};
       }
 
-      setCart(remoteCart);
+      updateCart(remoteCart)
     } else {
       // Remote cart has been deleted => reset local cart
-      const newCart = emptyCart();
-      setCart(newCart);
+      dispatch({
+        type: CART_ACTIONS.RESET,
+      });
     }
+  }
+
+  const updateCart = (cart: Cart) => {
+    dispatch({
+      type: CART_ACTIONS.UPDATE_CART,
+      cart: cart
+    });
   }
 
   const updateCartName = (newName: string) => {
@@ -90,7 +87,7 @@ export function CartProvider({ }: CartProviderProps) {
 
     const creationReusult = await createCart(newCart);
     if (creationReusult) {
-      setCart(newCart);
+      updateCart(newCart);
     }
     return creationReusult;
   }
@@ -101,22 +98,19 @@ export function CartProvider({ }: CartProviderProps) {
   }
 
   const unlinkCart = async () => {
-    // Create new empty cart and replace current cart
-    const newCart = emptyCart();
-    setCart(newCart);
+    dispatch({
+      type: CART_ACTIONS.UNLINK,
+    });
   }
 
   const addItem = (item: Poke) => {
     if (user && cart.isShared) {
       addCartItem(cart.id, item);
     } else {
-      setCart((prevCart: Cart) => ({
-        ...prevCart,
-        items: {
-          ...prevCart.items,
-          [item.id]: item
-        }
-      }));
+      dispatch({
+        type: CART_ACTIONS.ADD_ITEM,
+        item: item
+      })
     }
   }
 
@@ -136,7 +130,7 @@ export function CartProvider({ }: CartProviderProps) {
   const updateItemFromEditing = (item: Poke) => {
     // If old item does not exists create a new cart item
     const oldItem = cart.items[item.id];
-    if(!oldItem) addItem(item);
+    if (!oldItem) addItem(item);
 
     addItem(structuredClone(item));
   }
@@ -149,10 +143,9 @@ export function CartProvider({ }: CartProviderProps) {
     if (user && cart.isShared) {
       removeCartItem(cart.id, itemId);
     } else {
-      setCart(prevCart => {
-        const newItems = { ...prevCart.items };
-        delete newItems[itemId];
-        return { ...prevCart, items: newItems };
+      dispatch({
+        type: CART_ACTIONS.REMOVE_ITEM,
+        itemId: itemId
       });
     }
   }
@@ -172,9 +165,8 @@ export function CartProvider({ }: CartProviderProps) {
       }
       removeAllCartItems(cart.id);
     } else {
-      setCart({
-        ...cart,
-        items: {}
+      dispatch({
+        type: CART_ACTIONS.REMOVE_ALL_ITEMS
       })
     }
   }
@@ -188,7 +180,7 @@ export function CartProvider({ }: CartProviderProps) {
       value={
         {
           cart,
-          setCart,
+          updateCart,
           createCart: _createSharedCart,
           deleteCart: _deleteSharedCart,
           unlinkCart,

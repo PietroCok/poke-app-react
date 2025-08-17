@@ -22,7 +22,7 @@ export interface SharedCartsProps {
 export function SharedCarts({ }: SharedCartsProps) {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { cart, setCart, unlinkCart, deleteCart } = useCart();
+  const { cart, updateCart, unlinkCart, deleteCart } = useCart();
   const [carts, setCarts] = useState<Cart[]>([]);
   const [loading, setLoading] = useState(false);
   const [isCreateCartOpen, setIsCreateCartOpen] = useState(false);
@@ -53,7 +53,7 @@ export function SharedCarts({ }: SharedCartsProps) {
     const newCart = carts.find(cart => cart.id == cartId);
     if (!newCart) return;
 
-    setCart(newCart);
+    updateCart(cart);
     navigate('/cart');
   }
 
