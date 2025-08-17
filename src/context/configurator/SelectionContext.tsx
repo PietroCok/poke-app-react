@@ -1,12 +1,12 @@
-import { createContext, useContext, useEffect, useReducer, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type IngredientsState, type PaymentMethod, type Poke, type SelectionContext } from "@/types";
+import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type PaymentMethod, type Poke, type SelectionContext } from "@/types";
 
 import appConfig from '../../../config.json';
 import { ingredientIdToName } from "../../scripts/utils";
-import { ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
+import { SELECTION_ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
+import { useLocalStorage, useLocalStorageReducer } from "../../hooks/useLocalStorage";
 
 export interface SelectionProviderProps {
 
@@ -27,33 +27,16 @@ export const useSelection = () => {
   return ctx;
 };
 
-const getIngredientsFromLocalstorage = (): IngredientsState => {
-  const _ingredients = localStorage.getItem(ingredientsStorageKey);
-  let ingredients = {}
-  try {
-    if (_ingredients != null) {
-      ingredients = JSON.parse(_ingredients);
-      return ingredients;
-    }
-  } catch (error) { }
-
-  return emptyIngredients;
-}
-
 export function SelectionProvider({ }: SelectionProviderProps) {
   const [size, setSize] = useLocalStorage(sizeStorageKey, defaultSize);
-  const [ingredients, dispatch] = useReducer(
+  const [ingredients, dispatch] = useLocalStorageReducer(
+    ingredientsStorageKey,
     selectionReducer,
-    emptyIngredients,
-    getIngredientsFromLocalstorage
+    emptyIngredients
   );
   const [paymentMethod, setPaymentMethod] = useLocalStorage<PaymentMethod>('poke-payment-method', PAYMENT_METHODS.CASH);
   const [name, setName] = useLocalStorage('poke-save-name', '');
   const [editingId, setEditingId] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem(ingredientsStorageKey, JSON.stringify(ingredients));
-  }, [ingredients]);
 
   // Add or increase quantity of ingredient to selection
   const addIngredient = (group: string, ingredientId: string) => {
@@ -61,23 +44,26 @@ export function SelectionProvider({ }: SelectionProviderProps) {
     const price = config.gruppi[group]?.opzioni.find(i => i.name == ingredientName)?.prezzo ?? 0;
 
     dispatch({
-      type: ACTIONS.ADD_INGREDIENT,
-      payload: { group, ingredient: { id: ingredientId, quantity: 1, price } }
+      type: SELECTION_ACTIONS.ADD_INGREDIENT,
+      groupId: group,
+      ingredient: { id: ingredientId, quantity: 1, price }
     });
   }
 
   // Completetly an ingredient from selection
   const removeIngredient = (group: string, ingredientId: string) => {
     dispatch({
-      type: ACTIONS.REMOVE_INGREDIENT,
-      payload: { group, ingredientId }
+      type: SELECTION_ACTIONS.REMOVE_INGREDIENT,
+      groupId: group,
+      ingredientId: ingredientId
     })
   }
 
   const increaseQuantity = (group: string, ingredientId: string) => {
     dispatch({
-      type: ACTIONS.INCREMENT_QUANTITY,
-      payload: { group, ingredientId }
+      type: SELECTION_ACTIONS.INCREMENT_QUANTITY,
+      groupId: group,
+      ingredientId: ingredientId
     })
   }
 
@@ -154,7 +140,7 @@ export function SelectionProvider({ }: SelectionProviderProps) {
   // Reset ingredients selected
   const resetContext = () => {
     dispatch({
-      type: ACTIONS.RESET,
+      type: SELECTION_ACTIONS.RESET,
     })
   }
 
@@ -162,8 +148,8 @@ export function SelectionProvider({ }: SelectionProviderProps) {
     const newIngredients = structuredClone(item.ingredients) || {};
 
     dispatch({
-      type: ACTIONS.SET_INGREDIENTS,
-      payload: { ingredients: newIngredients }
+      type: SELECTION_ACTIONS.SET_INGREDIENTS,
+      ingredients: newIngredients
     });
 
     setSize(item.size);
