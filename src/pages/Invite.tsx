@@ -11,20 +11,23 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { addCartUser, getCart, hasCartUser } from "@/firebase/db";
+import { useModal } from "@/context/ModalContext";
 
 export interface InviteProps {
 
 }
 
 export function Invite({ }: InviteProps) {
-  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [alreadyInvited, setAlreadyInvited] = useState(false);
+  const { user } = useAuth();
   const { cartId, cartName } = useParams();
   const { updateCart } = useCart();
+  const { showAlert } = useModal();
   const navigate = useNavigate();
 
   const userUid = user?.uid || '';
-  
+
   // Should never happen
   if (!cartId || !cartName) {
     return <div>Invalid link</div>;
@@ -36,10 +39,7 @@ export function Invite({ }: InviteProps) {
     // Checks if user has already registered the cart
     const checkAlreadyRegistered = async () => {
       if (await hasCartUser(cartId, userUid)) {
-        await loadCart(cartId);
-        console.log('User already registered to cart, loading cart and redirecting to cart page...');
-        navigate("/cart", { replace: true });
-        setLoading(false);
+        setAlreadyInvited(true);
       }
       setLoading(false);
     }
@@ -51,7 +51,7 @@ export function Invite({ }: InviteProps) {
   const registerCart = async () => {
     setLoading(true);
     if (!await addCartUser(cartId, userUid)) {
-      alert(`Ops, qualcosa è andato storto...`);
+      showAlert(`Ops, qualcosa è andato storto...`);
       setLoading(false);
       return;
     }
@@ -65,14 +65,20 @@ export function Invite({ }: InviteProps) {
   const loadCart = async (cartId: string) => {
     const cart = await getCart(cartId);
     if (!cart) {
-      alert(`Ops, qualcosa è andato storto...`);
+      showAlert(`Ops, qualcosa è andato storto...`);
       setLoading(false);
-      return;
+      return false;;
     }
 
     updateCart(cart);
+    return true;
   }
 
+  const loadAndGo = async (cartId: string) => {
+    if(await loadCart(cartId)){
+      navigate('/cart');
+    }
+  }
 
   return (
     <div className="page-container h-100 flex flex-column">
@@ -96,9 +102,23 @@ export function Invite({ }: InviteProps) {
           />
           :
           <section
-            className="flex-1 scroll"
+            className="flex flex-center flex-column gap-2 flex-1 scroll  text-center"
           >
-            Sei stato invitato ad unirti al carrello condiviso: {cartName}
+            {
+              alreadyInvited ?
+                <>
+                  <p>Il carrello <strong>{cartName}</strong> è già registrato tra quelli disponibili</p>
+                  <ButtonText
+                    text="vai al carrello"
+                    classes="border-r-10 primary-bg primary-contrast-color w-fit"
+                    clickHandler={() => loadAndGo(cartId)}
+                  />
+                </>
+                :
+                <>
+                  Sei stato invitato ad unirti al carrello condiviso: <strong>{cartName}</strong>
+                </>
+            }
           </section>
       }
 
@@ -109,6 +129,7 @@ export function Invite({ }: InviteProps) {
             text="rifiuta"
             classes="border-r-10 red-bg primary-contrast-color"
             linkTo="/"
+            disabled={alreadyInvited}
           />
         }
         right={
@@ -116,6 +137,7 @@ export function Invite({ }: InviteProps) {
             text="accetta"
             classes="border-r-10 primary-bg primary-contrast-color"
             clickHandler={registerCart}
+            disabled={alreadyInvited}
           />
         }
       />
