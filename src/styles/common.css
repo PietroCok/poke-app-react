@@ -8,6 +8,10 @@
   font-weight: bold;
 }
 
+.selectable {
+  user-select: text;
+}
+
 .pointer {
   cursor: pointer;
 }
