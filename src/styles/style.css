@@ -225,8 +225,8 @@ details summary {
   min-width: 300px;
 }
 
-.modal-controls {
-  padding-top: 1rem;
+.modal-content {
+  padding: 1rem 0;
 }
 
 
