@@ -7,6 +7,7 @@ import { PAYMENT_METHODS, type Poke } from "../../types";
 import { ButtonIcon } from "../common/ButtonIcon";
 import { itemToString, shallowEqual } from "../../scripts/utils";
 import { useNavigate } from "react-router-dom";
+import { useModal } from "@/context/ModalContext";
 
 export interface ItemProps {
   item: Poke,
@@ -75,6 +76,7 @@ function isSameItem(prevItem: Poke, nextItem: Poke){
 function _Item({ item, disabled, deleteItem, duplicateItem, editItem }: ItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { showAlert } = useModal();
 
   const handleToggle = (event: ToggleEvent<HTMLDetailsElement>) => {
     const target = event.target as HTMLDetailsElement;
@@ -139,7 +141,7 @@ function _Item({ item, disabled, deleteItem, duplicateItem, editItem }: ItemProp
               icon={<FontAwesomeIcon icon={faStar} />}
               classes="small border-r-10 gold"
               disabled={disabled}
-              clickHandler={() => alert('coming soon')}
+              clickHandler={() => showAlert('coming soon')}
             />
             <ButtonIcon
               tooltip="Duplica elemento"

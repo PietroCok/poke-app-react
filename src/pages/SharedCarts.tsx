@@ -13,6 +13,7 @@ import { useAuth } from "@/context/AuthContext";
 import { getCarts } from "@/firebase/db";
 import { CreateSharedCartModal } from "@/components/cart/CreateSharedCartModal";
 import { useCart } from "@/context/CartContext";
+import { useModal } from "@/context/ModalContext";
 
 
 export interface SharedCartsProps {
@@ -26,6 +27,7 @@ export function SharedCarts({ }: SharedCartsProps) {
   const [carts, setCarts] = useState<Cart[]>([]);
   const [loading, setLoading] = useState(false);
   const [isCreateCartOpen, setIsCreateCartOpen] = useState(false);
+  const { showAlert, showConfirm } = useModal();
 
   useEffect(() => {
     reloadSharedCarts();
@@ -53,12 +55,12 @@ export function SharedCarts({ }: SharedCartsProps) {
     const newCart = carts.find(cart => cart.id == cartId);
     if (!newCart) return;
 
-    updateCart(cart);
+    updateCart(newCart);
     navigate('/cart');
   }
 
   const deleteSharedCart = async (cartId: string, cartName: string) => {
-    if (!confirm(`Eliminare il carrello ${cartName}?`)) {
+    if (!await showConfirm(`Eliminare il carrello ${cartName}?`)) {
       return;
     }
 
@@ -132,7 +134,7 @@ export function SharedCarts({ }: SharedCartsProps) {
             icon={<FontAwesomeIcon icon={faTrash} />}
             classes="border-r-10 red"
             tooltip="Cancella tutti i carrelli considivi"
-            clickHandler={() => alert('Coming soon')}
+            clickHandler={() => showAlert('Coming soon')}
           />
         }
         center={

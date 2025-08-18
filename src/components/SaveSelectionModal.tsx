@@ -8,6 +8,7 @@ import { ButtonIcon } from "./common/ButtonIcon";
 import { useCart } from "../context/CartContext";
 import { useSelection } from "../context/configurator/SelectionContext";
 import { useAuth } from "../context/AuthContext";
+import { useModal } from "@/context/ModalContext";
 
 
 export interface SaveSelectionModalProps {
@@ -15,6 +16,7 @@ export interface SaveSelectionModalProps {
 }
 
 export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
+  const {showAlert} = useModal();
   const { user } = useAuth();
   const { addItem, updateItemFromEditing } = useCart();
   const { 
@@ -117,7 +119,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
               icon={<FontAwesomeIcon icon={faStar} />}
               classes="gold border-r-10"
               tooltip="Salva nei preferiti"
-              clickHandler={() => alert('Coming soon')}
+              clickHandler={() => showAlert('Coming soon')}
             />
           </div>
         </div>

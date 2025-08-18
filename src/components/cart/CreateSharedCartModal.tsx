@@ -5,6 +5,7 @@ import { faSave, faX } from "@fortawesome/free-solid-svg-icons";
 import { ButtonIcon } from "../common/ButtonIcon";
 import { useCart } from "@/context/CartContext";
 import { useNavigate } from "react-router-dom";
+import { useModal } from "@/context/ModalContext";
 
 export interface CreateSharedCartModalProps {
   setIsOpen: (value: boolean) => void
@@ -15,6 +16,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
   const [useActiveCart, setuseActiveCart] = useState(false);
   const { createCart } = useCart();
   const navigate = useNavigate();
+  const { showAlert } = useModal();
 
   const handleClickOut = (event: React.MouseEvent) => {
     const target = event.target as HTMLDivElement;
@@ -29,7 +31,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
 
     const createResult = await createCart(cartName, useActiveCart);
     if(!createResult){
-      alert('Errore creazione carrello condiviso!')
+      showAlert('Errore creazione carrello condiviso!')
       return;
     }
 
