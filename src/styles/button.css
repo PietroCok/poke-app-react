@@ -46,10 +46,20 @@
   transform: translate(-50%, -50%);
 }
 
+
+/* Capitalize only first letter of the button text (works even for phrases) */
+.button-text {
+  display:inline-block;
+  text-transform: lowercase;
+}
+
+.button-text:first-letter {
+  text-transform: uppercase;
+}
+
 .button-text {
   font-weight: bold;
   font-size: large;
-  text-transform: capitalize;
   padding: .75rem;
 }
 
