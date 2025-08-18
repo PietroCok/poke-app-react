@@ -47,7 +47,6 @@ export function Invite({ }: InviteProps) {
     checkAlreadyRegistered();
   }, []);
 
-
   const registerCart = async () => {
     setLoading(true);
     if (!await addCartUser(cartId, userUid)) {
@@ -56,10 +55,7 @@ export function Invite({ }: InviteProps) {
       return;
     }
 
-    await loadCart(cartId);
-
-    navigate("/cart");
-    setLoading(false);
+    loadAndGo(cartId);
   }
 
   const loadCart = async (cartId: string) => {
@@ -76,7 +72,7 @@ export function Invite({ }: InviteProps) {
 
   const loadAndGo = async (cartId: string) => {
     if(await loadCart(cartId)){
-      navigate('/cart');
+      navigate('/cart', {replace: true});
     }
   }
 
