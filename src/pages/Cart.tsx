@@ -12,6 +12,7 @@ import { Item } from "../components/cart/Item";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { useSelection } from "@/context/configurator/SelectionContext";
+import { useModal } from "@/context/ModalContext";
 
 const ITEM_MEMO_THRESHOLD = 10;
 
@@ -19,13 +20,23 @@ export function Cart() {
   const { cart, deleteAllItems, deleteItem, duplicateItem } = useCart();
   const { loadItemIntoConfigurator } = useSelection();
   const { user } = useAuth();
+  const { showAlert } = useModal();
 
   const userUid = user?.uid || '';
-  const hasItems = Object.keys(cart.items || {}).length == 0;
-  const isCartOwner = cart.isShared && userUid != cart.createdBy;
+  const hasItems = Object.keys(cart.items || {}).length > 0;
+  const isCartOwner = !cart.isShared || userUid === cart.createdBy;
 
-  const generateInviteLink = () => {
-    alert('Coming soon');
+  const generateInviteLink = async () => {
+    const inviteLink = encodeURI(`${window.location.origin}${window.location.pathname}/invite/${cart.id}/${cart.name}`);
+
+    console.log(inviteLink);
+    if (navigator.clipboard) {
+      await navigator.clipboard.writeText(inviteLink);
+      showAlert(`Link di invito copiato negli appunti`);
+    } else {
+      // clipboard not supported -> show link in modal to be manually copied
+      showAlert(`${inviteLink}`);
+    }
   }
 
   return (
@@ -99,7 +110,7 @@ export function Cart() {
           <ButtonText
             text="Preview"
             classes="primary-bg primary-contrast-color border-r-10"
-            clickHandler={() => alert('Coming soon!')}
+            clickHandler={() => showAlert('Coming soon!')}
             disabled={!isCartOwner || !hasItems}
           />
         }
