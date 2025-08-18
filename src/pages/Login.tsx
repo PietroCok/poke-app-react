@@ -10,6 +10,7 @@ import type { ButtonClickEvent } from "@/types";
 import { ButtonText } from "../components/common/ButtonText";
 import { useAuth } from "../context/AuthContext";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
+import { useModal } from "@/context/ModalContext";
 
 
 export function Login() {
@@ -23,6 +24,7 @@ export function Login() {
   const [emailMessage, setEmailMessage] = useState('');
   const [loginMessage, setLoginMessage] = useState('');
   const [waiting, setWaiting] = useState(false);
+  const { showAlert, showConfirm } = useModal();
 
   const canLogin = !!(email && password) && !(emailMessage || passwordMessage);
   // Save path the user tried to navigate to
@@ -93,9 +95,9 @@ export function Login() {
     navigate(redirectTo, { replace: true });
   }
 
-  const continueAsOffline = (event: ButtonClickEvent) => {
+  const continueAsOffline = async (event: ButtonClickEvent) => {
     event.preventDefault();
-    if (confirm("Forzando la navigazione offline alcune funzionalità non saranno disponibili, continuare?")) {
+    if (await showConfirm("Forzando la navigazione offline alcune funzionalità non saranno disponibili, continuare?")) {
       setOffline(true);
       navigate(redirectTo, { replace: true });
     }
@@ -104,12 +106,12 @@ export function Login() {
   const resetPassword = async (event: ButtonClickEvent) => {
     event.preventDefault();
 
-    alert("Coming soon!");
+    showAlert("Coming soon!");
     return;
 
     // check if mail inserted
     if (!email.trim() || emailMessage) {
-      alert("Inserire un indirizzo mail per proseguire");
+      showAlert("Inserire un indirizzo mail per proseguire");
       return;
     }
   }
