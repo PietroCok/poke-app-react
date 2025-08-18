@@ -1,21 +1,28 @@
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useMemo } from "react";
 import { Outlet } from "react-router-dom";
 
-import type { Cart, CartContextType, Poke } from "@/types";
+import type { Cart, CartContextType, Poke, StaticCartContextType } from "@/types";
 import { addCartItem, createCart, deleteCart, observeCart, removeAllCartItems, removeCartItem } from "../firebase/db";
 import { useLocalStorageReducer } from "../hooks/useLocalStorage";
 import { useAuth } from "./AuthContext";
 import { CART_ACTIONS, cartReducer } from "./CartReducer";
+import { useModal } from "./ModalContext";
 
 export interface CartProviderProps {
 
 }
 
 const CartContext = createContext<CartContextType | null>(null);
+const StaticCartContext = createContext<StaticCartContextType | null>(null);
+
 export const useCart = () => {
   const ctx = useContext(CartContext);
   if (!ctx) throw new Error('useCart must be used within an CartProvider');
-  return ctx;
+
+  const staticCtx = useContext(StaticCartContext);
+  if (!staticCtx) throw new Error('useCart must be used within an CartProvider');
+
+  return { ...ctx, ...staticCtx };
 };
 
 const emptyCart = (userUid?: string, name?: string, isShared?: boolean) => {
@@ -35,6 +42,7 @@ export function CartProvider({ }: CartProviderProps) {
   const localStorageKey = userUid ? `poke-cart-${userUid}` : `poke-cart`;
 
   const [cart, dispatch] = useLocalStorageReducer(localStorageKey, cartReducer, emptyCart(userUid));
+  const { showAlert, showConfirm } = useModal();
 
   useEffect(() => {
     if (!user || !cart.isShared) return;
@@ -68,7 +76,7 @@ export function CartProvider({ }: CartProviderProps) {
 
   const updateCartName = (newName: string) => {
     if (!newName) return;
-    alert('coming soon!');
+    showAlert('coming soon!');
   }
 
   const _createSharedCart = async (name: string, copyActiveCart: boolean) => {
@@ -117,7 +125,7 @@ export function CartProvider({ }: CartProviderProps) {
   const duplicateItem = (itemId: string) => {
     const oldItem = cart.items[itemId];
     if (!oldItem) {
-      alert('Elemento non trovato');
+      showAlert('Elemento non trovato');
       return;
     }
 
@@ -135,8 +143,8 @@ export function CartProvider({ }: CartProviderProps) {
     addItem(structuredClone(item));
   }
 
-  const deleteItem = (itemId: string, itemName: string) => {
-    if (!confirm(`Confermare la cancellazione dell'elemento: ${itemName}?`)) {
+  const deleteItem = async (itemId: string, itemName: string) => {
+    if (!await showConfirm(`Confermare la cancellazione dell'elemento: ${itemName}?`)) {
       return;
     }
 
@@ -150,12 +158,12 @@ export function CartProvider({ }: CartProviderProps) {
     }
   }
 
-  const deleteAllItems = () => {
+  const deleteAllItems = async () => {
     if (Object.values(cart.items || {}).length == 0) {
       return;
     }
 
-    if (!confirm(`Confermare la cancellazione di tutti gli elementi del carrello?`)) {
+    if (!await showConfirm(`Confermare la cancellazione di tutti gli elementi del carrello?`)) {
       return;
     }
 
@@ -171,30 +179,39 @@ export function CartProvider({ }: CartProviderProps) {
     }
   }
 
-  const getItemsCount = () => {
-    return Object.keys(cart.items || {}).length;
-  }
+  const staticContextValue = useMemo(() => ({
+    getItemsCount: () => getItemsCount(cart)
+  }), [cart.items])
 
   return (
-    <CartContext.Provider
-      value={
-        {
-          cart,
-          updateCart,
-          createCart: _createSharedCart,
-          deleteCart: _deleteSharedCart,
-          unlinkCart,
-          updateCartName,
-          addItem,
-          duplicateItem,
-          updateItemFromEditing,
-          deleteItem,
-          deleteAllItems,
-          getItemsCount
-        }
-      }
+    <StaticCartContext.Provider
+      value={staticContextValue}
     >
-      <Outlet />
-    </CartContext.Provider>
+      <CartContext.Provider
+        value={
+          {
+            cart,
+            updateCart,
+            createCart: _createSharedCart,
+            deleteCart: _deleteSharedCart,
+            unlinkCart,
+            updateCartName,
+            addItem,
+            duplicateItem,
+            updateItemFromEditing,
+            deleteItem,
+            deleteAllItems,
+          }
+        }
+      >
+        <Outlet />
+      </CartContext.Provider>
+    </StaticCartContext.Provider>
   );
+}
+
+
+
+const getItemsCount = (cart: Cart) => {
+  return Object.keys(cart.items || {}).length;
 }

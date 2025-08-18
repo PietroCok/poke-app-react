@@ -1,21 +1,28 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 
-import type { AuthContextType, UserProfile } from "@/types";
+import type { AuthContextType, StaticAuthContextType, UserProfile } from "@/types";
 
 import { firebaseAuth, firebaseSignIn, firebaseSignUp } from "../firebase/auth";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
 import { getUserProfile } from "../firebase/db";
+import { useModal } from "./ModalContext";
 
 export interface AuthProviderProps {
   children: React.ReactNode
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
+const StaticAuthContext = createContext<StaticAuthContextType | null>(null);
+
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error('useAuth must be used within an AuthProvider');
-  return ctx;
+
+  const staticCtx = useContext(StaticAuthContext);
+  if (!staticCtx) throw new Error('useAuth must be used within an AuthProvider');
+
+  return { ...staticCtx, ...ctx };
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -23,6 +30,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isOffline, setIsOffline] = useState(false);
+  const { showAlert } = useModal();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, async (_user) => {
@@ -68,16 +76,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const deleteAccount = async () => {
-    alert(`Coming soon!`);
-
-    // ask confirmation
+    showAlert(`Coming soon!`);
   }
 
-  const isUserActive = () => {
-    return user && profile && profile.status === 'active' || false;
-  }
+  const staticContextValue = useMemo(() => ({
+    isUserActive: () => isUserActive(user, profile)
+  }), [user, profile]);
 
-  // Shows loading screen until we know the user is for sure logged or not
+    // Shows loading screen until we know the user is for sure logged or not
   if (loading) {
     return (
       <LoadingSpinner
@@ -89,10 +95,31 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider
-      value={{ user, profile, isOffline, isUserActive, login, logout, signUp, setOffline, deleteAccount }}
+    <StaticAuthContext.Provider
+      value={staticContextValue}
     >
-      {children}
-    </AuthContext.Provider>
+      <AuthContext.Provider
+        value={{ 
+          user, 
+          profile, 
+          isOffline, 
+          login, 
+          logout, 
+          signUp, 
+          setOffline, 
+          deleteAccount 
+        }}
+      >
+        {children}
+      </AuthContext.Provider>
+    </StaticAuthContext.Provider>
   );
+}
+
+
+
+const isUserActive =(user: User | null, profile: UserProfile | null) => {
+  console.log('isUserActive');
+
+  return user && profile && profile.status === 'active' || false;
 }

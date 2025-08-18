@@ -1,7 +1,8 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type PaymentMethod, type Poke, type SelectionContext } from "@/types";
+import type { AppConfig, ContextIngredient, IngredientsState, PaymentMethod, Poke, SelectionContextType, StaticSelectionContextType } from "@/types";
+import { PAYMENT_METHODS } from "@/types";
 
 import appConfig from '../../../config.json';
 import { ingredientIdToName } from "../../scripts/utils";
@@ -19,12 +20,17 @@ const config: AppConfig = appConfig;
 
 const defaultSize = Object.keys(config.dimensioni)[0] ?? '';
 
-const SelectionContext = createContext<SelectionContext | null>(null);
+const SelectionContext = createContext<SelectionContextType | null>(null);
+const StaticSelectionContext = createContext<StaticSelectionContextType | null>(null);
 
 export const useSelection = () => {
   const ctx = useContext(SelectionContext);
   if (!ctx) throw new Error('useSelection must be used within a SelectionProvider');
-  return ctx;
+
+  const staticCtx = useContext(StaticSelectionContext);
+  if (!staticCtx) throw new Error('useSelection must be used within a SelectionProvider');
+
+  return { ...ctx, ...staticCtx };
 };
 
 export function SelectionProvider({ }: SelectionProviderProps) {
@@ -67,74 +73,10 @@ export function SelectionProvider({ }: SelectionProviderProps) {
     })
   }
 
-  const hasIngredients = () => {
-    for (const [_, _ingredients] of Object.entries(ingredients)) {
-      if (_ingredients.length > 0) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  const groupCount = (groupId: string) => {
-    const groupIngredients = ingredients[groupId];
-    let total = 0;
-    for (const ingredient of groupIngredients) {
-      total += ingredient.quantity;
-    }
-    return total;
-  }
-
-  const groupExtraPrice = (groupId: string) => {
-    const groupLimit = config.dimensioni[size]?.limiti[groupId];
-    if (groupCount(groupId) <= groupLimit) return 0;
-
-    // order selected ingredient based on extra price
-    // NB: shallow copy, do NOT edit ingredients props from this array, as they still reference the original state
-    const sortedIngredients = ingredients[groupId].slice().sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price);
-
-    // Find te most expensive items price
-    let deductedCounter = 0;
-    let deductedPrice = 0;
-    let total = 0;
-    for (let i = 0; i < sortedIngredients.length; i++) {
-      const ingredient = sortedIngredients[i];
-      let j = 0;
-      while (deductedCounter < groupLimit && ingredient.quantity > j) {
-        deductedPrice += ingredient.price;
-        deductedCounter++;
-        j++;
-      }
-
-      total += ingredient.price * ingredient.quantity;
-    }
-
-    total -= deductedPrice;
-
-    return total;
-  }
-
-  const getTotalPrice = () => {
-    const basePrice = config.dimensioni[size].prezzo;
-    let price = basePrice;
-
-    for (const group of Object.keys(ingredients)) {
-      price += groupExtraPrice(group);
-    }
-
-    return price;
-  }
-
   const selectSize = (newSelectedSize: string) => {
     if (size != newSelectedSize) {
       setSize(newSelectedSize);
     }
-  }
-
-  // Return limit for current size and groupId
-  const getLimit = (groupId: string) => {
-    return config.dimensioni[size]?.limiti[groupId] ?? 0;
   }
 
   // Reset ingredients selected
@@ -161,34 +103,104 @@ export function SelectionProvider({ }: SelectionProviderProps) {
     setEditingId(item.id);
   }
 
+  const staticContextValue = useMemo(() => ({
+    hasIngredients: () => hasIngredients(ingredients),
+    getLimit: (groupId: string) => getLimit(size, groupId),
+    groupCount: (groupId: string) => groupCount(groupId, ingredients),
+    groupExtraPrice: (groupId: string) => groupExtraPrice(size, groupId, ingredients),
+    getTotalPrice: () => getTotalPrice(size, ingredients),
+  }), [size, ingredients]);
+
   return (
-    <SelectionContext.Provider value={{
-      size,
-      selectSize,
-      getLimit,
-
-      ingredients,
-      addIngredient,
-      removeIngredient,
-      increaseQuantity,
-      hasIngredients,
-      groupCount,
-      groupExtraPrice,
-      getTotalPrice,
-      resetContext,
-
-      loadItemIntoConfigurator,
-
-      name,
-      setName,
-
-      paymentMethod,
-      setPaymentMethod,
-
-      editingId,
-      setEditingId
-    } as SelectionContext}>
-      <Outlet />
-    </SelectionContext.Provider>
+    <StaticSelectionContext.Provider
+      value={staticContextValue}
+    >
+      <SelectionContext.Provider value={{
+        size,
+        ingredients,
+        name,
+        paymentMethod,
+        editingId,
+        selectSize,
+        addIngredient,
+        removeIngredient,
+        increaseQuantity,
+        resetContext,
+        loadItemIntoConfigurator,
+        setName,
+        setPaymentMethod,
+        setEditingId
+      }}>
+        <Outlet />
+      </SelectionContext.Provider>
+    </StaticSelectionContext.Provider>
   );
+}
+
+
+
+const hasIngredients = (ingredients: IngredientsState) => {
+  for (const [_, _ingredients] of Object.entries(ingredients)) {
+    if (_ingredients.length > 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+
+const groupExtraPrice = (size: string, groupId: string, ingredients: IngredientsState) => {
+  const groupLimit = config.dimensioni[size]?.limiti[groupId];
+  if (groupCount(groupId, ingredients) <= groupLimit) return 0;
+
+  // order selected ingredient based on extra price
+  // NB: shallow copy, do NOT edit ingredients props from this array, as they still reference the original state
+  const sortedIngredients = ingredients[groupId].slice().sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price);
+
+  // Find te most expensive items price
+  let deductedCounter = 0;
+  let deductedPrice = 0;
+  let total = 0;
+  for (let i = 0; i < sortedIngredients.length; i++) {
+    const ingredient = sortedIngredients[i];
+    let j = 0;
+    while (deductedCounter < groupLimit && ingredient.quantity > j) {
+      deductedPrice += ingredient.price;
+      deductedCounter++;
+      j++;
+    }
+
+    total += ingredient.price * ingredient.quantity;
+  }
+
+  total -= deductedPrice;
+
+  return total;
+}
+
+const groupCount = (groupId: string, ingredients: IngredientsState) => {
+  const groupIngredients = ingredients[groupId];
+  let total = 0;
+  for (const ingredient of groupIngredients) {
+    total += ingredient.quantity;
+  }
+  return total;
+}
+
+const getTotalPrice = (size: string, ingredients: IngredientsState) => {
+  const basePrice = config.dimensioni[size].prezzo;
+  let price = basePrice;
+
+  for (const group of Object.keys(ingredients)) {
+    price += groupExtraPrice(size, group, ingredients);
+  }
+
+  return price;
+}
+
+// Return limit for current size and groupId
+const getLimit = (size: string, groupId: string) => {
+  return config.dimensioni[size]?.limiti[groupId] ?? 0;
 }

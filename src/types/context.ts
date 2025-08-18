@@ -12,28 +12,31 @@ export type IngredientsState = {
   [key: string]: ContextIngredient[],
 }
 
-export type SelectionContext = {
+export type StaticSelectionContextType = {
+  getLimit: (groupId: string) => number,
+  groupCount: (groupId: string) => number,
+  groupExtraPrice: (groupId: string) => number,
+  getTotalPrice: () => number,
+  hasIngredients: () => boolean,
+}
+
+export type SelectionContextType = {
   ingredients: IngredientsState,
   size: string,
 
-  getLimit: (groupId: string) => number,
   selectSize: (newSelectedSize: string) => void,
 
   addIngredient: (groupId: string, ingredientId: string) => void,
   removeIngredient: (groupId: string, ingredientId: string) => void,
   increaseQuantity: (groupId: string, ingredientId: string) => void,
-  hasIngredients: () => boolean,
-  groupCount: (groupId: string) => number,
-  groupExtraPrice: (groupId: string) => number,
-  getTotalPrice: () => number,
   loadItemIntoConfigurator: (item: Poke) => void,
 
   resetContext: () => void,
 
-  name: string, 
+  name: string,
   setName: (name: string) => void,
 
-  paymentMethod: PaymentMethod, 
+  paymentMethod: PaymentMethod,
   setPaymentMethod: (paymentMethod: PaymentMethod) => void,
 
   editingId: string,
@@ -56,11 +59,14 @@ export const UserStatusLevel: { [key in UserStatus]: number } = {
   'active': 3
 } as const;
 
+export type StaticAuthContextType = {
+  isUserActive: () => boolean,
+}
+
 export type AuthContextType = {
   user: User | null,
   profile: UserProfile | null,
   isOffline: boolean,
-  isUserActive: () => boolean,
   login: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>,
   signUp: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>,
   logout: () => Promise<void>,
@@ -68,7 +74,9 @@ export type AuthContextType = {
   deleteAccount: () => void
 }
 
-
+export type StaticCartContextType = {
+  getItemsCount: () => number
+}
 
 export type CartContextType = {
   cart: Cart,
@@ -78,12 +86,10 @@ export type CartContextType = {
   deleteCart: (cartId: string) => Promise<boolean>,
   unlinkCart: () => void,
   updateCartName: (newName: string) => void,
-  
+
   addItem: (item: Poke) => void,
   duplicateItem: (itemId: string) => void,
   deleteItem: (itemId: string, itemName: string) => void
   updateItemFromEditing: (item: Poke) => void,
   deleteAllItems: () => void
-  getItemsCount: () => number
-
 }
