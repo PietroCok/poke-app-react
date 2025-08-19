@@ -148,6 +148,7 @@ export function SharedCarts({ }: SharedCartsProps) {
             tooltip="Cancella tutti i carrelli considivi"
             clickHandler={deleteAllSharedCarts}
             disabled={carts.length == 0}
+            disabledMessage={`Nessun carrello da eliminare`}
           />
         }
         center={
@@ -157,6 +158,7 @@ export function SharedCarts({ }: SharedCartsProps) {
             tooltip="Nuovo carrello condiviso"
             clickHandler={openSharedCartCreationModal}
             disabled={!isUserActive()}
+            disabledMessage={`Operazione disponibile ai soli utenti abilitati`}
           />
         }
         right={

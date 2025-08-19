@@ -7,6 +7,7 @@ import { useLocalStorageReducer } from "../hooks/useLocalStorage";
 import { useAuth } from "./AuthContext";
 import { CART_ACTIONS, cartReducer } from "./CartReducer";
 import { useModal } from "./ModalContext";
+import { useToast } from "./ToastContext";
 
 export interface CartProviderProps {
 
@@ -42,7 +43,8 @@ export function CartProvider({ }: CartProviderProps) {
   const localStorageKey = userUid ? `poke-cart-${userUid}` : `poke-cart`;
 
   const [cart, dispatch] = useLocalStorageReducer(localStorageKey, cartReducer, emptyCart(userUid));
-  const { showAlert, showConfirm } = useModal();
+  const { showConfirm } = useModal();
+  const { showError } = useToast();
 
   useEffect(() => {
     if (!user || !cart.isShared) return;
@@ -76,7 +78,7 @@ export function CartProvider({ }: CartProviderProps) {
 
   const updateCartName = (newName: string) => {
     if (!newName) return;
-    showAlert('coming soon!');
+    showError('coming soon!');
   }
 
   const _createSharedCart = async (name: string, copyActiveCart: boolean) => {
@@ -147,7 +149,7 @@ export function CartProvider({ }: CartProviderProps) {
   const duplicateItem = (itemId: string) => {
     const oldItem = cart.items[itemId];
     if (!oldItem) {
-      showAlert('Elemento non trovato');
+      showError('Elemento non trovato');
       return;
     }
 

@@ -9,6 +9,7 @@ import { StackedIcons } from "./StackedIcons";
 import { UserMenu } from "../UserMenu";
 import { ThemeModeSwitcher } from "../ThemeModeSwitcher";
 import { ThemeColorSwitcher } from "../ThemeColorSwitcher";
+import { useToast } from "@/context/ToastContext";
 
 export interface MainMenuProps {
   extraMenuItems?: React.ReactNode
@@ -17,6 +18,7 @@ export interface MainMenuProps {
 export function MainMenu({ extraMenuItems }: MainMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
+  const { showError } = useToast();
 
   // Tracks current open submenu
   const [openMenuId, setOpenMenuId] = useState('');
@@ -67,7 +69,8 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
             icon={<FontAwesomeIcon icon={faStar} />}
             classes="gold border-r-10"
             tooltip="Preferiti"
-            linkTo={"/favorites"}
+            clickHandler={() => showError('Coming soon')}
+          // linkTo={"/favorites"}
           />
 
           {/* The following are available only when the user is logged in */}

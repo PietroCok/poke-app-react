@@ -64,6 +64,7 @@ export function Cart() {
             classes="red-bg primary-contrast-color border-r-10"
             clickHandler={() => deleteAllItems()}
             disabled={!isCartOwner || !hasItems}
+            disabledMessage={`Operazione consentita solo al creatore del carrello`}
           />
         }
 
@@ -73,6 +74,7 @@ export function Cart() {
             classes="primary-bg primary-contrast-color border-r-10"
             clickHandler={() => showAlert('Coming soon!')}
             disabled={!isCartOwner || !hasItems}
+            disabledMessage={`Operazione consentita solo al creatore del carrello`}
           />
         }
 

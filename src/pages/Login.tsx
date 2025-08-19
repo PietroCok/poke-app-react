@@ -11,6 +11,7 @@ import { ButtonText } from "../components/common/ButtonText";
 import { useAuth } from "../context/AuthContext";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
 import { useModal } from "@/context/ModalContext";
+import { useToast } from "@/context/ToastContext";
 
 
 export function Login() {
@@ -25,6 +26,7 @@ export function Login() {
   const [loginMessage, setLoginMessage] = useState('');
   const [waiting, setWaiting] = useState(false);
   const { showAlert, showConfirm } = useModal();
+  const { showError } = useToast();
 
   const canLogin = !!(email && password) && !(emailMessage || passwordMessage);
   // Save path the user tried to navigate to
@@ -111,7 +113,7 @@ export function Login() {
 
     // check if mail inserted
     if (!email.trim() || emailMessage) {
-      showAlert("Inserire un indirizzo mail per proseguire");
+      showError("Inserire un indirizzo mail per proseguire");
       return;
     }
   }
@@ -227,6 +229,7 @@ export function Login() {
                   type="submit"
                   tooltip="Accedi"
                   disabled={!canLogin}
+                  disabledMessage={`Email o password non validi`}
                   classes="primary-bg primary-contrast-color w-100"
                 />
               )

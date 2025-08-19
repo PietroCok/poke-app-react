@@ -115,6 +115,7 @@ function _Item({ item, disabled, deleteItem, duplicateItem, editItem }: ItemProp
                 tooltip="Cancella elemento"
                 classes='red border-r-10 small'
                 disabled={disabled}
+                disabledMessage={`Operazione consentita solo al creatore del carrello o dell'elemento`}
                 clickHandler={() => deleteItem(item.id, item.name)}
               />
             }
@@ -134,13 +135,14 @@ function _Item({ item, disabled, deleteItem, duplicateItem, editItem }: ItemProp
               icon={<FontAwesomeIcon icon={faPen} />}
               classes="small border-r-10 primary-color"
               disabled={disabled}
+              disabledMessage={`Operazione consentita solo al creatore del carrello o dell'elemento`}
               clickHandler={_editItem}
             />
             <ButtonIcon
               tooltip="Aggiungi ai preferiti"
               icon={<FontAwesomeIcon icon={faStar} />}
               classes="small border-r-10 gold"
-              disabled={disabled}
+              disabled={false}
               clickHandler={() => showAlert('coming soon')}
             />
             <ButtonIcon
@@ -154,6 +156,7 @@ function _Item({ item, disabled, deleteItem, duplicateItem, editItem }: ItemProp
               icon={<FontAwesomeIcon icon={faTrash} />}
               classes="small border-r-10 red"
               disabled={disabled}
+              disabledMessage={`Operazione consentita solo al creatore del carrello o dell'elemento`}
               clickHandler={() => deleteItem(item.id, item.name)}
             />
           </div>

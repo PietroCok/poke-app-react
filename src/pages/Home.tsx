@@ -55,6 +55,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
             classes="red-bg primary-contrast-color border-r-10"
             clickHandler={resetContext}
             disabled={isEmpty}
+            disabledMessage={`Nessun elemento selezioato`}
             tooltip="Rimuove la selezione attuale"
           />
         }
@@ -68,6 +69,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
             text="salva"
             classes="primary-bg primary-contrast-color border-r-10"
             disabled={isEmpty}
+            disabledMessage={`Nessun elemento selezioato`}
             tooltip="Salva la selezione attuale"
             clickHandler={() => setIsSaveOpen(true)}
           />

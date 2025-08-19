@@ -9,6 +9,7 @@ import { useCart } from "../context/CartContext";
 import { useSelection } from "../context/configurator/SelectionContext";
 import { useAuth } from "../context/AuthContext";
 import { useModal } from "@/context/ModalContext";
+import { useToast } from "@/context/ToastContext";
 
 
 export interface SaveSelectionModalProps {
@@ -19,6 +20,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
   const {showAlert} = useModal();
   const { user } = useAuth();
   const { addItem, updateItemFromEditing } = useCart();
+  const { showInfo } = useToast();
   const { 
     ingredients,
     resetContext: resetSelection,
@@ -60,8 +62,10 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
     if(editingId) {
       updateItemFromEditing(item);
       setEditingId('');
+      showInfo('Elemento Aggiornato nel carrello')
     } else {
       addItem(item);
+      showInfo('Elemento salvato nel carrello')
     }
 
     resetSelection();

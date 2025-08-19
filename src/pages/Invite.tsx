@@ -11,7 +11,7 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { addCartUser, getCart, hasCartUser } from "@/firebase/db";
-import { useModal } from "@/context/ModalContext";
+import { useToast } from "@/context/ToastContext";
 
 export interface InviteProps {
 
@@ -23,7 +23,7 @@ export function Invite({ }: InviteProps) {
   const { user } = useAuth();
   const { cartId, cartName } = useParams();
   const { updateCart } = useCart();
-  const { showAlert } = useModal();
+  const { showError } = useToast();
   const navigate = useNavigate();
 
   const userUid = user?.uid || '';
@@ -50,7 +50,7 @@ export function Invite({ }: InviteProps) {
   const registerCart = async () => {
     setLoading(true);
     if (!await addCartUser(cartId, userUid)) {
-      showAlert(`Ops, qualcosa è andato storto...`);
+      showError(`Ops, qualcosa è andato storto...`);
       setLoading(false);
       return;
     }
@@ -61,7 +61,7 @@ export function Invite({ }: InviteProps) {
   const loadCart = async (cartId: string) => {
     const cart = await getCart(cartId);
     if (!cart) {
-      showAlert(`Ops, qualcosa è andato storto...`);
+      showError(`Ops, qualcosa è andato storto...`);
       setLoading(false);
       return false;;
     }

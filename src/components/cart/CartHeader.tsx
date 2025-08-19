@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { useCart } from "@/context/CartContext"
 import { useModal } from "@/context/ModalContext";
+import { useToast } from "@/context/ToastContext";
 
 export interface CartHeaderProps {
 
@@ -11,6 +12,7 @@ export interface CartHeaderProps {
 export function CartHeader({ }: CartHeaderProps) {
   const { cart } = useCart();
   const { showAlert } = useModal();
+  const { showInfo } = useToast();
 
   const generateInviteLink = async () => {
     const inviteLink = encodeURI(`${window.location.origin}${window.location.pathname}/invite/${cart.id}/${cart.name}`);
@@ -18,7 +20,7 @@ export function CartHeader({ }: CartHeaderProps) {
     console.log(inviteLink);
     if (navigator.clipboard) {
       await navigator.clipboard.writeText(inviteLink);
-      showAlert(`Link di invito copiato negli appunti`);
+      showInfo(`Link di invito copiato negli appunti`, 5);
     } else {
       // clipboard not supported -> show full link in modal to be manually copied
       showAlert(`${inviteLink}`);
