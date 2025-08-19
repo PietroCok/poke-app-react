@@ -21,50 +21,53 @@ import { CartProvider } from './context/CartContext';
 import { SharedCarts } from './pages/SharedCarts';
 import { Invite } from './pages/Invite';
 import { ModalProvider } from './context/ModalContext';
+import { ToastProvider } from './context/ToastContext';
 
 const config: AppConfig = appConfig;
 
 export default function App() {
   return (
-    <ModalProvider>
-      <ThemeProvider>
-        <AuthProvider>
-          <Router basename='poke-app-react'>
-            <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Registration />} />
+    <ToastProvider>
+      <ModalProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <Router basename='poke-app-react'>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Registration />} />
 
-              <Route element={<ProtectedRoute />}>
+                <Route element={<ProtectedRoute />}>
 
-                <Route
-                  element={<CartProvider />}
-                >
+                  <Route
+                    element={<CartProvider />}
+                  >
 
-                  <Route element={<SelectionProvider />}>
-                    <Route path="/" element={<Home {...config} />} />
-                    <Route path="/cart" element={<Cart />} />
+                    <Route element={<SelectionProvider />}>
+                      <Route path="/" element={<Home {...config} />} />
+                      <Route path="/cart" element={<Cart />} />
+                    </Route>
+
+                    <Route path='/shared-carts' element={<SharedCarts />} />
+                    <Route path='/cart/invite/:cartId/:cartName' element={<Invite />} />
+
                   </Route>
 
-                  <Route path='/shared-carts' element={<SharedCarts />} />
-                  <Route path='/cart/invite/:cartId/:cartName' element={<Invite />} />
+                  <Route path="/favorites" element={<Favorites />} />
+                  <Route path="/remote-carts" element={<RemoteCarts />} />
+                  <Route path="/personal" element={<PersonalArea />} />
+                  <Route path="*" element={<NotFound />} />
 
                 </Route>
 
-                <Route path="/favorites" element={<Favorites />} />
-                <Route path="/remote-carts" element={<RemoteCarts />} />
-                <Route path="/personal" element={<PersonalArea />} />
-                <Route path="*" element={<NotFound />} />
-
-              </Route>
-
-              <Route element={<ProtectedRoute roles={['admin']} />} >
-                <Route path='/admin/users' element={<AdminUsersManagement />} />
-              </Route>
-            </Routes>
-          </Router>
-        </AuthProvider>
-      </ThemeProvider>
-    </ModalProvider>
+                <Route element={<ProtectedRoute roles={['admin']} />} >
+                  <Route path='/admin/users' element={<AdminUsersManagement />} />
+                </Route>
+              </Routes>
+            </Router>
+          </AuthProvider>
+        </ThemeProvider>
+      </ModalProvider>
+    </ToastProvider>
   )
 }
 
