@@ -4,13 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowsRotate, faDownload, faLinkSlash, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import type { Cart } from "@/types";
+import { getCarts } from "@/firebase/db";
 import { ButtonIcon } from "@/components/common/ButtonIcon";
 import { PageHeader } from "@/components/common/PageHeader";
 import { MainMenu } from "@/components/common/MainMenu";
 import { PageFooter } from "@/components/common/PageFooter";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { useAuth } from "@/context/AuthContext";
-import { getCarts } from "@/firebase/db";
 import { CreateSharedCartModal } from "@/components/cart/CreateSharedCartModal";
 import { useCart } from "@/context/CartContext";
 import { useModal } from "@/context/ModalContext";
@@ -22,12 +22,12 @@ export interface SharedCartsProps {
 
 export function SharedCarts({ }: SharedCartsProps) {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const { cart, updateCart, unlinkCart, deleteCart } = useCart();
+  const { user, isUserActive } = useAuth();
+  const { cart, updateCart, unlinkCart, deleteCart, deleteCarts } = useCart();
   const [carts, setCarts] = useState<Cart[]>([]);
   const [loading, setLoading] = useState(false);
   const [isCreateCartOpen, setIsCreateCartOpen] = useState(false);
-  const { showAlert, showConfirm } = useModal();
+  const { showConfirm } = useModal();
 
   useEffect(() => {
     reloadSharedCarts();
@@ -59,18 +59,30 @@ export function SharedCarts({ }: SharedCartsProps) {
     navigate('/cart');
   }
 
-  const deleteSharedCart = async (cartId: string, cartName: string) => {
+  const deleteSharedCart = async (cart: Cart, cartName: string) => {
     if (!await showConfirm(`Eliminare il carrello ${cartName}?`)) {
       return;
     }
 
-    if (await deleteCart(cartId)) {
+    if (await deleteCart(cart)) {
       reloadSharedCarts();
     }
   }
 
   const unlinkSharedCart = () => {
     unlinkCart();
+  }
+
+  const deleteAllSharedCarts = async () => {
+    if (!user?.uid) return;
+
+    if (!await showConfirm(`Eliminare/Scollegare definitivamente TUTTI i carrelli condivisi?`)) {
+      return;
+    }
+
+    if (await deleteCarts(carts)) {
+      reloadSharedCarts();
+    }
   }
 
   return (
@@ -134,7 +146,8 @@ export function SharedCarts({ }: SharedCartsProps) {
             icon={<FontAwesomeIcon icon={faTrash} />}
             classes="border-r-10 red"
             tooltip="Cancella tutti i carrelli considivi"
-            clickHandler={() => showAlert('Coming soon')}
+            clickHandler={deleteAllSharedCarts}
+            disabled={carts.length == 0}
           />
         }
         center={
@@ -143,6 +156,7 @@ export function SharedCarts({ }: SharedCartsProps) {
             classes="border-r-10 primary-color"
             tooltip="Nuovo carrello condiviso"
             clickHandler={openSharedCartCreationModal}
+            disabled={!isUserActive()}
           />
         }
         right={
@@ -163,7 +177,7 @@ const renderSharedCartList = (
   carts: Cart[],
   activeCartId: string,
   userUid: string,
-  deleteSharedCart: (cartId: string, cartName: string) => void,
+  deleteSharedCart: (cart: Cart, cartName: string) => void,
   loadCartAsActive: (cartId: string) => void,
   unlinkSharedCart: () => void
 ) => {
@@ -186,18 +200,23 @@ const renderSharedCartList = (
             icon={<FontAwesomeIcon icon={faTrash} />}
             classes="small red border-r-10"
             tooltip="Cancella carrello"
-            clickHandler={() => deleteSharedCart(cart.id, cart.name)}
-            disabled={cart.createdBy != userUid}
+            clickHandler={() => deleteSharedCart(cart, cart.name)}
           />
 
           {
             isActiveCart ?
-              <ButtonIcon
-                icon={<FontAwesomeIcon icon={faLinkSlash} />}
-                classes="small red border-r-10"
-                tooltip="Scollega carrello"
-                clickHandler={() => unlinkSharedCart()}
-              />
+              <>
+                {
+                  // Creator cannot unlink cart => it wont be deleted and i will be inaccessible without a link
+                  cart.createdBy != userUid &&
+                  <ButtonIcon
+                    icon={<FontAwesomeIcon icon={faLinkSlash} />}
+                    classes="small red border-r-10"
+                    tooltip="Scollega carrello"
+                    clickHandler={() => unlinkSharedCart()}
+                  />
+                }
+              </>
               :
               <ButtonIcon
                 icon={<FontAwesomeIcon icon={faDownload} />}

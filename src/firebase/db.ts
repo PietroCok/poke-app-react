@@ -179,11 +179,10 @@ export const addCartUser = async (cartId: string, userUid: string): Promise<bool
 }
 
 export const removeCartUser = async (cartId: string, userUid: string): Promise<boolean> => {
+  const fixedCartId = cartId.startsWith('cart-') ? cartId : `cart-${cartId}`;
   try {
-    update(ref(firebaseDatabase, `/users/${userUid}/carts`), {
-      [cartId]: null
-    })
-    console.log('Removed deleted cart from list');
+    await remove(ref(firebaseDatabase, `/users/${userUid}/carts/${fixedCartId}`));
+    console.log('Removed cart access', cartId);
     return true;
   } catch (error) {
     console.warn(error);

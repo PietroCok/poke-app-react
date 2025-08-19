@@ -98,7 +98,7 @@ export function Invite({ }: InviteProps) {
           />
           :
           <section
-            className="flex flex-center flex-column gap-2 flex-1 scroll  text-center"
+            className="flex flex-center flex-column gap-2 flex-1 scroll text-center padding-1"
           >
             {
               alreadyInvited ?

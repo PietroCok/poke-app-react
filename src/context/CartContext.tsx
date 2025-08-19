@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo } from "react";
 import { Outlet } from "react-router-dom";
 
 import type { Cart, CartContextType, PaymentMethod, Poke, StaticCartContextType } from "@/types";
-import { addCartItem, createCart, deleteCart, observeCart, removeAllCartItems, removeCartItem } from "../firebase/db";
+import { addCartItem, createCart, deleteCart, observeCart, removeAllCartItems, removeCartItem, removeCartUser } from "../firebase/db";
 import { useLocalStorageReducer } from "../hooks/useLocalStorage";
 import { useAuth } from "./AuthContext";
 import { CART_ACTIONS, cartReducer } from "./CartReducer";
@@ -100,12 +100,34 @@ export function CartProvider({ }: CartProviderProps) {
     return creationReusult;
   }
 
-  const _deleteSharedCart = async (cartId: string) => {
+  const _deleteSharedCart = async (cart: Cart) => {
     if (!isUserActive()) return false;
-    return await deleteCart(cartId);
+
+    unlinkCart();
+
+    if(cart.createdBy != userUid) {
+      return await removeCartUser(cart.id, userUid);
+    }
+
+    return await deleteCart(cart.id);
+  }
+
+  const _deleteSharedCarts = async (carts: Cart[]) => {
+    if(!userUid) return true;
+
+    unlinkCart();
+
+    let result = false;
+    for(const cart of carts){
+      result = (await _deleteSharedCart(cart)) || result;
+    }
+
+    return result;
   }
 
   const unlinkCart = async () => {
+    if(!cart.isShared) return;
+
     dispatch({
       type: CART_ACTIONS.UNLINK,
     });
@@ -195,6 +217,7 @@ export function CartProvider({ }: CartProviderProps) {
             updateCart,
             createCart: _createSharedCart,
             deleteCart: _deleteSharedCart,
+            deleteCarts: _deleteSharedCarts,
             unlinkCart,
             updateCartName,
             addItem,
@@ -218,14 +241,14 @@ const getItemsCount = (cart: Cart) => {
 }
 
 const getTotalPrice = (cart: Cart, method?: PaymentMethod) => {
-  if(getItemsCount(cart) <= 0) return 0;
+  if (getItemsCount(cart) <= 0) return 0;
 
   let totalPrice = 0;
-  for(const item of Object.values(cart.items)){
-    if(!method || item.paymentMethod == method){
+  for (const item of Object.values(cart.items)) {
+    if (!method || item.paymentMethod == method) {
       totalPrice += item.price;
     }
-  }  
+  }
 
   return totalPrice;
 }
