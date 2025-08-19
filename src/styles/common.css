@@ -386,3 +386,7 @@
 .hide-empty:has(span:empty) {
   display: none;
 }
+
+.rotate-180 {
+  transform: rotate(180deg);
+}

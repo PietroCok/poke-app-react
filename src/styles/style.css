@@ -335,4 +335,14 @@ input:checked~.toggle-right {
   color: var(--main-color);
 }
 
+.cart-info{
+  position: relative;
+  margin: 2px 1rem 10px 1rem;
+}
+
+.cart-info svg {
+  transition: all 200ms ease-in-out;
+}
+
+
 /* END CART */

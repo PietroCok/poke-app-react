@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo } from "react";
 import { Outlet } from "react-router-dom";
 
-import type { Cart, CartContextType, Poke, StaticCartContextType } from "@/types";
+import type { Cart, CartContextType, PaymentMethod, Poke, StaticCartContextType } from "@/types";
 import { addCartItem, createCart, deleteCart, observeCart, removeAllCartItems, removeCartItem } from "../firebase/db";
 import { useLocalStorageReducer } from "../hooks/useLocalStorage";
 import { useAuth } from "./AuthContext";
@@ -180,7 +180,8 @@ export function CartProvider({ }: CartProviderProps) {
   }
 
   const staticContextValue = useMemo(() => ({
-    getItemsCount: () => getItemsCount(cart)
+    getItemsCount: () => getItemsCount(cart),
+    getTotalPrice: (method?: PaymentMethod) => getTotalPrice(cart, method)
   }), [cart.items])
 
   return (
@@ -214,4 +215,17 @@ export function CartProvider({ }: CartProviderProps) {
 
 const getItemsCount = (cart: Cart) => {
   return Object.keys(cart.items || {}).length;
+}
+
+const getTotalPrice = (cart: Cart, method?: PaymentMethod) => {
+  if(getItemsCount(cart) <= 0) return 0;
+
+  let totalPrice = 0;
+  for(const item of Object.values(cart.items)){
+    if(!method || item.paymentMethod == method){
+      totalPrice += item.price;
+    }
+  }  
+
+  return totalPrice;
 }

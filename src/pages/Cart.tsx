@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-regular-svg-icons";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
 
 import type { Cart, Poke } from "../types";
 import { ButtonIcon } from "../components/common/ButtonIcon";
@@ -13,31 +12,21 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { useSelection } from "@/context/configurator/SelectionContext";
 import { useModal } from "@/context/ModalContext";
+import { CartSubHeader } from "@/components/cart/CartSubHeader";
+import { CartHeader } from "@/components/cart/CartHeader";
 
 const ITEM_MEMO_THRESHOLD = 10;
 
 export function Cart() {
-  const { cart, deleteAllItems, deleteItem, duplicateItem } = useCart();
+  const { cart, deleteAllItems, deleteItem, duplicateItem, getItemsCount } = useCart();
   const { loadItemIntoConfigurator } = useSelection();
   const { user } = useAuth();
   const { showAlert } = useModal();
 
   const userUid = user?.uid || '';
-  const hasItems = Object.keys(cart.items || {}).length > 0;
+  const itemsCount = getItemsCount();
+  const hasItems = itemsCount > 0;
   const isCartOwner = !cart.isShared || userUid === cart.createdBy;
-
-  const generateInviteLink = async () => {
-    const inviteLink = encodeURI(`${window.location.origin}${window.location.pathname}/invite/${cart.id}/${cart.name}`);
-
-    console.log(inviteLink);
-    if (navigator.clipboard) {
-      await navigator.clipboard.writeText(inviteLink);
-      showAlert(`Link di invito copiato negli appunti`);
-    } else {
-      // clipboard not supported -> show link in modal to be manually copied
-      showAlert(`${inviteLink}`);
-    }
-  }
 
   return (
     <div className="page-container h-100 flex flex-column">
@@ -51,21 +40,7 @@ export function Cart() {
           />
         }
         center={
-          <h3
-            className="h-100 flex flex-center gap-05 text-center"
-          // contentEditable={"plaintext-only"}
-          >
-            {
-              cart.isShared &&
-              <FontAwesomeIcon
-                icon={faLink}
-                title="Carello condiviso"
-              />
-            }
-            <span>
-              {cart.name}
-            </span>
-          </h3>
+          <CartHeader />
         }
         right={
           <MainMenu />
@@ -73,21 +48,7 @@ export function Cart() {
         classes="main-bg"
       />
 
-
-      {
-        cart.isShared &&
-        <section
-          id="invite-link"
-          className="text-center"
-        >
-          <span
-            className="fake-link"
-            onClick={generateInviteLink}
-          >
-            Genera link di invito
-          </span>
-        </section>
-      }
+      <CartSubHeader />
 
       <section
         className="flex flex-column flex-1 padding-1 gap-1 scroll

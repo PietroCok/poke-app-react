@@ -76,6 +76,7 @@ export type AuthContextType = {
 
 export type StaticCartContextType = {
   getItemsCount: () => number
+  getTotalPrice: (method?: PaymentMethod) => number
 }
 
 export type CartContextType = {
