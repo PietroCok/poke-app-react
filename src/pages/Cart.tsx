@@ -74,7 +74,12 @@ export function Cart() {
             classes="primary-bg primary-contrast-color border-r-10"
             clickHandler={() => showAlert('Coming soon!')}
             disabled={!isCartOwner || !hasItems}
-            disabledMessage={`Operazione consentita solo al creatore del carrello`}
+            disabledMessage={
+              !isCartOwner ?
+              `Operazione consentita solo al creatore del carrello`
+              :
+              `Il carrello è vuoto`
+            }
           />
         }
 
