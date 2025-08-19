@@ -64,7 +64,12 @@ export function Cart() {
             classes="red-bg primary-contrast-color border-r-10"
             clickHandler={() => deleteAllItems()}
             disabled={!isCartOwner || !hasItems}
-            disabledMessage={`Operazione consentita solo al creatore del carrello`}
+            disabledMessage={
+              !isCartOwner ?
+              `Operazione consentita solo al creatore del carrello`
+              :
+              `Il carrello è vuoto`
+            }
           />
         }
 
