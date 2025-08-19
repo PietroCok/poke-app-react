@@ -116,10 +116,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 }
 
-
-
 const isUserActive =(user: User | null, profile: UserProfile | null) => {
-  console.log('isUserActive');
-
   return user && profile && profile.status === 'active' || false;
 }
