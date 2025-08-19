@@ -50,19 +50,26 @@ export function ToastProvider({ children }: ToastProviderProps) {
 
   const addToastToQueue = (toast: Toast) => {
     setToastsQueue(
-      prevState => [
-        ...prevState,
-        toast
-      ]
+      prevState => {
+        // Add only one of the same message to the queue
+        const alreadyQueued = prevState.find(t => t.message == toast.message) || currentToast?.message == toast.message;
+        if(alreadyQueued) return prevState;
+
+        console.log('Toast added to queue', toast);
+        return [
+          ...prevState,
+          toast
+        ]
+      }
     )
   }
 
   const showError = (message: string, duration = defaultErrorDuration) => {
-    showToast(message, 'red', duration);
+    showToast(message, 'var(--accent-red)', duration);
   }
 
   const showInfo = (message: string, duration = defaultInfoDuration) => {
-    showToast(message, 'green', duration);
+    showToast(message, 'var(--accent-green)', duration);
   }
 
   const showToast = (message: string, color?: string, duration?: number) => {
@@ -74,7 +81,6 @@ export function ToastProvider({ children }: ToastProviderProps) {
 
     if (currentToast || toastsQueue.length > 0) {
       addToastToQueue(newToast);
-      console.log('Toast added to queue', newToast);
       return;
     }
 
