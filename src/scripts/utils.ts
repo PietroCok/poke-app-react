@@ -61,3 +61,8 @@ export function itemToString(item: Poke) {
 
   return str;
 }
+
+
+export const hasItem = (items: Poke[], itemId: string) => {
+  return !!items.find(item => item.id === itemId);
+}
