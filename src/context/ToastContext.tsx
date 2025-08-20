@@ -3,15 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 
 import { ButtonIcon } from "@/components/common/ButtonIcon";
+import type { ToastContextType } from "@/types";
 
-
-export type ToastContext = {
-  showToast: (message: string, color?: string, duration?: number) => void
-  showInfo: (message: string, duration?: number) => void
-  showError: (message: string, duration?: number) => void
-}
-
-const ToastContext = createContext<ToastContext | null>(null);
+const ToastContext = createContext<ToastContextType | null>(null);
 
 export const useToast = () => {
   const ctx = useContext(ToastContext);

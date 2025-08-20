@@ -3,23 +3,9 @@ import { createPortal } from "react-dom";
 
 import { ButtonText } from "@/components/common/ButtonText";
 import { Modal } from "@/components/common/Modal";
+import type { ModalContextType, ModalType } from "@/types";
 
-export type Modal = {
-  type: 'alert' | 'confirm' | 'custom',
-  title: string,
-  content: React.ReactNode,
-  actions?: React.ReactNode[],
-  onCancel?: () => void
-}
-
-export type ModalContext = {
-  showModal: (modalProps: Modal) => void
-  showAlert: (message: string, title?: string) => void
-  showConfirm: (message: string, title?: string) => Promise<boolean>
-  hideModal: () => void
-}
-
-const ModalContext = createContext<ModalContext | null>(null);
+const ModalContext = createContext<ModalContextType | null>(null);
 
 export const useModal = () => {
   const ctx = useContext(ModalContext);
@@ -32,9 +18,9 @@ export interface ModalProviderProps {
 }
 
 export function ModalProvider({ children }: ModalProviderProps) {
-  const [modalProps, setModalProps] = useState<Modal | null>(null);
+  const [modalProps, setModalProps] = useState<ModalType | null>(null);
 
-  const showModal = useCallback(({ type, title, content, actions, onCancel }: Modal) => {
+  const showModal = useCallback(({ type, title, content, actions, onCancel }: ModalType) => {
     setModalProps({ type, title, content, actions, onCancel });
   }, []);
 

@@ -11,7 +11,6 @@ import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Cart } from "./pages/Cart";
 import { Favorites } from "./pages/Favorites";
-import { RemoteCarts } from "./pages/RemoteCarts";
 import { PersonalArea } from "./pages/PersonalArea";
 import { ThemeProvider } from './context/ThemeContext';
 import { Registration } from './pages/Register';
@@ -22,6 +21,7 @@ import { SharedCarts } from './pages/SharedCarts';
 import { Invite } from './pages/Invite';
 import { ModalProvider } from './context/ModalContext';
 import { ToastProvider } from './context/ToastContext';
+import { FavoriteProvider } from './context/FavoriteContext';
 
 const config: AppConfig = appConfig;
 
@@ -42,9 +42,16 @@ export default function App() {
                     element={<CartProvider />}
                   >
 
-                    <Route element={<SelectionProvider />}>
-                      <Route path="/" element={<Home {...config} />} />
-                      <Route path="/cart" element={<Cart />} />
+                    <Route
+                      element={<FavoriteProvider />}
+                    >
+
+                      <Route element={<SelectionProvider />}>
+                        <Route path="/" element={<Home {...config} />} />
+                        <Route path="/cart" element={<Cart />} />
+                        <Route path="/favorites" element={<Favorites />} />
+                      </Route>
+
                     </Route>
 
                     <Route path='/shared-carts' element={<SharedCarts />} />
@@ -52,8 +59,6 @@ export default function App() {
 
                   </Route>
 
-                  <Route path="/favorites" element={<Favorites />} />
-                  <Route path="/remote-carts" element={<RemoteCarts />} />
                   <Route path="/personal" element={<PersonalArea />} />
                   <Route path="*" element={<NotFound />} />
 

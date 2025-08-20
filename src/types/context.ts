@@ -29,7 +29,7 @@ export type SelectionContextType = {
   addIngredient: (groupId: string, ingredientId: string) => void,
   removeIngredient: (groupId: string, ingredientId: string) => void,
   increaseQuantity: (groupId: string, ingredientId: string) => void,
-  loadItemIntoConfigurator: (item: Poke) => void,
+  loadItemIntoConfigurator: (item: Poke, navigateHome?: boolean) => void,
 
   resetContext: () => void,
 
@@ -77,6 +77,7 @@ export type AuthContextType = {
 export type StaticCartContextType = {
   getItemsCount: () => number
   getTotalPrice: (method?: PaymentMethod) => number
+  hasItem: (itemId: string) => boolean
 }
 
 export type CartContextType = {
@@ -89,9 +90,41 @@ export type CartContextType = {
   unlinkCart: () => void,
   updateCartName: (newName: string) => void,
 
-  addItem: (item: Poke) => void,
+  addItem: (item: Poke, fromEdit?: boolean) => Promise<void>,
   duplicateItem: (itemId: string) => void,
   deleteItem: (itemId: string, itemName: string) => void
-  updateItemFromEditing: (item: Poke) => void,
   deleteAllItems: () => void
+}
+
+export type ToastContextType = {
+  showToast: (message: string, color?: string, duration?: number) => void
+  showInfo: (message: string, duration?: number) => void
+  showError: (message: string, duration?: number) => void
+}
+
+export type ModalType = {
+  type: 'alert' | 'confirm' | 'custom',
+  title: string,
+  content: React.ReactNode,
+  actions?: React.ReactNode[],
+  onCancel?: () => void
+}
+
+export type ModalContextType = {
+  showModal: (modalProps: ModalType) => void
+  showAlert: (message: string, title?: string) => void
+  showConfirm: (message: string, title?: string) => Promise<boolean>
+  hideModal: () => void
+}
+
+export type FavoriteContextType = {
+  favorites: Poke[],
+  addFavorite: (item: Poke, fromEdit?: boolean) => Promise<void>
+  removeFavorite: (itemId: string, itemName: string) => void
+  removeAllFavorites: () => void
+  duplicateItem: (itemId: string) => void
+}
+
+export type StaticFavoriteContextType = {
+  hasItem: (itemId: string) => boolean
 }

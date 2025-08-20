@@ -212,6 +212,19 @@ export const addCartItem = async (cartId: string, item: Poke): Promise<boolean> 
   return false;
 }
 
+export const replaceCartItem = async (cartId: string, item: Poke, oldItemId: string) => {
+  try {
+    const updates: any = {};
+    updates[`shared-carts/cart-${cartId}/items/${item.id}`] = item;
+    updates[`shared-carts/cart-${cartId}/items/${oldItemId}`] = null;
+    await update(ref(firebaseDatabase), updates);
+    return true;
+  } catch (error) {
+    console.warn(error);
+  }
+  return false;
+}
+
 export const removeAllCartItems = async (cartId: string) => {
   try {
     await set(ref(firebaseDatabase, `/shared-carts/cart-${cartId}/items`), {})

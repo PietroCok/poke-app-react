@@ -2,12 +2,13 @@ import { createContext, useContext, useEffect, useMemo } from "react";
 import { Outlet } from "react-router-dom";
 
 import type { Cart, CartContextType, PaymentMethod, Poke, StaticCartContextType } from "@/types";
-import { addCartItem, createCart, deleteCart, observeCart, removeAllCartItems, removeCartItem, removeCartUser } from "../firebase/db";
+import { addCartItem, createCart, deleteCart, observeCart, removeAllCartItems, removeCartItem, removeCartUser, replaceCartItem } from "../firebase/db";
 import { useLocalStorageReducer } from "../hooks/useLocalStorage";
 import { useAuth } from "./AuthContext";
 import { CART_ACTIONS, cartReducer } from "./CartReducer";
 import { useModal } from "./ModalContext";
 import { useToast } from "./ToastContext";
+import { hasItem } from "@/scripts/utils";
 
 export interface CartProviderProps {
 
@@ -44,7 +45,7 @@ export function CartProvider({ }: CartProviderProps) {
 
   const [cart, dispatch] = useLocalStorageReducer(localStorageKey, cartReducer, emptyCart(userUid));
   const { showConfirm } = useModal();
-  const { showError } = useToast();
+  const { showError, showInfo } = useToast();
 
   useEffect(() => {
     if (!user || !cart.isShared) return;
@@ -107,7 +108,7 @@ export function CartProvider({ }: CartProviderProps) {
 
     unlinkCart();
 
-    if(cart.createdBy != userUid) {
+    if (cart.createdBy != userUid) {
       return await removeCartUser(cart.id, userUid);
     }
 
@@ -115,12 +116,12 @@ export function CartProvider({ }: CartProviderProps) {
   }
 
   const _deleteSharedCarts = async (carts: Cart[]) => {
-    if(!userUid) return true;
+    if (!userUid) return true;
 
     unlinkCart();
 
     let result = false;
-    for(const cart of carts){
+    for (const cart of carts) {
       result = (await _deleteSharedCart(cart)) || result;
     }
 
@@ -128,28 +129,52 @@ export function CartProvider({ }: CartProviderProps) {
   }
 
   const unlinkCart = async () => {
-    if(!cart.isShared) return;
+    if (!cart.isShared) return;
 
     dispatch({
       type: CART_ACTIONS.UNLINK,
     });
   }
 
-  const addItem = (item: Poke) => {
+  const addItem = async (item: Poke, fromEdit = false) => {
+    const newItem = structuredClone(item);
+
+    // If the items is saved after edit, update its id and remove old item
+    // this prevents having an item with the same id (but different content) in the cart
+    if (fromEdit) {
+      newItem.id = crypto.randomUUID();
+    }
+
     if (user && cart.isShared) {
-      addCartItem(cart.id, item);
+      if (fromEdit) {
+        if (await replaceCartItem(cart.id, newItem, item.id)) {
+          showInfo(`Elemento aggiornato nel carrello`);
+        }
+      } else {
+        if (await addCartItem(cart.id, newItem)) {
+          showInfo(`Elemento salvato nel carrello`);
+        }
+      }
     } else {
       dispatch({
         type: CART_ACTIONS.ADD_ITEM,
-        item: item
+        item: newItem
       })
+      if (fromEdit) {
+        dispatch({
+          type: CART_ACTIONS.REMOVE_ITEM,
+          itemId: item.id
+        })
+        showInfo(`Elemento aggiornato nel carrello`);
+      } else {
+        showInfo(`Elemento salvato nel carrello`);
+      }
     }
   }
 
   const duplicateItem = (itemId: string) => {
     const oldItem = cart.items[itemId];
     if (!oldItem) {
-      showError('Elemento non trovato');
       return;
     }
 
@@ -157,14 +182,6 @@ export function CartProvider({ }: CartProviderProps) {
     newItem.createdBy = userUid;
     newItem.id = crypto.randomUUID();
     addItem(newItem);
-  }
-
-  const updateItemFromEditing = (item: Poke) => {
-    // If old item does not exists create a new cart item
-    const oldItem = cart.items[item.id];
-    if (!oldItem) addItem(item);
-
-    addItem(structuredClone(item));
   }
 
   const deleteItem = async (itemId: string, itemName: string) => {
@@ -205,7 +222,8 @@ export function CartProvider({ }: CartProviderProps) {
 
   const staticContextValue = useMemo(() => ({
     getItemsCount: () => getItemsCount(cart),
-    getTotalPrice: (method?: PaymentMethod) => getTotalPrice(cart, method)
+    getTotalPrice: (method?: PaymentMethod) => getTotalPrice(cart, method),
+    hasItem: (itemId: string) => hasItem(Object.values(cart.items || []), itemId)
   }), [cart.items])
 
   return (
@@ -224,7 +242,6 @@ export function CartProvider({ }: CartProviderProps) {
             updateCartName,
             addItem,
             duplicateItem,
-            updateItemFromEditing,
             deleteItem,
             deleteAllItems,
           }
@@ -235,8 +252,6 @@ export function CartProvider({ }: CartProviderProps) {
     </StaticCartContext.Provider>
   );
 }
-
-
 
 const getItemsCount = (cart: Cart) => {
   return Object.keys(cart.items || {}).length;

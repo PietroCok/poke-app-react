@@ -7,19 +7,17 @@ import { MainMenu } from "../components/common/MainMenu";
 import { PageHeader } from "../components/common/PageHeader";
 import { PageFooter } from "../components/common/PageFooter";
 import { ButtonText } from "../components/common/ButtonText";
-import { Item } from "../components/cart/Item";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { useSelection } from "@/context/configurator/SelectionContext";
 import { useModal } from "@/context/ModalContext";
 import { CartSubHeader } from "@/components/cart/CartSubHeader";
 import { CartHeader } from "@/components/cart/CartHeader";
+import { CartItem } from "@/components/common/CartItem";
 
 const ITEM_MEMO_THRESHOLD = 10;
 
 export function Cart() {
   const { cart, deleteAllItems, deleteItem, duplicateItem, getItemsCount } = useCart();
-  const { loadItemIntoConfigurator } = useSelection();
   const { user } = useAuth();
   const { showAlert } = useModal();
 
@@ -54,7 +52,7 @@ export function Cart() {
         className="flex flex-column flex-1 padding-1 gap-1 scroll
         "
       >
-        {renderItems(cart, userUid, deleteItem, duplicateItem, loadItemIntoConfigurator)}
+        {renderItems(cart, userUid, deleteItem, duplicateItem)}
       </section>
 
       <PageFooter
@@ -99,7 +97,6 @@ const renderItems = (
   userUid: string,
   deleteItem: (itemId: string, itemName: string) => void,
   duplicateItem: (itemId: string) => void,
-  loadItemIntoConfigurator: (item: Poke) => void
 ) => {
 
   const items = cart.items || {};
@@ -116,14 +113,13 @@ const renderItems = (
 
   return sortedItems.map(item => {
     return (
-      <Item
+      <CartItem
         key={item.id}
         item={item}
         disabled={item.createdBy != userUid && cart.createdBy != userUid}
-        deleteItem={deleteItem}
-        duplicateItem={duplicateItem}
-        editItem={loadItemIntoConfigurator}
         useMemo={itemsCount > ITEM_MEMO_THRESHOLD}
+        duplicate={duplicateItem}
+        deleteItem={deleteItem}
       />
     )
   })

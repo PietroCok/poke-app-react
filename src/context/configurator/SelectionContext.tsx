@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import type { AppConfig, ContextIngredient, IngredientsState, PaymentMethod, Poke, SelectionContextType, StaticSelectionContextType } from "@/types";
 import { PAYMENT_METHODS } from "@/types";
@@ -8,6 +8,7 @@ import appConfig from '../../../config.json';
 import { ingredientIdToName } from "../../scripts/utils";
 import { SELECTION_ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
 import { useLocalStorage, useLocalStorageReducer } from "../../hooks/useLocalStorage";
+import { useToast } from "../ToastContext";
 
 export interface SelectionProviderProps {
 
@@ -43,6 +44,8 @@ export function SelectionProvider({ }: SelectionProviderProps) {
   const [paymentMethod, setPaymentMethod] = useLocalStorage<PaymentMethod>('poke-payment-method', PAYMENT_METHODS.CASH);
   const [name, setName] = useLocalStorage('poke-save-name', '');
   const [editingId, setEditingId] = useState('');
+  const { showInfo } = useToast();
+  const navigate = useNavigate();
 
   // Add or increase quantity of ingredient to selection
   const addIngredient = (group: string, ingredientId: string) => {
@@ -81,12 +84,13 @@ export function SelectionProvider({ }: SelectionProviderProps) {
 
   // Reset ingredients selected
   const resetContext = () => {
+    setEditingId('');
     dispatch({
       type: SELECTION_ACTIONS.RESET,
     })
   }
 
-  const loadItemIntoConfigurator = (item: Poke) => {
+  const loadItemIntoConfigurator = (item: Poke, navigateHome = false) => {
     const newIngredients = structuredClone(item.ingredients) || {};
 
     dispatch({
@@ -101,6 +105,12 @@ export function SelectionProvider({ }: SelectionProviderProps) {
     setPaymentMethod(item.paymentMethod || PAYMENT_METHODS.CASH);
 
     setEditingId(item.id);
+
+    showInfo(`Modificando l'elemento: ${item.name}`, 2);
+
+    if (navigateHome) {
+      navigate('/');
+    }
   }
 
   const staticContextValue = useMemo(() => ({
@@ -137,8 +147,6 @@ export function SelectionProvider({ }: SelectionProviderProps) {
   );
 }
 
-
-
 const hasIngredients = (ingredients: IngredientsState) => {
   for (const [_, _ingredients] of Object.entries(ingredients)) {
     if (_ingredients.length > 0) {
@@ -148,8 +156,6 @@ const hasIngredients = (ingredients: IngredientsState) => {
 
   return false;
 }
-
-
 
 const groupExtraPrice = (size: string, groupId: string, ingredients: IngredientsState) => {
   const groupLimit = config.dimensioni[size]?.limiti[groupId];

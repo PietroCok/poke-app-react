@@ -5,11 +5,11 @@ import { faCartShopping, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
 import { PAYMENT_METHODS, type Poke } from "../types";
 import { ButtonIcon } from "./common/ButtonIcon";
-import { useCart } from "../context/CartContext";
 import { useSelection } from "../context/configurator/SelectionContext";
 import { useAuth } from "../context/AuthContext";
-import { useModal } from "@/context/ModalContext";
 import { useToast } from "@/context/ToastContext";
+import { useFavorite } from "@/context/FavoriteContext";
+import { useCart } from "@/context/CartContext";
 
 
 export interface SaveSelectionModalProps {
@@ -17,21 +17,21 @@ export interface SaveSelectionModalProps {
 }
 
 export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
-  const {showAlert} = useModal();
   const { user } = useAuth();
-  const { addItem, updateItemFromEditing } = useCart();
-  const { showInfo } = useToast();
-  const { 
+  const { showError } = useToast();
+  const { addFavorite } = useFavorite();
+  const { addItem: addCart } = useCart();
+  const {
     ingredients,
     resetContext: resetSelection,
-    size, 
-    getTotalPrice, 
-    name, 
-    setName, 
-    paymentMethod, 
+    size,
+    getTotalPrice,
+    name,
+    setName,
+    paymentMethod,
     setPaymentMethod,
     editingId,
-    setEditingId
+    setEditingId,
   } = useSelection();
 
   const changePaymentMethod = (event: ChangeEvent) => {
@@ -48,7 +48,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
     }
   }
 
-  const saveCart = () => {
+  const saveTo = (destination: string) => {
     const item: Poke = {
       id: editingId || crypto.randomUUID(),
       name: name,
@@ -59,18 +59,31 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
       price: getTotalPrice()
     }
 
-    if(editingId) {
-      updateItemFromEditing(item);
-      setEditingId('');
-      showInfo('Elemento Aggiornato nel carrello')
-    } else {
-      addItem(item);
-      showInfo('Elemento salvato nel carrello')
+    switch (destination) {
+      case 'cart':
+        _saveCart(item)
+        break;
+
+      case 'favorite':
+        _saveFavorite(item);
+        break;
+
+      default:
+        showError('Destinazione di salvataggio non valida')
+        break;
     }
 
+    setEditingId('');
     resetSelection();
-
     setIsOpen(false);
+  }
+
+  const _saveCart = (item: Poke) => {
+    addCart(item, !!editingId);
+  }
+
+  const _saveFavorite = (item: Poke) => {
+    addFavorite(item, !!editingId);
   }
 
   return (
@@ -109,7 +122,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
               icon={<FontAwesomeIcon icon={faCartShopping} />}
               classes="gold border-r-10"
               tooltip="Salva nel carrello"
-              clickHandler={saveCart}
+              clickHandler={() => saveTo('cart')}
             />
 
             <ButtonIcon
@@ -123,7 +136,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
               icon={<FontAwesomeIcon icon={faStar} />}
               classes="gold border-r-10"
               tooltip="Salva nei preferiti"
-              clickHandler={() => showAlert('Coming soon')}
+              clickHandler={() => saveTo('favorite')}
             />
           </div>
         </div>
