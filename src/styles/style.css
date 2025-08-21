@@ -318,7 +318,6 @@ input:checked~.toggle-right {
 .cart-item-container {
   border: 1px solid var(--main-color);
   border-radius: 10px;
-  padding: 1rem;
   cursor: pointer;
 }
 
@@ -328,6 +327,19 @@ input:checked~.toggle-right {
 
 .cart-item-pay {
   margin-right: 5px;
+}
+
+.cart-item-summary {
+  padding: 1rem;
+}
+
+.cart-item-container details:open .cart-item-summary {
+  padding-bottom: 0;
+}
+
+.cart-item-extra-info {
+  padding: 1rem;
+  padding-top: 0;
 }
 
 .shared-cart {

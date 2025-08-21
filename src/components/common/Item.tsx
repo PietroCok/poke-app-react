@@ -86,7 +86,7 @@ function _Item({ item, disabled = false, actions }: ItemProps) {
         onToggle={handleToggle}
       >
         <summary
-          className="cart-item-summary flex align-center just-between"
+          className="cart-item-summary flex align-center just-between padding-1"
         >
           <span>
             <FontAwesomeIcon className="cart-item-pay" icon={item.paymentMethod == PAYMENT_METHODS.CASH ? faCoins : faPaypal} />
