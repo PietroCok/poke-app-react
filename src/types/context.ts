@@ -96,6 +96,15 @@ export type CartContextType = {
   deleteAllItems: () => void
 }
 
+export type ToastType = {
+  id: string,
+  message: string,
+  color: string,
+  duration: number
+  icon?: React.ReactNode
+  doAnimate?: boolean
+}
+
 export type ToastOptions = {
   color?: string,
   duration?: number
