@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 
@@ -47,7 +47,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
       prevState => {
         // Add only one of the same message to the queue
         const alreadyQueued = prevState.find(t => t.message == toast.message) || currentToast?.message == toast.message;
-        if(alreadyQueued) return prevState;
+        if (alreadyQueued) return prevState;
 
         console.log('Toast added to queue', toast);
         return [
@@ -58,15 +58,15 @@ export function ToastProvider({ children }: ToastProviderProps) {
     )
   }
 
-  const showError = (message: string, duration = defaultErrorDuration) => {
+  const showError = useCallback((message: string, duration = defaultErrorDuration) => {
     showToast(message, 'var(--accent-red)', duration);
-  }
+  }, [])
 
-  const showInfo = (message: string, duration = defaultInfoDuration) => {
+  const showInfo = useCallback((message: string, duration = defaultInfoDuration) => {
     showToast(message, 'var(--accent-green)', duration);
-  }
+  }, [])
 
-  const showToast = (message: string, color?: string, duration?: number) => {
+  const showToast = useCallback((message: string, color?: string, duration?: number) => {
     const newToast = {
       message: message,
       color: color || defaultColor,
@@ -79,7 +79,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
     }
 
     setCurrentToast(newToast)
-  }
+  }, [])
 
   const showNextToast = () => {
     setToastsQueue(prevState => {
@@ -101,13 +101,15 @@ export function ToastProvider({ children }: ToastProviderProps) {
     })
   }
 
+  const contextValue = useMemo(() => ({
+    showToast:  (message: string, color?: string, duration?: number) => showToast(message, color, duration),
+    showInfo: (message: string, duration?: number) => showInfo(message, duration),
+    showError: (message: string, duration?: number) => showError(message, duration)
+  }), [])
+
   return (
     <ToastContext
-      value={{
-        showToast,
-        showInfo,
-        showError
-      }}
+      value={contextValue}
     >
       {children}
       {
