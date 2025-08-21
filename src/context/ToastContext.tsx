@@ -170,7 +170,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
           }
 
           <div
-            className="toast-message"
+            className="toast-message flex align-center"
           >
             {currentToast.message}
           </div>
