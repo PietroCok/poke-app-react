@@ -9,7 +9,7 @@ export function ButtonIcon({ icon, classes, ...otherProps }: ButtonIconProps) {
 
   return (
     <Button
-      classes={`${_classes}icon icon-only alt-bg`}
+      classes={`${_classes} button-icon-only alt-bg`}
       {...otherProps}
     >
       {icon}
