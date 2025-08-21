@@ -356,7 +356,7 @@ input:checked~.toggle-right {
 
   z-index: 9999;
 
-  top: 4rem;
+  top: 5rem;
   left: 50%;
 
   transform: translate(-50%, 0);
