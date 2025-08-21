@@ -6,6 +6,7 @@ import { ButtonIcon } from "../common/ButtonIcon";
 import { useCart } from "@/context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/context/ToastContext";
+import { Modal } from "../common/Modal";
 
 export interface CreateSharedCartModalProps {
   setIsOpen: (value: boolean) => void
@@ -15,22 +16,15 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
   const [cartName, setCartName] = useState('');
   const [useActiveCart, setuseActiveCart] = useState(false);
   const { createCart } = useCart();
-  const navigate = useNavigate();
   const { showError } = useToast();
-
-  const handleClickOut = (event: React.MouseEvent) => {
-    const target = event.target as HTMLDivElement;
-    if (target.id === 'create-shared-cart-modal-backdrop') {
-      setIsOpen(false);
-    }
-  }
+  const navigate = useNavigate();
 
   const createSharedCart = async (event: any) => {
     event.preventDefault();
     if (!cartName) return;
 
     const createResult = await createCart(cartName, useActiveCart);
-    if(!createResult){
+    if (!createResult) {
       showError('Errore creazione carrello condiviso!')
       return;
     }
@@ -39,17 +33,27 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
   }
 
   return (
-    <div
-      id="create-shared-cart-modal-backdrop"
-      className="modal-backdrop"
-      onClick={handleClickOut}
-    >
-      <form
-        className="modal-container"
-      >
-        <h3 className="text-center">Nuovo carrello condiviso</h3>
-
-        <div>
+    <Modal
+      title={`Nuovo carrello condiviso`}
+      actions={[
+        <ButtonIcon
+          key={`save`}
+          icon={<FontAwesomeIcon icon={faSave} />}
+          classes="primary-color border-r-10"
+          tooltip="Salva nel carrello"
+          clickHandler={createSharedCart}
+        />,
+        <ButtonIcon
+          key={`cancel`}
+          icon={<FontAwesomeIcon icon={faX} />}
+          classes="red border-r-10"
+          tooltip="Annulla"
+          clickHandler={() => setIsOpen(false)}
+          type="reset"
+        />
+      ]}
+      content={
+        <>
           <input
             type="text"
             placeholder="Nome"
@@ -79,28 +83,9 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
               checked={useActiveCart}
             />
           </div>
-
-        </div>
-
-        <div
-          className="modal-controls flex just-between"
-        >
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faX} />}
-            classes="red border-r-10"
-            tooltip="Annulla"
-            clickHandler={() => setIsOpen(false)}
-            type="reset"
-          />
-
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faSave} />}
-            classes="primary-color border-r-10"
-            tooltip="Salva nel carrello"
-            clickHandler={createSharedCart}
-          />
-        </div>
-      </form>
-    </div>
+        </>
+      }
+      hideModal={() => setIsOpen(false)}
+    />
   )
 }

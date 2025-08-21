@@ -11,9 +11,9 @@ import { MainMenu } from "@/components/common/MainMenu";
 import { PageFooter } from "@/components/common/PageFooter";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { useAuth } from "@/context/AuthContext";
-import { CreateSharedCartModal } from "@/components/cart/CreateSharedCartModal";
 import { useCart } from "@/context/CartContext";
 import { useModal } from "@/context/ModalContext";
+import { CreateSharedCartModal } from "@/components/cart/CreateSharedCartModal";
 
 
 export interface SharedCartsProps {
@@ -45,10 +45,6 @@ export function SharedCarts({ }: SharedCartsProps) {
     console.log(sharedCarts);
 
     setLoading(false);
-  }
-
-  const openSharedCartCreationModal = async () => {
-    setIsCreateCartOpen(true);
   }
 
   const loadCartAsActive = (cartId: string) => {
@@ -83,6 +79,10 @@ export function SharedCarts({ }: SharedCartsProps) {
     if (await deleteCarts(carts)) {
       reloadSharedCarts();
     }
+  }
+
+  const openSharedCartCreationModal = () => {
+    setIsCreateCartOpen(true);
   }
 
   return (
