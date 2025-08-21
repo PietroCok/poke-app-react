@@ -94,7 +94,7 @@ function _Item({ item, disabled = false, actions }: ItemProps) {
           </span>
           <div className={`flex align-center just-end ${isOpen ? '' : 'gap-05'}`}>
             <span className="cart-item-price">{item.price.toFixed(2)} €</span>
-            <div className="h-2"></div>
+            <div className="h-button-icon"></div>
             {
               !isOpen &&
               actions.slice(-1)
