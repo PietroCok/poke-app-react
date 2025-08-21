@@ -14,6 +14,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useModal } from "@/context/ModalContext";
 import { CreateSharedCartModal } from "@/components/cart/CreateSharedCartModal";
+import { useToast } from "@/context/ToastContext";
 
 
 export interface SharedCartsProps {
@@ -28,6 +29,7 @@ export function SharedCarts({ }: SharedCartsProps) {
   const [loading, setLoading] = useState(false);
   const [isCreateCartOpen, setIsCreateCartOpen] = useState(false);
   const { showConfirm } = useModal();
+  const { showInfo } = useToast();
 
   useEffect(() => {
     reloadSharedCarts();
@@ -52,6 +54,9 @@ export function SharedCarts({ }: SharedCartsProps) {
     if (!newCart) return;
 
     updateCart(newCart);
+
+    showInfo(`Caricato il carrello condiviso: ${newCart.name}`)
+
     navigate('/cart');
   }
 
