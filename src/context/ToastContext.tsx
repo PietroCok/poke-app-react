@@ -1,8 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamation, faInfo, faX } from "@fortawesome/free-solid-svg-icons";
+import { faExclamation, faInfo } from "@fortawesome/free-solid-svg-icons";
 
-import type { ToastContextType, ToastOptions } from "@/types";
+import type { ToastContextType, ToastOptions, ToastType } from "@/types";
+import { Toast } from "@/components/common/Toast";
 
 const ToastContext = createContext<ToastContextType | null>(null);
 
@@ -12,14 +13,6 @@ export const useToast = () => {
   return ctx;
 };
 
-type Toast = {
-  message: string,
-  color: string,
-  duration: number
-  icon?: React.ReactNode
-  doAnimate?: boolean
-}
-
 export interface ToastProviderProps {
   children: React.ReactNode
 }
@@ -28,42 +21,55 @@ const defaultColor = 'var(--primary-color)';
 const defaultDuration = 2
 const defaultErrorDuration = 2;
 const defaultInfoDuration = 1;
-const delay = .5;
-const animationDuration = .5 + .5;
 const minToastDuration = 1;
 
 export function ToastProvider({ children }: ToastProviderProps) {
-  const [currentToast, setCurrentToast] = useState<Toast | null>(null);
-  const [toastsQueue, setToastsQueue] = useState<Toast[]>([]);
+  const [manager, setManager] = useState<{ current: ToastType | null, queue: ToastType[] }>({
+    current: null,
+    queue: []
+  });
 
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-    if (currentToast) {
-      timer = setTimeout(showNextToast, (currentToast.duration + (currentToast.doAnimate ? animationDuration : 0)) * 1000);
-      if (currentToast.doAnimate) {
-        setTimeout(() => {
-          document.querySelector('.toast-container')?.classList.add('animate-out');
-        }, currentToast.duration * 1000)
-      }
-    }
-    return () => clearTimeout(timer);
-  }, [currentToast]);
+  const { current: currentToast } = manager;
 
-  const addToastToQueue = (toast: Toast) => {
-    setToastsQueue(
+  const addToQueue = (toast: ToastType) => {
+    setManager(
       prevState => {
-        // Add only one of the same message to the queue
-        const alreadyQueued = prevState.find(t => t.message == toast.message) || currentToast?.message == toast.message;
-        if (alreadyQueued) return prevState;
+        const { current, queue } = prevState;
+        if (queue.length == 0 && !current) {
+          return {
+            current: toast,
+            queue: []
+          }
+        }
 
-        console.log('Toast added to queue', toast);
-        return [
-          ...prevState,
-          toast
-        ]
+        const alreadyQueued = queue.find(t => t.message === toast.message) || current?.message == toast.message;
+        if (alreadyQueued) {
+          return prevState;
+        }
+
+        console.log('Toast added to the queue', toast);
+
+        return {
+          current: current,
+          queue: [...queue, toast]
+        }
       }
     )
   }
+
+  const showNext = useCallback(() => {
+    setManager(
+      prevState => {
+        const { queue } = prevState;
+        const [nextToast, ...updatedQueue] = queue;
+
+        return {
+          current: nextToast ?? null,
+          queue: updatedQueue
+        }
+      }
+    )
+  }, [])
 
   const showError = useCallback((
     message: string,
@@ -104,6 +110,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
     }: ToastOptions = {}
   ) => {
     const newToast = {
+      id: crypto.randomUUID(),
       message: message,
       color: color,
       duration: Math.max(duration, minToastDuration),
@@ -111,32 +118,8 @@ export function ToastProvider({ children }: ToastProviderProps) {
       doAnimate: doAnimate
     }
 
-    if (currentToast || toastsQueue.length > 0) {
-      addToastToQueue(newToast);
-      return;
-    }
-
-    setCurrentToast(newToast)
+    addToQueue(newToast);
   }, [])
-
-  const showNextToast = () => {
-    setToastsQueue(prevState => {
-      if (prevState.length == 0) {
-        console.log('No more toasts to show');
-        setCurrentToast(null);
-        return prevState;
-      };
-
-      const [nextToast, ...others] = prevState;
-
-      setTimeout(() => {
-        console.log(`Showing toast (${others.length} left)`, nextToast);
-        setCurrentToast(nextToast);
-      }, delay * 1000);
-
-      return others;
-    })
-  }
 
   const contextValue = useMemo(() => ({
     showToast: (message: string, options?: ToastOptions) => showToast(message, options),
@@ -151,39 +134,11 @@ export function ToastProvider({ children }: ToastProviderProps) {
       {children}
       {
         currentToast &&
-        <div
-          className={`toast-container flex border-r-10 gap-05 ${currentToast.doAnimate ? 'animate-in' : 'no-animation'}`}
-          style={{
-            ["--toast-duration" as any]: `${currentToast.duration}s`,
-            ["--toast-color" as any]: `${currentToast.color}`
-          }}
-        >
-
-          {
-            currentToast.icon &&
-            <div
-              className="icon"
-              onClick={showNextToast}
-            >
-              {currentToast.icon}
-            </div>
-          }
-
-          <div
-            className="toast-message flex align-center"
-          >
-            {currentToast.message}
-          </div>
-
-          <div
-            className="pointer icon"
-            onClick={showNextToast}
-          >
-            <FontAwesomeIcon
-              icon={faX}
-            />
-          </div>
-        </div>
+        <Toast
+          key={currentToast.id}
+          toast={currentToast}
+          showNext={showNext}
+        />
       }
     </ToastContext>
   )

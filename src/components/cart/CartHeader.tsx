@@ -20,7 +20,7 @@ export function CartHeader({ }: CartHeaderProps) {
     console.log(inviteLink);
     if (navigator.clipboard) {
       await navigator.clipboard.writeText(inviteLink);
-      showInfo(`Link di invito copiato negli appunti`, 5);
+      showInfo(`Link di invito copiato negli appunti`, {duration: 5});
     } else {
       // clipboard not supported -> show full link in modal to be manually copied
       showAlert(`${inviteLink}`);
