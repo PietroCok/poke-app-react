@@ -14,6 +14,7 @@ export function CartSubHeader({ }: CartSubHeaderProps) {
   const { getItemsCount, getTotalPrice } = useCart();
   const [isOpen, setIsOpen] = useState(false);
 
+  const itemsCount = getItemsCount();
   const paypalSubtotal = getTotalPrice(PAYMENT_METHODS.PAYPAL);
   const cashSubtotal = getTotalPrice(PAYMENT_METHODS.CASH);
 
@@ -31,7 +32,7 @@ export function CartSubHeader({ }: CartSubHeaderProps) {
           <FontAwesomeIcon icon={faBowlFood} />
           <span
           >
-            {getItemsCount()}
+            {itemsCount}
           </span>
         </div>
         <div
@@ -40,14 +41,17 @@ export function CartSubHeader({ }: CartSubHeaderProps) {
           {getTotalPrice().toFixed(2)} €
         </div>
 
-        <FontAwesomeIcon 
-          icon={faAngleDown}
-          className={`absolute right-0 ${isOpen && 'rotate-180'}`}
-        />
+        {
+          itemsCount > 0 &&
+          <FontAwesomeIcon
+            icon={faAngleDown}
+            className={`absolute right-0 ${isOpen && 'rotate-180'}`}
+          />
+        }
       </div>
 
       {
-        isOpen &&
+        isOpen && getTotalPrice() != 0 &&
         <div
           className="cart-price-detail flex gap-2"
         >
