@@ -1,9 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faX } from "@fortawesome/free-solid-svg-icons";
+import { faExclamation, faInfo, faX } from "@fortawesome/free-solid-svg-icons";
 
-import { ButtonIcon } from "@/components/common/ButtonIcon";
-import type { ToastContextType } from "@/types";
+import type { ToastContextType, ToastOptions } from "@/types";
 
 const ToastContext = createContext<ToastContextType | null>(null);
 
@@ -17,6 +16,8 @@ type Toast = {
   message: string,
   color: string,
   duration: number
+  icon?: React.ReactNode
+  doAnimate?: boolean
 }
 
 export interface ToastProviderProps {
@@ -28,16 +29,22 @@ const defaultDuration = 2
 const defaultErrorDuration = 2;
 const defaultInfoDuration = 1;
 const delay = .5;
+const animationDuration = .5 + .5;
+const minToastDuration = 1;
 
 export function ToastProvider({ children }: ToastProviderProps) {
   const [currentToast, setCurrentToast] = useState<Toast | null>(null);
   const [toastsQueue, setToastsQueue] = useState<Toast[]>([]);
 
-
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     if (currentToast) {
-      timer = setTimeout(showNextToast, currentToast.duration * 1000);
+      timer = setTimeout(showNextToast, (currentToast.duration + (currentToast.doAnimate ? animationDuration : 0)) * 1000);
+      if (currentToast.doAnimate) {
+        setTimeout(() => {
+          document.querySelector('.toast-container')?.classList.add('animate-out');
+        }, currentToast.duration * 1000)
+      }
     }
     return () => clearTimeout(timer);
   }, [currentToast]);
@@ -58,19 +65,50 @@ export function ToastProvider({ children }: ToastProviderProps) {
     )
   }
 
-  const showError = useCallback((message: string, duration = defaultErrorDuration) => {
-    showToast(message, 'var(--accent-red)', duration);
+  const showError = useCallback((
+    message: string,
+    options?: ToastOptions
+  ) => {
+    showToast(
+      message,
+      {
+        duration: defaultErrorDuration,
+        color: 'var(--accent-red)',
+        icon: <FontAwesomeIcon icon={faExclamation} className="red circle" />,
+        ...options
+      });
   }, [])
 
-  const showInfo = useCallback((message: string, duration = defaultInfoDuration) => {
-    showToast(message, 'var(--accent-green)', duration);
+  const showInfo = useCallback((
+    message: string,
+    options?: ToastOptions
+  ) => {
+    showToast(
+      message,
+      {
+        duration: defaultInfoDuration,
+        color: 'var(--primary-color)',
+        icon: <FontAwesomeIcon icon={faInfo} className="primary-color circle" />,
+        ...options
+      }
+    );
   }, [])
 
-  const showToast = useCallback((message: string, color?: string, duration?: number) => {
+  const showToast = useCallback((
+    message: string,
+    {
+      color = defaultColor,
+      duration = defaultDuration,
+      icon = null,
+      doAnimate = true
+    }: ToastOptions = {}
+  ) => {
     const newToast = {
       message: message,
-      color: color || defaultColor,
-      duration: duration || defaultDuration
+      color: color,
+      duration: Math.max(duration, minToastDuration),
+      icon: icon,
+      doAnimate: doAnimate
     }
 
     if (currentToast || toastsQueue.length > 0) {
@@ -91,7 +129,6 @@ export function ToastProvider({ children }: ToastProviderProps) {
 
       const [nextToast, ...others] = prevState;
 
-      setCurrentToast(null);
       setTimeout(() => {
         console.log(`Showing toast (${others.length} left)`, nextToast);
         setCurrentToast(nextToast);
@@ -102,9 +139,9 @@ export function ToastProvider({ children }: ToastProviderProps) {
   }
 
   const contextValue = useMemo(() => ({
-    showToast:  (message: string, color?: string, duration?: number) => showToast(message, color, duration),
-    showInfo: (message: string, duration?: number) => showInfo(message, duration),
-    showError: (message: string, duration?: number) => showError(message, duration)
+    showToast: (message: string, options?: ToastOptions) => showToast(message, options),
+    showInfo: (message: string, options?: ToastOptions) => showInfo(message, options),
+    showError: (message: string, options?: ToastOptions) => showError(message, options)
   }), [])
 
   return (
@@ -115,25 +152,37 @@ export function ToastProvider({ children }: ToastProviderProps) {
       {
         currentToast &&
         <div
-          className="toast-container flex align-center gap-1 border-r-10"
+          className={`toast-container flex border-r-10 gap-05 ${currentToast.doAnimate ? 'animate-in' : 'no-animation'}`}
           style={{
-            color: currentToast.color,
-            borderColor: currentToast.color,
             ["--toast-duration" as any]: `${currentToast.duration}s`,
             ["--toast-color" as any]: `${currentToast.color}`
           }}
         >
+
+          {
+            currentToast.icon &&
+            <div
+              className="icon"
+              onClick={showNextToast}
+            >
+              {currentToast.icon}
+            </div>
+          }
+
           <div
-            className="toast-message text-center"
+            className="toast-message"
           >
             {currentToast.message}
           </div>
 
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faX} />}
-            classes="border-r-10 red small"
-            clickHandler={showNextToast}
-          />
+          <div
+            className="pointer icon"
+            onClick={showNextToast}
+          >
+            <FontAwesomeIcon
+              icon={faX}
+            />
+          </div>
         </div>
       }
     </ToastContext>

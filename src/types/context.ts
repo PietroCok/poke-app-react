@@ -96,10 +96,17 @@ export type CartContextType = {
   deleteAllItems: () => void
 }
 
+export type ToastOptions = {
+  color?: string,
+  duration?: number
+  icon?: React.ReactNode
+  doAnimate?: boolean
+}
+
 export type ToastContextType = {
-  showToast: (message: string, color?: string, duration?: number) => void
-  showInfo: (message: string, duration?: number) => void
-  showError: (message: string, duration?: number) => void
+  showToast: (message: string, options?: ToastOptions) => void
+  showInfo: (message: string, options?: ToastOptions) => void
+  showError: (message: string, options?: ToastOptions) => void
 }
 
 export type ModalType = {

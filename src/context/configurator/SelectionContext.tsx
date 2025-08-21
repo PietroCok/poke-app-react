@@ -106,7 +106,7 @@ export function SelectionProvider({ }: SelectionProviderProps) {
 
     setEditingId(item.id);
 
-    showInfo(`Modificando l'elemento: ${item.name}`, 2);
+    showInfo(`${item.name} caricato`, {duration: 2});
 
     if (navigateHome) {
       navigate('/');
