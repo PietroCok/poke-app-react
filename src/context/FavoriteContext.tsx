@@ -73,7 +73,7 @@ export function FavoriteProvider({ }: FavoriteProviderProps) {
   }
 
   const removeFavorite = async (itemId: string, itemName: string) => {
-    if (!await showConfirm(`Confermare l'eliminazione dell'elemento ${itemName}`)) {
+    if (!await showConfirm(`Confermare la cancellazione dell'elemento ${itemName}`)) {
       return;
     }
 
@@ -84,7 +84,11 @@ export function FavoriteProvider({ }: FavoriteProviderProps) {
     )
   }
 
-  const removeAllFavorites = () => {
+  const removeAllFavorites = async () => {
+    if (!await showConfirm(`Confermare la cancellazione di tutti i preferiti?`)) {
+      return;
+    }
+
     setFavorites([])
   }
 
