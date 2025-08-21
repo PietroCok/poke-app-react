@@ -1,11 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'path'
+import path, { resolve } from 'path'
 import { copyFileSync } from 'fs'
+
+import mkcert from 'vite-plugin-mkcert'
+
 
 // https://vite.dev/config/
 export default defineConfig({
   base: '/poke-app-react',
+  resolve:{
+    alias: {
+      '@': path.resolve(__dirname, './src')
+    }
+  },
   plugins: [
     react(),
     {
@@ -16,7 +24,8 @@ export default defineConfig({
           resolve(__dirname, 'dist/404.html')
         )
       }
-    }
+    },
+    mkcert()
   ],
   server: {
     host: true, // same as 0.0.0.0
