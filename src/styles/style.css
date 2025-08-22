@@ -479,6 +479,7 @@ input:checked~.toggle-right {
   flex-direction: column;
   gap: 0.5rem;
   width: 80vw;
+  max-width: 800px;
 }
 
 #order-preview-container .group{
