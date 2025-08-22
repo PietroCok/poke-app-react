@@ -15,7 +15,7 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
   const [orderName, setOrderName] = useLocalStorage('poke-order-name', '');
   const [orderTime, setOrderTime] = useLocalStorage('poke-order-time', '');
   const [orderTimeMessage, setOrderTimeMessage] = useState('');
-  const { cart } = useCart();
+  const { cart, getTotalPrice } = useCart();
   const [orderMessage, setOrderMessage] = useState('');
 
   useEffect(() => {
@@ -123,7 +123,7 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
             className="group"
           >
             <span className="group-label">Totale</span>
-            <span id="order-price"></span>
+            <span id="order-price">{getTotalPrice().toFixed(2)}</span>
           </div>
 
 
