@@ -155,7 +155,7 @@ export function Login() {
           {
             emailMessage &&
             <div
-              className="form-validation-message email"
+              className="form-validation-message error-message email"
             >
               {emailMessage}
             </div>
@@ -188,7 +188,7 @@ export function Login() {
           {
             passwordMessage &&
             <div
-              className="form-validation-message password"
+              className="form-validation-message error-message password"
             >
               {passwordMessage}
             </div>

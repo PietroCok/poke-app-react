@@ -57,8 +57,6 @@
 .form-validation-message {
   padding: .5rem;
   padding-bottom: 0;
-  color: var(--accent-red);
-  opacity: .9;
 }
 
 .form-submit-message {
