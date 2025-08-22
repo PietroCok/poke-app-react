@@ -50,7 +50,7 @@ export function Invite({ }: InviteProps) {
   const registerCart = async () => {
     setLoading(true);
     if (!await addCartUser(cartId, userUid)) {
-      showError(`Ops, qualcosa è andato storto...`);
+      showError(`Ops, qualcosa è andato storto durante la registrazione del carrello condiviso.`);
       setLoading(false);
       return;
     }
@@ -61,7 +61,7 @@ export function Invite({ }: InviteProps) {
   const loadCart = async (cartId: string) => {
     const cart = await getCart(cartId);
     if (!cart) {
-      showError(`Ops, qualcosa è andato storto...`);
+      showError(`Ops, qualcosa è andato storto durante il recupero del carello condiviso`);
       setLoading(false);
       return false;;
     }
