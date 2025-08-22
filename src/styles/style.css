@@ -72,6 +72,11 @@ details summary {
   list-style: none;
 }
 
+.error-message {
+  color: var(--accent-red);
+  opacity: .9;
+}
+
 .checkbox {
   display: inline-block;
   width: 1rem;
@@ -465,3 +470,42 @@ input:checked~.toggle-right {
 }
 
 /* END TOASTS  */
+
+
+/* ORDER PREVIEW */
+
+#order-preview-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 80vw;
+}
+
+#order-preview-container .group{
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#order-preview-container .group-label {
+  min-width: 6ch;
+  text-align: left;
+}
+
+#order-message {
+  width: 100%;
+  min-width: 100%;
+  resize: vertical;
+  max-height: 35svh;
+  padding: 10px;
+  margin-top: 1rem;
+  field-sizing: content;
+}
+
+#order-time-error {
+  margin-top: .5rem;
+}
+
+/* END ORDER PREVIEW */
+
+

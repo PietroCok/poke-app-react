@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse } from "@fortawesome/free-regular-svg-icons";
 
@@ -9,17 +10,17 @@ import { PageFooter } from "../components/common/PageFooter";
 import { ButtonText } from "../components/common/ButtonText";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { useModal } from "@/context/ModalContext";
 import { CartSubHeader } from "@/components/cart/CartSubHeader";
 import { CartHeader } from "@/components/cart/CartHeader";
 import { CartItem } from "@/components/common/CartItem";
+import { OrderPreviewModal } from "@/components/modals/OrderPreviewModal";
 
 const ITEM_MEMO_THRESHOLD = 10;
 
 export function Cart() {
   const { cart, deleteAllItems, deleteItem, duplicateItem, getItemsCount } = useCart();
   const { user } = useAuth();
-  const { showAlert } = useModal();
+  const [isOrderPreviewOpen, setIsOrderPreviewOpen] = useState(false);
 
   const userUid = user?.uid || '';
   const itemsCount = getItemsCount();
@@ -55,6 +56,13 @@ export function Cart() {
         {renderItems(cart, userUid, deleteItem, duplicateItem)}
       </section>
 
+      {
+        isOrderPreviewOpen &&
+        <OrderPreviewModal 
+          hideModal={() => setIsOrderPreviewOpen(false)}
+        />
+      }
+
       <PageFooter
         left={
           <ButtonText
@@ -75,7 +83,7 @@ export function Cart() {
           <ButtonText
             text="Preview"
             classes="primary-bg primary-contrast-color border-r-10"
-            clickHandler={() => showAlert('Coming soon!')}
+            clickHandler={() => {setIsOrderPreviewOpen(true)}}
             disabled={!isCartOwner || !hasItems}
             disabledMessage={
               !isCartOwner ?
