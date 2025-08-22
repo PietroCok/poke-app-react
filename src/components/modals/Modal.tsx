@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 
 export interface ModalPros {
-  hideModal: () => void
+  hideModal?: () => void
   title: string
   actions: React.ReactNode[]
   content: React.ReactNode,
@@ -14,7 +14,7 @@ export function Modal({ hideModal, onCancel, title, content, actions }: ModalPro
     const target = event.target as HTMLDivElement;
     if (target.id === 'save-modal-backdrop') {
       if(onCancel) onCancel();
-      hideModal();
+      if(hideModal) hideModal();
     }
   }
 

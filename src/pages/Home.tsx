@@ -11,7 +11,7 @@ import { useSelection } from "../context/configurator/SelectionContext";
 import { PageHeader } from "../components/common/PageHeader";
 import { ButtonIcon } from "../components/common/ButtonIcon";
 import { MainMenu } from "../components/common/MainMenu";
-import { SaveSelectionModal } from "../components/SaveSelectionModal";
+import { SaveSelectionModal } from "@/components/modals/SaveSelectionModal";
 import { useCart } from "@/context/CartContext";
 
 export function Home({ dimensioni, gruppi }: AppConfig) {
@@ -80,7 +80,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
       {
         isSaveOpen &&
         <SaveSelectionModal
-          setIsOpen={setIsSaveOpen}
+          hideModal={() => setIsSaveOpen(false)}
         />
       }
 

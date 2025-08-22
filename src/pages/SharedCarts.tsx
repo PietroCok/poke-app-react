@@ -13,7 +13,7 @@ import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { useAuth } from "@/context/AuthContext";
 import { useCart } from "@/context/CartContext";
 import { useModal } from "@/context/ModalContext";
-import { CreateSharedCartModal } from "@/components/cart/CreateSharedCartModal";
+import { CreateSharedCartModal } from "@/components/modals/CreateSharedCartModal";
 import { useToast } from "@/context/ToastContext";
 
 

@@ -1,12 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faX } from "@fortawesome/free-solid-svg-icons";
 
 import { ButtonIcon } from "../common/ButtonIcon";
 import { useCart } from "@/context/CartContext";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "@/context/ToastContext";
-import { Modal } from "../common/Modal";
+import { Modal } from "./Modal";
 
 export interface CreateSharedCartModalProps {
   setIsOpen: (value: boolean) => void

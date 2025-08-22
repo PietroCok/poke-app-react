@@ -2,21 +2,21 @@ import { type ChangeEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
-import { PAYMENT_METHODS, type Poke } from "../types";
-import { ButtonIcon } from "./common/ButtonIcon";
-import { useSelection } from "../context/configurator/SelectionContext";
-import { useAuth } from "../context/AuthContext";
+import { PAYMENT_METHODS, type Poke } from "@/types";
+import { ButtonIcon } from "@/components/common/ButtonIcon";
+import { useSelection } from "@/context/configurator/SelectionContext";
+import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 import { useFavorite } from "@/context/FavoriteContext";
 import { useCart } from "@/context/CartContext";
-import { Modal } from "./common/Modal";
+import { Modal } from "@/components/modals/Modal";
 
 
 export interface SaveSelectionModalProps {
-  setIsOpen: (value: boolean) => void
+  hideModal: () => void
 }
 
-export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
+export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
   const { user } = useAuth();
   const { showError } = useToast();
   const { addFavorite } = useFavorite();
@@ -37,7 +37,6 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
   const changePaymentMethod = (event: ChangeEvent) => {
     const target = event.target as HTMLInputElement;
     const method = target.checked ? PAYMENT_METHODS.PAYPAL : PAYMENT_METHODS.CASH;
-    console.log(method);
     setPaymentMethod(method);
   }
 
@@ -68,7 +67,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
 
     setEditingId('');
     resetSelection();
-    setIsOpen(false);
+    hideModal();
   }
 
   const _saveCart = (item: Poke) => {
@@ -82,7 +81,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
   return (
     <Modal
       title={`Salva poke`}
-      hideModal={() => setIsOpen(false)}
+      hideModal={hideModal}
       actions={[
         <ButtonIcon
           key={`saveFavotires`}
@@ -96,7 +95,7 @@ export function SaveSelectionModal({ setIsOpen }: SaveSelectionModalProps) {
           icon={<FontAwesomeIcon icon={faX} />}
           classes="red border-r-10"
           tooltip="Annulla"
-          clickHandler={() => setIsOpen(false)}
+          clickHandler={hideModal}
         />,
         <ButtonIcon
           key={`saveCart`}

@@ -1,8 +1,8 @@
+import React from "react";
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
 
 import { ButtonText } from "@/components/common/ButtonText";
-import { Modal } from "@/components/common/Modal";
+import { Modal } from "@/components/modals/Modal";
 import type { ModalContextType, ModalType } from "@/types";
 
 const ModalContext = createContext<ModalContextType | null>(null);
@@ -25,7 +25,7 @@ export function ModalProvider({ children }: ModalProviderProps) {
   }, []);
 
   const hideModal = useCallback(() => {
-    setModalProps(null)
+    setModalProps(null);
   }, []);
 
   const showAlert = useCallback((message: string, title?: string) => showModal({
@@ -79,7 +79,7 @@ export function ModalProvider({ children }: ModalProviderProps) {
     showModal,
     showAlert,
     showConfirm,
-    hideModal
+    hideModal,
   }), [showModal, showAlert, showConfirm, hideModal]);
 
   return (
@@ -87,17 +87,15 @@ export function ModalProvider({ children }: ModalProviderProps) {
       value={staticContextValue}
     >
       {children}
-      {modalProps &&
-        createPortal(
-          <Modal
-            hideModal={hideModal}
-            title={modalProps.title}
-            content={modalProps.content}
-            actions={modalProps?.actions || []}
-            onCancel={modalProps?.onCancel}
-          />,
-          document.body
-        )
+      {
+        modalProps &&
+        <Modal
+          hideModal={hideModal}
+          title={modalProps.title}
+          content={modalProps.content}
+          actions={modalProps?.actions || []}
+          onCancel={modalProps?.onCancel}
+        />
       }
     </ModalContext.Provider>
   )
