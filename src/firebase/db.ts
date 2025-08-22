@@ -40,6 +40,28 @@ const createUserRecord = async (user: User): Promise<UserProfile | null> => {
   return profile;
 }
 
+
+export const deleteUserRecord = async (userUid: string) => {
+  try {
+    // remove all carts for the user
+    const allCarts = await getCarts(userUid) || [];
+    for(const cart of allCarts) {
+      if(cart.createdBy === userUid){
+        await deleteCart(cart.id);
+      } else {
+        await removeCartUser(cart.id, userUid);
+      }
+    }
+    // removed the actual user record
+    await remove(ref(firebaseDatabase, `/users/${userUid}`));
+    return true;
+  } catch (error) {
+    console.warn(error);
+  }
+
+  return false;
+}
+
 type FirebaseDbUser = {
   [key: string]: UserProfile
 }

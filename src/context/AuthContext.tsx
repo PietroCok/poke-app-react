@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from "react";
-import { onAuthStateChanged, signOut, type User } from "firebase/auth";
+import { AuthErrorCodes, onAuthStateChanged, signOut, type User } from "firebase/auth";
 
 import type { AuthContextType, StaticAuthContextType, UserProfile } from "@/types";
 
-import { firebaseAuth, firebaseSignIn, firebaseSignUp } from "../firebase/auth";
+import { deleteUserAccount, firebaseAuth, firebaseSignIn, firebaseSignUp } from "../firebase/auth";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
 import { getUserProfile } from "../firebase/db";
 import { useModal } from "./ModalContext";
+import { FirebaseError } from "firebase/app";
 
 export interface AuthProviderProps {
   children: React.ReactNode
@@ -76,7 +77,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const deleteAccount = async () => {
-    showAlert(`Coming soon!`);
+    const result = await deleteUserAccount();
+    if(result instanceof FirebaseError &&
+      result.code === AuthErrorCodes.CREDENTIAL_TOO_OLD_LOGIN_AGAIN
+    ) {
+      showAlert('Questa operazione richiede una autenticazione recente, eseguire nuovamente la login e riprovare');
+      return {redirect: '/login'};
+    }
+
+    if(typeof result === 'string') {
+      showAlert(result);
+      return;
+    }
   }
 
   const staticContextValue = useMemo(() => ({

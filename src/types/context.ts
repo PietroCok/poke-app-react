@@ -71,7 +71,7 @@ export type AuthContextType = {
   signUp: (email: string, password: string) => Promise<UserCredential | FirebaseError | null>,
   logout: () => Promise<void>,
   setOffline: (value: boolean) => void,
-  deleteAccount: () => void
+  deleteAccount: () => Promise<{redirect: string} | undefined>
 }
 
 export type StaticCartContextType = {
