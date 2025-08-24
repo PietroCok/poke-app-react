@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Modal } from "./Modal";
 import { ButtonText } from "../common/ButtonText";
@@ -17,6 +17,7 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
   const [orderTimeMessage, setOrderTimeMessage] = useState('');
   const { cart, getTotalPrice } = useCart();
   const [orderMessage, setOrderMessage] = useState('');
+  const messageRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     updateOrderMessage();
@@ -28,9 +29,9 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
       return;
     }
     console.log('field-sizing not suppoter -> manual workaround');
-    const messageElement = document.getElementById('order-message');
-    if (!messageElement) return;
-    messageElement.style.height = messageElement.scrollHeight + 3 + "px";
+    if(messageRef.current){
+      messageRef.current.style.height = messageRef.current.scrollHeight + 3 + "px"
+    }
   }, [orderMessage])
 
   const updateOrderMessage = () => {
@@ -128,6 +129,7 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
 
 
           <textarea
+            ref={messageRef}
             id="order-message"
             value={orderMessage}
             onChange={(event) => setOrderMessage(event.target.value)}

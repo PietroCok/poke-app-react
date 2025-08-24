@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -19,11 +19,12 @@ export const Toast = React.memo(
 )
 
 function _Toast({ toast, showNext }: ToastProps) {
+  const toastRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Animation out
     const animateOutTimer = setTimeout(() => {
-      document.getElementById(`toast-${toast.id}`)?.classList.add('animate-out');
+      toastRef.current?.classList.add('animate-out')
     }, (toast.duration + animationDuration / 2) * 1000)
 
     // Next toast
@@ -39,7 +40,7 @@ function _Toast({ toast, showNext }: ToastProps) {
 
   return (
     <div
-      id={`toast-${toast.id}`}
+      ref={toastRef}
       className={`toast-container flex border-r-10 gap-05 ${toast.doAnimate ? 'animate-in' : 'no-animation'}`}
       style={{
         ["--toast-duration" as any]: `${toast.duration + animationDuration / 2}s`,
