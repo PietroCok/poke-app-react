@@ -188,8 +188,15 @@ const renderSharedCartList = (
   loadCartAsActive: (cartId: string) => void,
   unlinkSharedCart: () => void
 ) => {
+  
+  // sort carts by most recent
+  const sortedCarts = carts.sort((cartA: Cart, cartB: Cart) => {
+    // If createdAt field is missing we use an empty string
+    // This should push the record as the first (chronologically)
+    return (cartA.createdAt ?? '') < (cartB.createdAt ?? '') ? 1 : -1;
+  });
 
-  return carts.map((cart) => {
+  return sortedCarts.map((cart) => {
     const isActiveCart = activeCartId === cart.id;
     return (
       <div
