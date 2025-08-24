@@ -12,6 +12,7 @@ import { useAuth } from "../context/AuthContext";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
 import { useModal } from "@/context/ModalContext";
 import { useToast } from "@/context/ToastContext";
+import { resetUserPassword } from "@/firebase/auth";
 
 
 export function Login() {
@@ -108,13 +109,22 @@ export function Login() {
   const resetPassword = async (event: ButtonClickEvent) => {
     event.preventDefault();
 
-    showAlert("Coming soon!");
-    return;
-
     // check if mail inserted
     if (!email.trim() || emailMessage) {
       showError("Inserire un indirizzo mail per proseguire");
       return;
+    }
+
+    if(!(await showConfirm(`Procedere con il reset della password?`))){
+      return;
+    }
+
+    const sendResetResult = await resetUserPassword(email);
+
+    if (!sendResetResult) {
+      showAlert(`È stata inviata una mail con la precedura di reset della password all'indirizzo ${email}`);
+    } else {
+      showError(`Qualcsa è andato storto durante l'operazione, provare più tardi`, { duration: 10 });
     }
   }
 

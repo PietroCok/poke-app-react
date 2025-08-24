@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, deleteUser, getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, deleteUser, getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
 
 import { firebaseApp } from './index';
 import type { UserCredential } from 'firebase/auth/cordova';
@@ -36,6 +36,16 @@ export const firebaseSignUp = async (email: string, password: string): Promise<U
     }
   }
   return null;
+}
+
+export const resetUserPassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(firebaseAuth, email);
+    return null;
+  } catch (error) {
+    console.warn(error);
+    return { error: error };
+  }
 }
 
 
