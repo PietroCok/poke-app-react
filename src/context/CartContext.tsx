@@ -27,9 +27,10 @@ export const useCart = () => {
   return { ...ctx, ...staticCtx };
 };
 
-const emptyCart = (userUid?: string, name?: string, isShared?: boolean) => {
+export const emptyCart = (userUid?: string, name?: string, isShared?: boolean) => {
   return {
     id: crypto.randomUUID(),
+    createdAt: new Date().toISOString(),
     name: name ?? 'Carrello',
     createdBy: userUid ?? '',
     items: {},

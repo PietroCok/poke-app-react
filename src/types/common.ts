@@ -30,5 +30,6 @@ export type Cart = {
   },
   name: string,
   createdBy: string,
+  createdAt: string,
   isShared: boolean
 }
