@@ -1,4 +1,5 @@
 import type { Cart, Poke } from "@/types";
+import { emptyCart } from "./CartContext";
 
 
 export type ActionType = typeof CART_ACTIONS[keyof typeof CART_ACTIONS];
@@ -17,16 +18,6 @@ type CartAction = {
   cart?: Cart,
   item?: Poke,
   itemId?: string
-}
-
-const emptyCart = (userUid?: string, name?: string, isShared?: boolean) => {
-  return {
-    id: crypto.randomUUID(),
-    name: name ?? 'Carrello',
-    createdBy: userUid ?? '',
-    items: {},
-    isShared: isShared || false
-  }
 }
 
 export function cartReducer(state: Cart, action: CartAction) {
