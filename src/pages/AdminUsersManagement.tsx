@@ -100,7 +100,7 @@ export function AdminUsersManagement() {
 const sortUsers = (users: UserProfile[]): UserProfile[] => {
   return users.slice().sort((userA: UserProfile, userB: UserProfile) => {
     if (userA.status == userB.status) {
-      return userA.createdAt > userB.createdAt ? -1 : 1;
+      return (userA.createdAt || '') > (userB.createdAt || '') ? -1 : 1;
     }
 
     return UserStatusLevel[userA.status] - UserStatusLevel[userB.status];
