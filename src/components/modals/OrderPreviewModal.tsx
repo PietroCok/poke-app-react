@@ -80,6 +80,7 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
           clickHandler={hideModal}
         />
       ]}
+      actionsClasses="just-between"
       content={
         <div
           id="order-preview-container"

@@ -34,6 +34,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
 
   return (
     <Modal
+      hideModal={() => setIsOpen(false)}
       title={`Nuovo carrello condiviso`}
       actions={[
         <ButtonIcon
@@ -52,6 +53,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
           type="reset"
         />
       ]}
+      actionsClasses="just-between"
       content={
         <>
           <input
@@ -64,7 +66,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
           />
 
           <div
-            className="flex align-center gap-1 padding-1-0"
+            className="flex align-center gap-1 padding-1-0 pointer"
             title="Utilizza i dati del carrello attualmente attivo"
           >
             <label htmlFor="use-local-cart">
@@ -85,7 +87,6 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
           </div>
         </>
       }
-      hideModal={() => setIsOpen(false)}
     />
   )
 }

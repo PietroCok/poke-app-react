@@ -64,6 +64,10 @@ a.disabled {
   cursor: pointer;
 }
 
+label {
+  cursor: inherit;
+}
+
 #root {
   height: 100svh;
 }

@@ -60,7 +60,7 @@
 .button-text {
   font-weight: bold;
   font-size: large;
-  padding: .75rem;
+  padding: .75em;
 }
 
 a.button-text {
@@ -75,4 +75,8 @@ a.button-text {
     width: 1rem;
     height: 1rem;
   }
+}
+
+.button-text.medium {
+  font-size: medium;
 }

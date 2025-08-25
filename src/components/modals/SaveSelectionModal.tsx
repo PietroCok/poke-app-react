@@ -105,12 +105,13 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
           clickHandler={() => saveTo('cart')}
         />
       ]}
+      actionsClasses="just-between"
       content={
         <>
           <input
             type="text"
             placeholder="Nome"
-            className="text-large text-center margin-1-0 w-100"
+            className="text-large margin-1-0 w-100"
             onChange={(event) => setName(event.target.value)}
             value={name}
           />

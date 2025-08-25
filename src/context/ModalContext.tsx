@@ -35,8 +35,8 @@ export function ModalProvider({ children }: ModalProviderProps) {
     actions: [
       <ButtonText
         key='ok'
-        text="OK"
-        classes="primary-bg primary-contrast-color border-r-10"
+        text="ok"
+        classes="primary-bg primary-contrast-color border-r-10 medium"
         clickHandler={hideModal}
       />
     ]
@@ -52,8 +52,8 @@ export function ModalProvider({ children }: ModalProviderProps) {
         actions: [
           <ButtonText
             key='ok'
-            text="OK"
-            classes="primary-bg primary-contrast-color border-r-10"
+            text="ok"
+            classes="primary-bg primary-contrast-color border-r-10 medium"
             clickHandler={() => {
               hideModal();
               resolve(true);
@@ -61,8 +61,8 @@ export function ModalProvider({ children }: ModalProviderProps) {
           />,
           <ButtonText
             key='cancel'
-            text="Cancel"
-            classes="red-bg primary-contrast-color border-r-10"
+            text="annulla"
+            classes="red-bg primary-contrast-color border-r-10 medium"
             clickHandler={() => {
               hideModal();
               resolve(false);

@@ -5,10 +5,13 @@ export interface ModalPros {
   title: string
   actions: React.ReactNode[]
   content: React.ReactNode,
+  titleClasses?: string,
+  contentClasses?: string,
+  actionsClasses?: string, 
   onCancel?: () => void
 }
 
-export function Modal({ hideModal, onCancel, title, content, actions }: ModalPros) {
+export function Modal({ hideModal, onCancel, title, titleClasses, content, contentClasses, actions, actionsClasses }: ModalPros) {
 
   const handleClickOut = (event: React.MouseEvent) => {
     const target = event.target as HTMLDivElement;
@@ -30,21 +33,21 @@ export function Modal({ hideModal, onCancel, title, content, actions }: ModalPro
         >
           {/* TITLE */}
           <h3 
-            className="modal-title text-center selectable"
+            className={`modal-title selectable ${titleClasses ?? ''}`}
           >
             {title}
           </h3>
 
           {/* CONTENT */}
           <div
-            className="modal-content text-center selectable"
+            className={`modal-content selectable ${contentClasses ?? ''}`}
           >
             {content}
           </div>
 
           {/* ACTIONS */}
           <div
-            className="modal-controls flex just-between row-reverse"
+            className={`modal-controls flex gap-1 row-reverse ${actionsClasses ?? ''}`}
           >
             {actions}
           </div>
