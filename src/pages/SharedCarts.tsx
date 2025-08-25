@@ -133,7 +133,7 @@ export function SharedCarts({ }: SharedCartsProps) {
           >
             {
               carts.length > 0 ?
-                renderSharedCartList(carts, cart.id, user?.uid || '', deleteSharedCart, loadCartAsActive, unlinkSharedCart)
+                renderSharedCartList(carts, cart.id, deleteSharedCart, loadCartAsActive, unlinkSharedCart)
                 :
                 <span
                   className="flex flex-center h-100"
@@ -183,12 +183,11 @@ export function SharedCarts({ }: SharedCartsProps) {
 const renderSharedCartList = (
   carts: Cart[],
   activeCartId: string,
-  userUid: string,
   deleteSharedCart: (cart: Cart, cartName: string) => void,
   loadCartAsActive: (cartId: string) => void,
   unlinkSharedCart: () => void
 ) => {
-  
+
   // sort carts by most recent
   const sortedCarts = carts.sort((cartA: Cart, cartB: Cart) => {
     // If createdAt field is missing we use an empty string
@@ -219,18 +218,12 @@ const renderSharedCartList = (
 
           {
             isActiveCart ?
-              <>
-                {
-                  // Creator cannot unlink cart => it wont be deleted and i will be inaccessible without a link
-                  cart.createdBy != userUid &&
-                  <ButtonIcon
-                    icon={<FontAwesomeIcon icon={faLinkSlash} />}
-                    classes="small red border-r-10"
-                    tooltip="Scollega carrello"
-                    clickHandler={() => unlinkSharedCart()}
-                  />
-                }
-              </>
+              <ButtonIcon
+                icon={<FontAwesomeIcon icon={faLinkSlash} />}
+                classes="small red border-r-10"
+                tooltip="Scollega carrello"
+                clickHandler={() => unlinkSharedCart()}
+              />
               :
               <ButtonIcon
                 icon={<FontAwesomeIcon icon={faDownload} />}
