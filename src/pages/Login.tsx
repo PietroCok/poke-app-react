@@ -258,7 +258,7 @@ export function Login() {
 
 
           <ButtonText
-            text="continua offline"
+            text="continua come ospite"
             type="button"
             tooltip="Forza navigazione offline"
             clickHandler={continueAsOffline}
