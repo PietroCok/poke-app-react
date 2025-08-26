@@ -4,15 +4,15 @@
   cursor: pointer;
   border: 0 transparent;
 
-  &:not(.disabled):active {
-    box-shadow: 0 0 2px 1px var(--primary-color);
+  &:not(.disabled):not(.no-active):active {
+    box-shadow: 0 0 2px 1px var(--main-color);
   }
 }
 
 /* For devices that supports hover status */
 @media (hover: hover) {
-  .button:not(.disabled):hover {
-    box-shadow: 0 0 2px 1px var(--primary-color);
+  .button:not(.disabled):not(.no-active):hover {
+    box-shadow: 0 0 2px 1px var(--main-color);
   }
 }
 
