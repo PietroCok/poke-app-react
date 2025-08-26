@@ -75,7 +75,7 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
         <ButtonText
           key={`cancel`}
           text={`Annulla`}
-          classes="red-bg primary-contrast-color border-r-10"
+          classes="red main-bg border-r-10"
           tooltip="Annulla"
           clickHandler={hideModal}
         />

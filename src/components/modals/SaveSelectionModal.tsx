@@ -81,6 +81,7 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
   return (
     <Modal
       title={`Salva poke`}
+      titleClasses="text-center"
       hideModal={hideModal}
       actions={[
         <ButtonIcon
@@ -93,7 +94,7 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
         <ButtonIcon
           key={`cancel`}
           icon={<FontAwesomeIcon icon={faX} />}
-          classes="red border-r-10"
+          classes="red main-bg border-r-10"
           tooltip="Annulla"
           clickHandler={hideModal}
         />,
@@ -111,7 +112,7 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
           <input
             type="text"
             placeholder="Nome"
-            className="text-large margin-1-0 w-100"
+            className="text-large text-center margin-1-0 w-100"
             onChange={(event) => setName(event.target.value)}
             value={name}
           />

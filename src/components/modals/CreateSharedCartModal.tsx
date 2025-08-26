@@ -36,6 +36,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
     <Modal
       hideModal={() => setIsOpen(false)}
       title={`Nuovo carrello condiviso`}
+      titleClasses="text-center"
       actions={[
         <ButtonIcon
           key={`save`}
@@ -47,7 +48,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
         <ButtonIcon
           key={`cancel`}
           icon={<FontAwesomeIcon icon={faX} />}
-          classes="red border-r-10"
+          classes="red main-bg border-r-10"
           tooltip="Annulla"
           clickHandler={() => setIsOpen(false)}
           type="reset"
@@ -66,7 +67,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
           />
 
           <div
-            className="flex align-center gap-1 padding-1-0 pointer"
+            className="flex flex-center gap-1 padding-1-0 pointer"
             title="Utilizza i dati del carrello attualmente attivo"
           >
             <label htmlFor="use-local-cart">

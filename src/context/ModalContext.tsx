@@ -62,7 +62,7 @@ export function ModalProvider({ children }: ModalProviderProps) {
           <ButtonText
             key='cancel'
             text="annulla"
-            classes="red-bg primary-contrast-color border-r-10 medium"
+            classes="red main-bg border-r-10 medium"
             clickHandler={() => {
               hideModal();
               resolve(false);
