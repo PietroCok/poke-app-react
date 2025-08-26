@@ -9,7 +9,7 @@ export function ButtonIcon({ icon, classes, ...otherProps }: ButtonIconProps) {
 
   return (
     <Button
-      classes={`${_classes} button-icon-only alt-bg`}
+      classes={`${_classes} button-icon-only ${_classes.indexOf('-bg') > 0 ? '' : 'alt-bg'}`}
       {...otherProps}
     >
       {icon}
