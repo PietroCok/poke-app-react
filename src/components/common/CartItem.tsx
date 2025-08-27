@@ -34,14 +34,16 @@ export function CartItem({ item, disabled, deleteItem, duplicate, useMemo = fals
           icon={<FontAwesomeIcon icon={faPen} />}
           classes="small border-r-10 primary-color"
           clickHandler={() => loadItemIntoConfigurator(item, true)}
+          disabled={disabled}
+          disabledMessage={`Non è possibile modificare l'elemento di un altro utente`}
         />,
         <ButtonIcon
           key={`addCart`}
           tooltip="Aggiungi ai preferiti"
           icon={<FontAwesomeIcon icon={faStar} />}
           classes="small border-r-10 gold"
-          disabled={isInFavorite}
-          disabledMessage={`Elemento già presente nei preferiti`}
+          disabled={isInFavorite || disabled}
+          disabledMessage={isInFavorite ? `Elemento già presente nei preferiti` : `Elemento appartenente ad un altro utente`}
           clickHandler={() => {addFavorite(item)}}
         />,
         <ButtonIcon
@@ -57,6 +59,8 @@ export function CartItem({ item, disabled, deleteItem, duplicate, useMemo = fals
           icon={<FontAwesomeIcon icon={faTrash} />}
           classes="small border-r-10 red"
           clickHandler={() => {deleteItem(item.id, item.name)}}
+          disabled={disabled}
+          disabledMessage={`Non è possibile eliminare l'elemento di un altro utente`}
         />
       ]}
     />
