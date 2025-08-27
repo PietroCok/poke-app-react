@@ -125,7 +125,7 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
             className="group"
           >
             <span className="group-label">Totale</span>
-            <span id="order-price">{getTotalPrice().toFixed(2)}</span>
+            <span id="order-price">{getTotalPrice().toFixed(2)} €</span>
           </div>
 
 
