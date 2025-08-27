@@ -30,7 +30,7 @@ export function ModalProvider({ children }: ModalProviderProps) {
 
   const showAlert = useCallback((message: string, title?: string) => showModal({
     type: 'alert',
-    title: title ?? 'Poke App',
+    title: title ?? '',
     content: message,
     actions: [
       <ButtonText
@@ -46,7 +46,7 @@ export function ModalProvider({ children }: ModalProviderProps) {
     return await new Promise<boolean>((resolve, _) => {
       showModal({
         type: 'confirm',
-        title: title ?? 'Poke App',
+        title: title ?? '',
         content: message,
         onCancel: () => resolve(false),
         actions: [
