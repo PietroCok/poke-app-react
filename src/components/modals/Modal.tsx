@@ -7,7 +7,7 @@ export interface ModalPros {
   content: React.ReactNode,
   titleClasses?: string,
   contentClasses?: string,
-  actionsClasses?: string, 
+  actionsClasses?: string,
   onCancel?: () => void
 }
 
@@ -16,8 +16,8 @@ export function Modal({ hideModal, onCancel, title, titleClasses, content, conte
   const handleClickOut = (event: React.MouseEvent) => {
     const target = event.target as HTMLDivElement;
     if (target.id === 'save-modal-backdrop') {
-      if(onCancel) onCancel();
-      if(hideModal) hideModal();
+      if (onCancel) onCancel();
+      if (hideModal) hideModal();
     }
   }
 
@@ -31,12 +31,16 @@ export function Modal({ hideModal, onCancel, title, titleClasses, content, conte
         <div
           className="modal-container"
         >
+
           {/* TITLE */}
-          <h3 
-            className={`modal-title selectable ${titleClasses ?? ''}`}
-          >
-            {title}
-          </h3>
+          {
+            title &&
+            <h3
+              className={`modal-title selectable ${titleClasses ?? ''}`}
+            >
+              {title}
+            </h3>
+          }
 
           {/* CONTENT */}
           <div
