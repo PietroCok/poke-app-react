@@ -33,7 +33,7 @@ export function CartHeader({ }: CartHeaderProps) {
       // contentEditable={"plaintext-only"}
     >
       <span
-        className="flex gap-05 text-center w-100"
+        className="flex gap-05 just-center w-100"
       >
         {
           cart.isShared &&
