@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowsRotate, faBowlRice, faDownload, faLinkSlash, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowsRotate, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import type { Cart } from "@/types";
 import { getCarts } from "@/firebase/db";
@@ -15,6 +15,7 @@ import { useCart } from "@/context/CartContext";
 import { useModal } from "@/context/ModalContext";
 import { CreateSharedCartModal } from "@/components/modals/CreateSharedCartModal";
 import { useToast } from "@/context/ToastContext";
+import { SharedCart } from "@/components/cart/SharedCart";
 
 
 export interface SharedCartsProps {
@@ -196,57 +197,15 @@ const renderSharedCartList = (
   });
 
   return sortedCarts.map((cart) => {
-    const isActiveCart = activeCartId === cart.id;
-    const itemsCount = Object.keys(cart.items || {}).length;
     return (
-      <div
+      <SharedCart
         key={cart.id}
-        className={`shared-cart flex align-center just-between ${isActiveCart ? 'border-primary' : ''}`}
-      >
-        <div
-          className="ellipsis"
-          title={cart.name}
-        >
-          {cart.name}
-        </div>
-
-        <div
-          className="flex gap-1"
-        >
-
-          <div
-            className="flex flex-center gap-05"
-            title="Elementi nel carrello"
-          >
-            <span>{itemsCount}</span>
-            <span><FontAwesomeIcon icon={faBowlRice} /></span>
-          </div>
-
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faTrash} />}
-            classes="small red border-r-10"
-            tooltip="Cancella carrello"
-            clickHandler={() => deleteSharedCart(cart, cart.name)}
-          />
-
-          {
-            isActiveCart ?
-              <ButtonIcon
-                icon={<FontAwesomeIcon icon={faLinkSlash} />}
-                classes="small red border-r-10"
-                tooltip="Scollega carrello"
-                clickHandler={() => unlinkSharedCart()}
-              />
-              :
-              <ButtonIcon
-                icon={<FontAwesomeIcon icon={faDownload} />}
-                classes="small primary-color border-r-10"
-                tooltip="Carica come carrello attivo"
-                clickHandler={() => loadCartAsActive(cart.id)}
-              />
-          }
-        </div>
-      </div>
+        cart={cart}
+        deleteSharedCart={deleteSharedCart}
+        unlinkSharedCart={unlinkSharedCart}
+        loadCartAsActive={loadCartAsActive}
+        activeCartId={activeCartId}
+      />
     )
   })
 }
