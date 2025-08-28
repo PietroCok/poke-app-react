@@ -33,7 +33,7 @@ export function CartHeader({ }: CartHeaderProps) {
       // contentEditable={"plaintext-only"}
     >
       <span
-        className="flex gap-05 text-center"
+        className="flex gap-05 text-center w-100"
       >
         {
           cart.isShared &&
@@ -42,14 +42,16 @@ export function CartHeader({ }: CartHeaderProps) {
             title="Carello condiviso"
           />
         }
-        <span>
+        <span
+          className="ellipsis"
+        >
           {cart.name}
         </span>
       </span>
       {
         cart.isShared &&
         <span
-          className="fake-link text-small"
+          className="fake-link text-small text-center"
           onClick={generateInviteLink}
         >
           Genera link di invito

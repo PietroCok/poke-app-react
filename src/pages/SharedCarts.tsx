@@ -202,13 +202,17 @@ const renderSharedCartList = (
         key={cart.id}
         className={`shared-cart flex align-center just-between ${isActiveCart ? 'border-primary' : ''}`}
       >
-        <div>
+        <div
+          className="ellipsis"
+          title={cart.name}
+        >
           {cart.name}
         </div>
 
         <div
           className="flex gap-1"
         >
+
           <ButtonIcon
             icon={<FontAwesomeIcon icon={faTrash} />}
             classes="small red border-r-10"

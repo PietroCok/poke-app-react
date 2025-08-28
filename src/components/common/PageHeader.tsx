@@ -13,15 +13,15 @@ export function PageHeader({ classes, left, center, right }: PageHeaderProps) {
     <header 
       className={`${_classes}page-header`}
     >
-      {renderElement(left)}
-      {renderElement(center)}
-      {renderElement(right)}
+      {renderElement(left, "padding-1")}
+      {renderElement(center, "padding-1-0 min-w-0")}
+      {renderElement(right, "padding-1")}
     </header>
   )
 }
 
-function renderElement(element: React.ReactNode) {
+function renderElement(element: React.ReactNode, classes: string) {
   return (
-    <div className="padding-1" >{element}</div>
+    <div className={classes} >{element}</div>
   )
 }

@@ -1,5 +1,11 @@
 /* List of common rules to add when needed */
 
+.ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .weight-normal {
   font-weight: normal;
 }
@@ -289,6 +295,10 @@
 
 .w-fit {
   width: fit-content;
+}
+
+.min-w-0 {
+  min-width: 0;
 }
 
 .min-w-fit {
