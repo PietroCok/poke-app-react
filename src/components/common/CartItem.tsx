@@ -4,7 +4,7 @@ import { faCopy, faPen, faStar, faTrash } from "@fortawesome/free-solid-svg-icon
 import type { Poke } from "@/types";
 import { Item } from "./Item";
 import { ButtonIcon } from "./ButtonIcon";
-import { useSelection } from "@/context/configurator/SelectionContext";
+import { useSelection } from "@/context/SelectionContext";
 import { useFavorite } from "@/context/FavoriteContext";
 
 

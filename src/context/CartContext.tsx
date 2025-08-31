@@ -5,7 +5,7 @@ import type { Cart, CartContextType, PaymentMethod, Poke, StaticCartContextType 
 import { addCartItem, createCart, deleteCart, observeCart, removeAllCartItems, removeCartItem, removeCartUser, replaceCartItem } from "../firebase/db";
 import { useLocalStorageReducer } from "../hooks/useLocalStorage";
 import { useAuth } from "./AuthContext";
-import { CART_ACTIONS, cartReducer } from "./CartReducer";
+import { CART_ACTIONS, cartReducer } from "./reducer/CartReducer";
 import { useModal } from "./ModalContext";
 import { useToast } from "./ToastContext";
 import { getPokePrice, hasItem } from "@/scripts/utils";

@@ -1,5 +1,5 @@
 import type { PokeSize } from "@/types";
-import { useSelection } from "../../context/configurator/SelectionContext";
+import { useSelection } from "../../context/SelectionContext";
 
 export interface SizeGroupProps {
   name: PokeSize,

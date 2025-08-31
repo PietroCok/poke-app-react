@@ -1,6 +1,6 @@
 import type { ContextIngredient } from "@/types";
 
-import { useSelection } from "../../context/configurator/SelectionContext";
+import { useSelection } from "../../context/SelectionContext";
 import { ingredientNameToId } from "../../scripts/utils";
 import { GroupLimits } from "./GroupLimits"
 import { Ingredient } from "./Ingredient"

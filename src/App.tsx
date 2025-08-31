@@ -5,7 +5,7 @@ import type { AppConfig } from '@/types';
 import appConfig from '../config.json';
 
 import { AuthProvider } from './context/AuthContext';
-import { SelectionProvider } from './context/configurator/SelectionContext';
+import { SelectionProvider } from './context/SelectionContext';
 import { ProtectedRoute } from './components/common/ProtectedRoute'
 import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";

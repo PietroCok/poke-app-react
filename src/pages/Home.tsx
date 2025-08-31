@@ -7,7 +7,7 @@ import { IngredientGroup } from "../components/home/IngredientGroup";
 import { SizeSelector } from "../components/home/SizeSelector";
 import { PageFooter } from "../components/common/PageFooter";
 import { ButtonText } from "../components/common/ButtonText";
-import { useSelection } from "../context/configurator/SelectionContext";
+import { useSelection } from "../context/SelectionContext";
 import { PageHeader } from "../components/common/PageHeader";
 import { ButtonIcon } from "../components/common/ButtonIcon";
 import { MainMenu } from "../components/common/MainMenu";

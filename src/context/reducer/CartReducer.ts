@@ -1,5 +1,5 @@
 import type { Cart, Poke } from "@/types";
-import { emptyCart } from "./CartContext";
+import { emptyCart } from "../CartContext";
 
 
 export type ActionType = typeof CART_ACTIONS[keyof typeof CART_ACTIONS];

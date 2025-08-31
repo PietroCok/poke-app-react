@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Poke } from "@/types";
 import { ButtonIcon } from "./ButtonIcon";
 import { Item } from "./Item";
-import { useSelection } from "@/context/configurator/SelectionContext";
+import { useSelection } from "@/context/SelectionContext";
 import { useCart } from "@/context/CartContext";
 
 export interface FavoriteItemProps {

@@ -4,12 +4,11 @@ import { Outlet, useNavigate } from "react-router-dom";
 import type { AppConfig, IngredientsState, PaymentMethod, Poke, PokeSize, SelectionContextType, StaticSelectionContextType } from "@/types";
 import { PAYMENT_METHODS } from "@/types";
 
-import appConfig from '../../../config.json';
-import { getLimit, groupCount } from "../../scripts/utils";
-import { SELECTION_ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
-import { useLocalStorage, useLocalStorageReducer } from "../../hooks/useLocalStorage";
-import { useToast } from "../ToastContext";
-import { getPokePrice, groupExtraPrice } from "../../scripts/utils";
+import appConfig from '../../config.json';
+import { getLimit, groupCount, getPokePrice, groupExtraPrice } from "./../scripts/utils";
+import { SELECTION_ACTIONS, emptyIngredients, selectionReducer } from "./reducer/selectionReducer";
+import { useLocalStorage, useLocalStorageReducer } from "@/hooks/useLocalStorage";
+import { useToast } from "./ToastContext";
 
 export interface SelectionProviderProps {
 

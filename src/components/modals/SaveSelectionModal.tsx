@@ -4,7 +4,7 @@ import { faCartShopping, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
 import { PAYMENT_METHODS, type Poke } from "@/types";
 import { ButtonIcon } from "@/components/common/ButtonIcon";
-import { useSelection } from "@/context/configurator/SelectionContext";
+import { useSelection } from "@/context/SelectionContext";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 import { useFavorite } from "@/context/FavoriteContext";
