@@ -7,7 +7,6 @@ import appConfig from '../../config.json';
 export type ContextIngredient = {
   id: string,
   quantity: number,
-  price: number
 }
 
 export type IngredientsState = {

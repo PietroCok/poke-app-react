@@ -5,7 +5,7 @@ import type { AppConfig, IngredientsState, PaymentMethod, Poke, PokeSize, Select
 import { PAYMENT_METHODS } from "@/types";
 
 import appConfig from '../../../config.json';
-import { getLimit, groupCount, ingredientIdToName } from "../../scripts/utils";
+import { getLimit, groupCount } from "../../scripts/utils";
 import { SELECTION_ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
 import { useLocalStorage, useLocalStorageReducer } from "../../hooks/useLocalStorage";
 import { useToast } from "../ToastContext";
@@ -50,13 +50,11 @@ export function SelectionProvider({ }: SelectionProviderProps) {
 
   // Add or increase quantity of ingredient to selection
   const addIngredient = (group: string, ingredientId: string) => {
-    const ingredientName = ingredientIdToName(ingredientId);
-    const price = config.gruppi[group]?.opzioni.find(i => i.name == ingredientName)?.prezzo ?? 0;
 
     dispatch({
       type: SELECTION_ACTIONS.ADD_INGREDIENT,
       groupId: group,
-      ingredient: { id: ingredientId, quantity: 1, price }
+      ingredient: { id: ingredientId, quantity: 1 }
     });
   }
 
