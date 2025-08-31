@@ -64,6 +64,7 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
     <Modal
       title="Completa l'ordine"
       hideModal={hideModal}
+      autoFocus={true}
       actions={[
         <ButtonText
           key={`confirm`}

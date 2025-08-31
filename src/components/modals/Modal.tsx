@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 export interface ModalPros {
@@ -8,10 +9,23 @@ export interface ModalPros {
   titleClasses?: string,
   contentClasses?: string,
   actionsClasses?: string,
+  autoFocus?: boolean,
   onCancel?: () => void
 }
 
-export function Modal({ hideModal, onCancel, title, titleClasses, content, contentClasses, actions, actionsClasses }: ModalPros) {
+export function Modal({
+  hideModal,
+  onCancel,
+  title,
+  titleClasses,
+  content,
+  contentClasses,
+  actions,
+  actionsClasses,
+  autoFocus,
+}: ModalPros) {
+
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const handleClickOut = (event: React.MouseEvent) => {
     const target = event.target as HTMLDivElement;
@@ -20,6 +34,18 @@ export function Modal({ hideModal, onCancel, title, titleClasses, content, conte
       if (hideModal) hideModal();
     }
   }
+
+  useEffect(() => {
+    if (!autoFocus) return;
+
+    const container = contentRef.current;
+    if (container) {
+      const firstFocusableChild = container.querySelector<HTMLElement>(
+        `button, input, select, textarea, [tabindex]:not([tabindex='-1'])`
+      );
+      if (firstFocusableChild) firstFocusableChild.focus();
+    }
+  }, [autoFocus])
 
   return (
     createPortal(
@@ -44,6 +70,7 @@ export function Modal({ hideModal, onCancel, title, titleClasses, content, conte
 
           {/* CONTENT */}
           <div
+            ref={contentRef}
             className={`modal-content selectable ${contentClasses ?? ''}`}
           >
             {content}

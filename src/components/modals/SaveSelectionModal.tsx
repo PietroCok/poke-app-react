@@ -78,6 +78,7 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
 
   return (
     <Modal
+      autoFocus={true}
       title={`Salva poke`}
       titleClasses="text-center"
       hideModal={hideModal}

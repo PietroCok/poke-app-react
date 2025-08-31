@@ -35,6 +35,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
   return (
     <Modal
       hideModal={() => setIsOpen(false)}
+      autoFocus={true}
       title={`Nuovo carrello condiviso`}
       titleClasses="text-center"
       actions={[
