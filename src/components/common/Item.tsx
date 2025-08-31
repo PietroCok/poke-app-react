@@ -1,4 +1,4 @@
-import { memo, useState, type ToggleEvent } from "react";
+import { memo, useMemo, useState, type ToggleEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
@@ -76,7 +76,10 @@ function _Item({ item, disabled = false, actions }: ItemProps) {
     setIsOpen(target.open);
   }
 
-  const itemPrice = getPokePrice(item.size, item.ingredients);
+  const itemPrice = useMemo(() => getPokePrice(item.size, item.ingredients), [
+    item.size,
+    item.ingredients
+  ]);
 
   const classes = disabled ? 'item-disabled ' : '';
 
