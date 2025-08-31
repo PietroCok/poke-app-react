@@ -4,7 +4,7 @@ import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 
 import { PAYMENT_METHODS, type Poke } from "../../types";
-import { getPokePrice, itemToString, shallowEqual } from "../../scripts/utils";
+import { getIngredientPrice, getPokePrice, itemToString, shallowEqual } from "../../scripts/utils";
 
 export interface ItemProps {
   item: Poke,
@@ -59,7 +59,7 @@ function isSameItem(prevItem: Poke, nextItem: Poke) {
       if (
         sortedPrevIngredients[i].id !== sortedNextIngredients[i].id ||
         sortedPrevIngredients[i].quantity !== sortedNextIngredients[i].quantity ||
-        sortedPrevIngredients[i].price !== sortedNextIngredients[i].price
+        getIngredientPrice(sortedPrevIngredients[i].id) !== getIngredientPrice(sortedNextIngredients[i].id)
       ) {
         return false;
       }

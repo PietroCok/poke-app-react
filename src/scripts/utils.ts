@@ -97,7 +97,7 @@ export const groupExtraPrice = (size: PokeSize, groupId: string, ingredients: In
 
   // order selected ingredient based on extra price
   // NB: shallow copy, do NOT edit ingredients props from this array, as they still reference the original state
-  const sortedIngredients = ingredients[groupId].slice().sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price);
+  const sortedIngredients = ingredients[groupId].slice().sort((a: ContextIngredient, b: ContextIngredient) => getIngredientPrice(b.id) - getIngredientPrice(a.id));
 
   // Find te most expensive items price
   let deductedCounter = 0;
