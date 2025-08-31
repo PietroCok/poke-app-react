@@ -1,4 +1,4 @@
-import type { IngredientsState } from "./context"
+import type { IngredientsState, PokeSize } from "./context"
 
 export interface SubMenuProps {
   menuId: string,
@@ -18,8 +18,7 @@ export type Poke = {
   name: string
   ingredients: IngredientsState,
   createdBy: string
-  size: string,
-  price: number
+  size: PokeSize,
   paymentMethod?: PaymentMethod
 }
 

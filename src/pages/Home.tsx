@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { AppConfig, Group } from "@/types";
+import type { AppConfig, Dimension, Group, PokeSize } from "@/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 
@@ -20,7 +20,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
   const isEmpty = !hasIngredients();
   const { getItemsCount } = useCart();
 
-  const dimensions = Object.entries(dimensioni);
+  const dimensions = Object.entries(dimensioni) as [PokeSize, Dimension][];
   const groups = Object.entries(gruppi);
 
   return (

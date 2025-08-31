@@ -2,10 +2,12 @@ import type { FirebaseError } from "firebase/app"
 import type { User, UserCredential } from "firebase/auth"
 import type { Cart, PaymentMethod, Poke } from "./common"
 
+import appConfig from '../../config.json';
+
 export type ContextIngredient = {
   id: string,
   quantity: number,
-  price: number,
+  price: number
 }
 
 export type IngredientsState = {
@@ -20,11 +22,13 @@ export type StaticSelectionContextType = {
   hasIngredients: () => boolean,
 }
 
+export type PokeSize = keyof typeof appConfig.dimensioni;
+
 export type SelectionContextType = {
   ingredients: IngredientsState,
-  size: string,
+  size: PokeSize,
 
-  selectSize: (newSelectedSize: string) => void,
+  selectSize: (newSelectedSize: PokeSize) => void,
 
   addIngredient: (groupId: string, ingredientId: string) => void,
   removeIngredient: (groupId: string, ingredientId: string) => void,

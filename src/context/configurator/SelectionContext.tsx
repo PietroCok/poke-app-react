@@ -1,14 +1,15 @@
 import { createContext, useContext, useMemo, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-import type { AppConfig, ContextIngredient, IngredientsState, PaymentMethod, Poke, SelectionContextType, StaticSelectionContextType } from "@/types";
+import type { AppConfig, IngredientsState, PaymentMethod, Poke, PokeSize, SelectionContextType, StaticSelectionContextType } from "@/types";
 import { PAYMENT_METHODS } from "@/types";
 
 import appConfig from '../../../config.json';
-import { ingredientIdToName } from "../../scripts/utils";
+import { getLimit, groupCount, ingredientIdToName } from "../../scripts/utils";
 import { SELECTION_ACTIONS, emptyIngredients, selectionReducer } from "./selectionReducer";
 import { useLocalStorage, useLocalStorageReducer } from "../../hooks/useLocalStorage";
 import { useToast } from "../ToastContext";
+import { getPokePrice, groupExtraPrice } from "../../scripts/utils";
 
 export interface SelectionProviderProps {
 
@@ -19,7 +20,7 @@ export const sizeStorageKey = 'poke-size';
 
 const config: AppConfig = appConfig;
 
-const defaultSize = Object.keys(config.dimensioni)[0] ?? '';
+const defaultSize = Object.keys(config.dimensioni)[0] as PokeSize;
 
 const SelectionContext = createContext<SelectionContextType | null>(null);
 const StaticSelectionContext = createContext<StaticSelectionContextType | null>(null);
@@ -35,7 +36,7 @@ export const useSelection = () => {
 };
 
 export function SelectionProvider({ }: SelectionProviderProps) {
-  const [size, setSize] = useLocalStorage(sizeStorageKey, defaultSize);
+  const [size, setSize] = useLocalStorage<PokeSize>(sizeStorageKey, defaultSize);
   const [ingredients, dispatch] = useLocalStorageReducer(
     ingredientsStorageKey,
     selectionReducer,
@@ -76,7 +77,7 @@ export function SelectionProvider({ }: SelectionProviderProps) {
     })
   }
 
-  const selectSize = (newSelectedSize: string) => {
+  const selectSize = (newSelectedSize: PokeSize) => {
     if (size != newSelectedSize) {
       setSize(newSelectedSize);
     }
@@ -118,7 +119,7 @@ export function SelectionProvider({ }: SelectionProviderProps) {
     getLimit: (groupId: string) => getLimit(size, groupId),
     groupCount: (groupId: string) => groupCount(groupId, ingredients),
     groupExtraPrice: (groupId: string) => groupExtraPrice(size, groupId, ingredients),
-    getTotalPrice: () => getTotalPrice(size, ingredients),
+    getTotalPrice: () => getPokePrice(size, ingredients),
   }), [size, ingredients]);
 
   return (
@@ -157,56 +158,3 @@ const hasIngredients = (ingredients: IngredientsState) => {
   return false;
 }
 
-const groupExtraPrice = (size: string, groupId: string, ingredients: IngredientsState) => {
-  const groupLimit = config.dimensioni[size]?.limiti[groupId];
-  if (groupCount(groupId, ingredients) <= groupLimit) return 0;
-
-  // order selected ingredient based on extra price
-  // NB: shallow copy, do NOT edit ingredients props from this array, as they still reference the original state
-  const sortedIngredients = ingredients[groupId].slice().sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price);
-
-  // Find te most expensive items price
-  let deductedCounter = 0;
-  let deductedPrice = 0;
-  let total = 0;
-  for (let i = 0; i < sortedIngredients.length; i++) {
-    const ingredient = sortedIngredients[i];
-    let j = 0;
-    while (deductedCounter < groupLimit && ingredient.quantity > j) {
-      deductedPrice += ingredient.price;
-      deductedCounter++;
-      j++;
-    }
-
-    total += ingredient.price * ingredient.quantity;
-  }
-
-  total -= deductedPrice;
-
-  return total;
-}
-
-const groupCount = (groupId: string, ingredients: IngredientsState) => {
-  const groupIngredients = ingredients[groupId];
-  let total = 0;
-  for (const ingredient of groupIngredients) {
-    total += ingredient.quantity;
-  }
-  return total;
-}
-
-const getTotalPrice = (size: string, ingredients: IngredientsState) => {
-  const basePrice = config.dimensioni[size].prezzo;
-  let price = basePrice;
-
-  for (const group of Object.keys(ingredients)) {
-    price += groupExtraPrice(size, group, ingredients);
-  }
-
-  return price;
-}
-
-// Return limit for current size and groupId
-const getLimit = (size: string, groupId: string) => {
-  return config.dimensioni[size]?.limiti[groupId] ?? 0;
-}

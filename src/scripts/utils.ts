@@ -1,4 +1,4 @@
-import type { AppConfig, Poke } from "@/types";
+import type { AppConfig, ContextIngredient, IngredientsState, Poke, PokeSize } from "@/types";
 
 import appConfig from '../../config.json';
 
@@ -65,4 +65,71 @@ export function itemToString(item: Poke) {
 
 export const hasItem = (items: Poke[], itemId: string) => {
   return !!items.find(item => item.id === itemId);
+}
+
+
+// Cache ingredients price on load
+const items: { [key: string]: number } = {};
+for (const group of Object.values(appConfig.gruppi)) {
+  for (const ingredient of group.opzioni) {
+    items[ingredientNameToId(ingredient.name)] = ingredient.prezzo;
+  }
+}
+
+export const getIngredientPrice = (ingredientId: string): number => {
+  return items[ingredientId] ?? 0;
+}
+
+export const getPokePrice = (size: PokeSize, ingredients: IngredientsState) => {
+  const basePrice = config.dimensioni[size].prezzo;
+  let price = basePrice;
+
+  for (const group of Object.keys(ingredients)) {
+    price += groupExtraPrice(size, group, ingredients);
+  }
+
+  return price;
+}
+
+export const groupExtraPrice = (size: PokeSize, groupId: string, ingredients: IngredientsState) => {
+  const groupLimit = config.dimensioni[size]?.limiti[groupId];
+  if (groupCount(groupId, ingredients) <= groupLimit) return 0;
+
+  // order selected ingredient based on extra price
+  // NB: shallow copy, do NOT edit ingredients props from this array, as they still reference the original state
+  const sortedIngredients = ingredients[groupId].slice().sort((a: ContextIngredient, b: ContextIngredient) => b.price - a.price);
+
+  // Find te most expensive items price
+  let deductedCounter = 0;
+  let deductedPrice = 0;
+  let total = 0;
+  for (let i = 0; i < sortedIngredients.length; i++) {
+    const ingredient = sortedIngredients[i];
+    let j = 0;
+    while (deductedCounter < groupLimit && ingredient.quantity > j) {
+      deductedPrice += getIngredientPrice(ingredient.id);
+      deductedCounter++;
+      j++;
+    }
+
+    total += getIngredientPrice(ingredient.id) * ingredient.quantity;
+  }
+
+  total -= deductedPrice;
+
+  return total;
+}
+
+export const groupCount = (groupId: string, ingredients: IngredientsState) => {
+  const groupIngredients = ingredients[groupId];
+  let total = 0;
+  for (const ingredient of groupIngredients) {
+    total += ingredient.quantity;
+  }
+  return total;
+}
+
+// Return limit for current size and groupId
+export const getLimit = (size: PokeSize, groupId: string) => {
+  return config.dimensioni[size]?.limiti[groupId] ?? 0;
 }

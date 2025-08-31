@@ -25,7 +25,6 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
     ingredients,
     resetContext: resetSelection,
     size,
-    getTotalPrice,
     name,
     setName,
     paymentMethod,
@@ -48,7 +47,6 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
       createdBy: user?.uid || '',
       size: size,
       paymentMethod: paymentMethod,
-      price: getTotalPrice()
     }
 
     switch (destination) {

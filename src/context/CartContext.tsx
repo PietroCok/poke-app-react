@@ -8,7 +8,7 @@ import { useAuth } from "./AuthContext";
 import { CART_ACTIONS, cartReducer } from "./CartReducer";
 import { useModal } from "./ModalContext";
 import { useToast } from "./ToastContext";
-import { hasItem } from "@/scripts/utils";
+import { getPokePrice, hasItem } from "@/scripts/utils";
 
 export interface CartProviderProps {
 
@@ -264,7 +264,7 @@ const getTotalPrice = (cart: Cart, method?: PaymentMethod) => {
   let totalPrice = 0;
   for (const item of Object.values(cart.items)) {
     if (!method || item.paymentMethod == method) {
-      totalPrice += item.price;
+      totalPrice += getPokePrice(item.size, item.ingredients);
     }
   }
 

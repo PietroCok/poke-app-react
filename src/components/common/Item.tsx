@@ -4,7 +4,7 @@ import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 
 import { PAYMENT_METHODS, type Poke } from "../../types";
-import { itemToString, shallowEqual } from "../../scripts/utils";
+import { getPokePrice, itemToString, shallowEqual } from "../../scripts/utils";
 
 export interface ItemProps {
   item: Poke,
@@ -25,7 +25,7 @@ function areEquals(prevProps: ItemProps, nextProps: ItemProps) {
   );
 }
 
-function isSameItem(prevItem: Poke, nextItem: Poke){
+function isSameItem(prevItem: Poke, nextItem: Poke) {
   const {
     ingredients: prevIngredientsGroup,
     ...prevOthers
@@ -37,26 +37,26 @@ function isSameItem(prevItem: Poke, nextItem: Poke){
   } = nextItem;
 
   // Compare fist level properties
-  if(!shallowEqual(prevOthers, nextOthers)) return false;
+  if (!shallowEqual(prevOthers, nextOthers)) return false;
 
   const prevGroupsKeys = Object.keys(prevIngredientsGroup);
   const nextGroupsKeys = Object.keys(nextIngredientsGroup);
 
   // Compares items groups number
-  if(prevGroupsKeys.length != nextGroupsKeys.length) return false;
+  if (prevGroupsKeys.length != nextGroupsKeys.length) return false;
 
   // Compare each group
-  for(const groupKey of prevGroupsKeys){
+  for (const groupKey of prevGroupsKeys) {
     const prevIngredients = prevIngredientsGroup[groupKey]
     const nextIngredients = nextIngredientsGroup[groupKey]
 
-    if(prevIngredients.length != nextIngredients.length) return false;
+    if (prevIngredients.length != nextIngredients.length) return false;
 
     const sortedPrevIngredients = [...prevIngredients].sort((a, b) => a.id.localeCompare(b.id));
     const sortedNextIngredients = [...nextIngredients].sort((a, b) => a.id.localeCompare(b.id));
 
-    for(let i = 0; i < sortedPrevIngredients.length; i++){
-      if(
+    for (let i = 0; i < sortedPrevIngredients.length; i++) {
+      if (
         sortedPrevIngredients[i].id !== sortedNextIngredients[i].id ||
         sortedPrevIngredients[i].quantity !== sortedNextIngredients[i].quantity ||
         sortedPrevIngredients[i].price !== sortedNextIngredients[i].price
@@ -76,6 +76,8 @@ function _Item({ item, disabled = false, actions }: ItemProps) {
     setIsOpen(target.open);
   }
 
+  const itemPrice = getPokePrice(item.size, item.ingredients);
+
   const classes = disabled ? 'item-disabled ' : '';
 
   return (
@@ -93,7 +95,7 @@ function _Item({ item, disabled = false, actions }: ItemProps) {
             {item.name}
           </span>
           <div className={`flex align-center just-end ${isOpen ? '' : 'gap-05'}`}>
-            <span className="cart-item-price">{item.price.toFixed(2)} €</span>
+            <span className="cart-item-price">{itemPrice.toFixed(2)} €</span>
             <div className="h-button-icon"></div>
             {
               !isOpen &&
