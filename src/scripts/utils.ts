@@ -1,6 +1,7 @@
-import type { AppConfig, ContextIngredient, IngredientsState, Poke, PokeSize } from "@/types";
+import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type IngredientsState, type Poke, type PokeSize } from "@/types";
 
 import appConfig from '../../config.json';
+import { emptyIngredients } from "@/context/reducer/selectionReducer";
 
 const config: AppConfig = appConfig;
 
@@ -133,3 +134,71 @@ export const groupCount = (groupId: string, ingredients: IngredientsState) => {
 export const getLimit = (size: PokeSize, groupId: string) => {
   return config.dimensioni[size]?.limiti[groupId] ?? 0;
 }
+
+
+
+
+
+export const convertPoke = (oldItem: any): Poke => {
+
+  const ingredients = oldItem.ingredients ?? {};
+  if (ingredients.proteina) {
+    ingredients.proteine = structuredClone(ingredients.proteina)
+    delete ingredients.proteina;
+  }
+
+  const baseItem: Poke = {
+    id: crypto.randomUUID(),
+    name: oldItem.name ?? 'poke',
+    ingredients: {
+      ...emptyIngredients,
+      ...ingredients
+    },
+    createdBy: '',
+    size: oldItem.size ?? 'regular',
+    paymentMethod: oldItem.paymentMethod ?? PAYMENT_METHODS.CASH,
+  }
+
+  return baseItem;
+}
+
+
+export const importOldFavorites = () => {
+  console.log(`Importing old poke from favorites...`);
+
+  try {
+    const oldItems = localStorage.getItem('starred');
+    if (!oldItems) {
+      console.log(`No item to import`);
+      localStorage.removeItem('starred');
+      return;
+    }
+    const oldItemsParsed = JSON.parse(oldItems);
+
+    const convertedItems = [];
+
+    // Convert items
+    for (const oldItem of oldItemsParsed) {
+      const convertedItem = convertPoke(oldItem);
+      if (convertedItem) {
+        convertedItems.push(convertedItem);
+      }
+    }
+
+    // Merge with current favorites
+    if (convertedItems.length > 0) {
+      const currentFavorites = localStorage.getItem('poke-favorites') ?? '[]';
+      const mergedFavorites = [...JSON.parse(currentFavorites), ...convertedItems];
+      localStorage.setItem('poke-favorites', JSON.stringify(mergedFavorites));
+    }
+  } catch (error) {
+    console.warn(error);
+  }
+
+  // Remove localstorage data to avoid import next time
+  localStorage.removeItem('starred');
+
+  console.log(`Import of old poke from favorites completed`);
+}
+
+importOldFavorites();
