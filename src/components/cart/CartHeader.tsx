@@ -15,7 +15,7 @@ export function CartHeader({ }: CartHeaderProps) {
   const { showInfo } = useToast();
 
   const generateInviteLink = async () => {
-    const inviteLink = encodeURI(`${window.location.origin}${window.location.pathname}/invite/${cart.id}/${cart.name}`);
+    const inviteLink = `${window.location.origin}${window.location.pathname}/invite/${cart.id}/${encodeURIComponent(cart.name)}`;
 
     console.log(inviteLink);
     if (navigator.clipboard) {
