@@ -6,6 +6,7 @@ import { ButtonText } from "../common/ButtonText";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { Poke } from "@/types";
 import { useCart } from "@/context/CartContext";
+import { itemToString } from "@/scripts/utils";
 
 export interface OrderPreviewModalProps {
   hideModal: () => void
@@ -156,13 +157,7 @@ function generateOrderMessage(items: Poke[], orderName: string, orderTime: strin
 
   for (const [index, item] of Object.entries(items)) {
     let singleItemString = ''
-    singleItemString += `${Number(index) + 1}) ${item.size.toUpperCase()}: `;
-
-    for (const elements of Object.values(item.ingredients)) {
-      for (const element of elements) {
-        singleItemString += element.id.replaceAll("-", " ").replaceAll("--", "'") + (element.quantity > 1 ? " x" + element.quantity : "") + ", ";
-      }
-    }
+    singleItemString += `${Number(index) + 1}) ${itemToString(item)}`
     // rimozione ultima virgola
     singleItemString = singleItemString.slice(0, singleItemString.length - 2);
 
