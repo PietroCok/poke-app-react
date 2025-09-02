@@ -146,6 +146,11 @@ export function CartProvider({ }: CartProviderProps) {
       newItem.id = crypto.randomUUID();
     }
 
+    // Items can come from favorites saved when in guest mode
+    if (!item.createdBy) {
+      item.createdBy = userUid;
+    }
+
     if (user && cart.isShared) {
       if (fromEdit) {
         if (await replaceCartItem(cart.id, newItem, item.id)) {
