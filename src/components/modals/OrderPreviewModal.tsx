@@ -158,9 +158,6 @@ function generateOrderMessage(items: Poke[], orderName: string, orderTime: strin
   for (const [index, item] of Object.entries(items)) {
     let singleItemString = ''
     singleItemString += `${Number(index) + 1}) ${itemToString(item)}`
-    // rimozione ultima virgola
-    singleItemString = singleItemString.slice(0, singleItemString.length - 2);
-
     singleItemString += '\n\r';
 
     itemOrderString += singleItemString;
