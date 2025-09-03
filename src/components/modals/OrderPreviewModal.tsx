@@ -153,21 +153,17 @@ function generateOrderMessage(items: Poke[], orderName: string, orderTime: strin
     greetings = 'Buonasera';
   }
 
-  let itemOrderString = '';
+  const stringedItems = [];
 
   for (const [index, item] of Object.entries(items)) {
-    let singleItemString = ''
-    singleItemString += `${Number(index) + 1}) ${itemToString(item)}`
-    singleItemString += '\n\r';
-
-    itemOrderString += singleItemString;
+    stringedItems.push(`${Number(index) + 1}) ${itemToString(item)}`)
   }
 
   const completeOrderString =
     `${greetings},
 vorrei ordinare ${items.length > 1 ? items.length : "una"} poke da asporto per le ${orderTime}${orderName ? " a nome: " + orderName : ""}.
 
-${itemOrderString}`;
+${stringedItems.join('\n\r')}`;
 
   return completeOrderString;
 }
