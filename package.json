@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
-    "dev": "vite",
-    "build": "npm run typecheck && vite build",
+    "dev": "vite --mode development",
+    "build": "npm run typecheck && vite build --mode production",
     "preview": "vite preview"
   },
   "dependencies": {
