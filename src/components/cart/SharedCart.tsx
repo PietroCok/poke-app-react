@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBowlRice, faDownload, faLinkSlash, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faBowlFood, faDownload, faLinkSlash, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import type { Cart } from "@/types";
 import { ButtonIcon } from "../common/ButtonIcon";
@@ -37,7 +37,7 @@ export function SharedCart({ cart, activeCartId, deleteSharedCart, unlinkSharedC
           title="Elementi nel carrello"
         >
           <span>{itemsCount}</span>
-          <span><FontAwesomeIcon icon={faBowlRice} /></span>
+          <span><FontAwesomeIcon icon={faBowlFood} /></span>
         </div>
 
         <ButtonIcon
