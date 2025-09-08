@@ -147,8 +147,8 @@ export function CartProvider({ }: CartProviderProps) {
     }
 
     // Items can come from favorites saved when in guest mode
-    if (!item.createdBy) {
-      item.createdBy = userUid;
+    if (!newItem.createdBy && userUid) {
+      newItem.createdBy = userUid;
     }
 
     if (user && cart.isShared) {
