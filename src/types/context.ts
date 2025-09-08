@@ -21,7 +21,7 @@ export type StaticSelectionContextType = {
   hasIngredients: () => boolean,
 }
 
-export type PokeSize = keyof typeof appConfig.dimensioni;
+export type PokeSize = keyof typeof appConfig.sizes;
 
 export type SelectionContextType = {
   ingredients: IngredientsState,

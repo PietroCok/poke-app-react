@@ -1,9 +1,9 @@
-import type { Dimension, PokeSize } from '@/types'
+import type { SizeType, PokeSize } from '@/types'
 
 import { SizeGroup } from './SizeGroup'
 
 interface SizeSelectorProps {
-  sizes: [PokeSize, Dimension][]
+  sizes: [PokeSize, SizeType][]
 }
 
 export function SizeSelector({ sizes }: SizeSelectorProps) {
@@ -19,8 +19,8 @@ export function SizeSelector({ sizes }: SizeSelectorProps) {
         <SizeGroup
           key={_size.name}
           name={_size.name}
-          price={_size.prezzo}
-          limits={_size.limiti}
+          price={_size.price}
+          limits={_size.limits}
         />
       )
     })

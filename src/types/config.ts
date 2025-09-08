@@ -1,24 +1,24 @@
 import type { PokeSize } from "./context"
 
 export type AppConfig = {
-  dimensioni: Record<PokeSize, Dimension>,
-  gruppi: {
+  sizes: Record<PokeSize, SizeType>,
+  groups: {
     [key: string]: Group
   }
 }
 
-export type Dimension = {
-  limiti: {
+export type SizeType = {
+  limits: {
     [key: string]: number
   },
-  prezzo: number
+  price: number
 }
 
 export type Group = {
   extras: string,
-  opzioni: {
+  options: {
     name: string,
-    prezzo: number
+    price: number
   }[],
   order: number
 }

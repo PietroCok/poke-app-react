@@ -8,9 +8,9 @@ import { Ingredient } from "./Ingredient"
 interface IngredientGroupProps {
   group: {
     extras: string;
-    opzioni: {
+    options: {
       name: string;
-      prezzo: number;
+      price: number;
     }[];
     id: string;
   }
@@ -27,7 +27,7 @@ export function IngredientGroup({ group }: IngredientGroupProps) {
     removeIngredient
   } = useSelection();
 
-  const ingredients = group.opzioni;
+  const ingredients = group.options;
 
   const count = groupCount(group.id);
   const limit = getLimit(group.id);

@@ -11,7 +11,7 @@ type Action = {
   ingredients?: IngredientsState
 }
 
-export const emptyIngredients = Object.fromEntries(Object.entries(appConfig.gruppi).map(group => [group[0], []]));
+export const emptyIngredients = Object.fromEntries(Object.entries(appConfig.groups).map(group => [group[0], []]));
 
 export const SELECTION_ACTIONS = {
   ADD_INGREDIENT: 'add_ingredient',

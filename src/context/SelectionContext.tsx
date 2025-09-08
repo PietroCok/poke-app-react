@@ -19,7 +19,7 @@ export const sizeStorageKey = 'poke-size';
 
 const config: AppConfig = appConfig;
 
-const defaultSize = Object.keys(config.dimensioni)[0] as PokeSize;
+const defaultSize = Object.keys(config.sizes)[0] as PokeSize;
 
 const SelectionContext = createContext<SelectionContextType | null>(null);
 const StaticSelectionContext = createContext<StaticSelectionContextType | null>(null);

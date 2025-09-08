@@ -42,8 +42,8 @@ export function itemToString(item: Poke) {
     const ingredients = item.ingredients;
     const groups = Object.keys(ingredients);
     groups.sort((groupA, groupB) => {
-      const orderA = config.gruppi[groupA].order;
-      const orderB = config.gruppi[groupB].order;
+      const orderA = config.groups[groupA].order;
+      const orderB = config.groups[groupB].order;
 
       return orderA - orderB;
     })
@@ -71,9 +71,9 @@ export const hasItem = (items: Poke[], itemId: string) => {
 
 // Cache ingredients price on load
 const items: { [key: string]: number } = {};
-for (const group of Object.values(appConfig.gruppi)) {
-  for (const ingredient of group.opzioni) {
-    items[ingredientNameToId(ingredient.name)] = ingredient.prezzo;
+for (const group of Object.values(appConfig.groups)) {
+  for (const ingredient of group.options) {
+    items[ingredientNameToId(ingredient.name)] = ingredient.price;
   }
 }
 
@@ -82,7 +82,7 @@ export const getIngredientPrice = (ingredientId: string): number => {
 }
 
 export const getPokePrice = (size: PokeSize, ingredients: IngredientsState) => {
-  const basePrice = config.dimensioni[size].prezzo;
+  const basePrice = config.sizes[size].price;
   let price = basePrice;
 
   for (const group of Object.keys(ingredients)) {
@@ -93,7 +93,7 @@ export const getPokePrice = (size: PokeSize, ingredients: IngredientsState) => {
 }
 
 export const groupExtraPrice = (size: PokeSize, groupId: string, ingredients: IngredientsState) => {
-  const groupLimit = config.dimensioni[size]?.limiti[groupId];
+  const groupLimit = config.sizes[size]?.limits[groupId];
   if (groupCount(groupId, ingredients) <= groupLimit) return 0;
 
   // order selected ingredient based on extra price
@@ -132,7 +132,7 @@ export const groupCount = (groupId: string, ingredients: IngredientsState) => {
 
 // Return limit for current size and groupId
 export const getLimit = (size: PokeSize, groupId: string) => {
-  return config.dimensioni[size]?.limiti[groupId] ?? 0;
+  return config.sizes[size]?.limits[groupId] ?? 0;
 }
 
 

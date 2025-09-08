@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { AppConfig, Dimension, Group, PokeSize } from "@/types";
+import type { AppConfig, SizeType, Group, PokeSize } from "@/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,14 +14,14 @@ import { MainMenu } from "../components/common/MainMenu";
 import { SaveSelectionModal } from "@/components/modals/SaveSelectionModal";
 import { useCart } from "@/context/CartContext";
 
-export function Home({ dimensioni, gruppi }: AppConfig) {
+export function Home({ sizes, groups }: AppConfig) {
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const { resetContext, hasIngredients, getTotalPrice } = useSelection();
   const isEmpty = !hasIngredients();
   const { getItemsCount } = useCart();
 
-  const dimensions = Object.entries(dimensioni) as [PokeSize, Dimension][];
-  const groups = Object.entries(gruppi);
+  const dimensions = Object.entries(sizes) as [PokeSize, SizeType][];
+  const groupsEntries = Object.entries(groups);
 
   return (
     <div className="page-container">
@@ -45,7 +45,7 @@ export function Home({ dimensioni, gruppi }: AppConfig) {
       <SizeSelector sizes={dimensions} />
 
       <section id="ingredients-selection-container">
-        {renderGroups(groups)}
+        {renderGroups(groupsEntries)}
       </section>
 
       <PageFooter
