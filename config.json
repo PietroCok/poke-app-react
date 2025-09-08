@@ -232,5 +232,14 @@
       ],
       "order": 3
     }
+  },
+  "menu": {
+    "mains": [
+      {
+        "name": "riso cantonese",
+        "description": "",
+        "price": 12
+      }
+    ]
   }
 }
