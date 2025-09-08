@@ -33,6 +33,9 @@ export function FavoriteProvider({ }: FavoriteProviderProps) {
         let oldItemId = item.id;
         const newItem = structuredClone(item);
 
+        // For now, favorites are shared across any account using the device
+        newItem.createdBy = '';
+
         // If the items is saved after edit, update its id and remove old item
         // this prevents having an item with the same id (but different content) in the cart
         if (fromEdit) {
