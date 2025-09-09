@@ -146,10 +146,7 @@ export function CartProvider({ }: CartProviderProps) {
       newItem.id = crypto.randomUUID();
     }
 
-    // Items can come from favorites saved when in guest mode
-    if (!newItem.createdBy && userUid) {
-      newItem.createdBy = userUid;
-    }
+    newItem.createdBy = userUid;
 
     if (user && cart.isShared) {
       if (fromEdit) {
@@ -185,7 +182,6 @@ export function CartProvider({ }: CartProviderProps) {
     }
 
     const newItem = structuredClone(oldItem);
-    newItem.createdBy = userUid;
     newItem.id = crypto.randomUUID();
     addItem(newItem);
   }
