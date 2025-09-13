@@ -404,3 +404,10 @@
 .rotate-180 {
   transform: rotate(180deg);
 }
+
+
+@supports (scrollbar-gutter: stable) {
+  .scrollbar-gutter-stable-both {
+    scrollbar-gutter: stable both-edges;
+  }
+}

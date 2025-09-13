@@ -163,7 +163,6 @@ details summary {
 /* PAGE HEADER */
 
 
-
 /* PAGE FOOTER */
 
 .page-footer {
@@ -523,4 +522,10 @@ input:checked~.toggle-right {
 
 /* END ORDER PREVIEW */
 
+/* TABBED HEADER */
 
+.tabbed-header {
+  border-bottom: 1px solid var(--main-color)
+}
+
+/* END TABBED HEADER */
