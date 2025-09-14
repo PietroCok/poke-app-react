@@ -1,6 +1,8 @@
 import type { PokeSize } from "./context"
 
-export type AppConfig = PokeConfig & MenuConfig
+export type AppConfig = PokeConfig & {
+  menu: MenuConfig
+}
 
 export type PokeConfig = {
   sizes: Record<PokeSize, SizeType>,
@@ -26,9 +28,7 @@ export type Group = {
 }
 
 export type MenuConfig = {
-  menu: {
-    [key: string]: DishType[]
-  }
+  [key: string]: DishType[]
 }
 
 export type DishType = {

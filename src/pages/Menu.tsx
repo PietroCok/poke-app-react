@@ -1,30 +1,28 @@
 import { useState } from "react";
-import type { SizeType, Group, PokeSize, PokeConfig } from "@/types";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { MenuConfig } from "@/types";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { IngredientGroup } from "../components/home/IngredientGroup";
-import { SizeSelector } from "../components/home/SizeSelector";
-import { PageFooter } from "../components/common/PageFooter";
-import { ButtonText } from "../components/common/ButtonText";
-import { useSelection } from "../context/SelectionContext";
-import { PageHeader } from "../components/common/PageHeader";
-import { ButtonIcon } from "../components/common/ButtonIcon";
-import { MainMenu } from "../components/common/MainMenu";
-import { SaveSelectionModal } from "@/components/modals/SaveSelectionModal";
+import { ButtonIcon } from "@/components/common/ButtonIcon";
+import { MainMenu } from "@/components/common/MainMenu";
+import { PageHeader } from "@/components/common/PageHeader";
 import { useCart } from "@/context/CartContext";
+import { PageFooter } from "@/components/common/PageFooter";
+import { ButtonText } from "@/components/common/ButtonText";
+import { SaveSelectionModal } from "@/components/modals/SaveSelectionModal";
+import { useSelection } from "@/context/SelectionContext";
+import { DishCategory } from "@/components/home/DishCategory";
 
-export function Home({ sizes, groups }: PokeConfig) {
+
+export function Menu({ menu }: {menu: MenuConfig}) {
   const [isSaveOpen, setIsSaveOpen] = useState(false);
   const { resetContext, hasIngredients, getTotalPrice } = useSelection();
-  const isEmpty = !hasIngredients();
   const { getItemsCount } = useCart();
 
-  const dimensions = Object.entries(sizes) as [PokeSize, SizeType][];
-  const groupsEntries = Object.entries(groups);
+  const isEmpty = !hasIngredients();
 
   return (
-    <div className="page-container">
+    <div className="page-container h-100 flex flex-column">
       <PageHeader
         left={
           <ButtonIcon
@@ -35,18 +33,19 @@ export function Home({ sizes, groups }: PokeConfig) {
             data-cart-count={getItemsCount() || null}
           />
         }
-      right={
-        <MainMenu />
-      }
+        right={
+          <MainMenu />
+        }
       />
 
-      <h2 id="page-title">crea la tua poke bowl</h2>
+      <h2 id="page-title">Menu</h2>
 
-      <SizeSelector sizes={dimensions} />
-
-      <section id="ingredients-selection-container">
-        {renderGroups(groupsEntries)}
+      <section
+        className="flex flex-column flex-1 padding-1"
+      >
+        {renderMenuCategories(menu)}
       </section>
+
 
       <PageFooter
         left={
@@ -88,18 +87,15 @@ export function Home({ sizes, groups }: PokeConfig) {
   )
 }
 
-function renderGroups(groups: [string, Group][]) {
-  return groups.map(group => {
-    const _group = {
-      id: group[0],
-      ...group[1]
-    }
-
+function renderMenuCategories(menu: MenuConfig) {
+  return Object.keys(menu).map(category => {
+    const dishes = menu[category];
     return (
-      <IngredientGroup
-        key={_group.id}
-        group={_group}
+      <DishCategory
+        key={category}
+        category={category}
+        dishes={dishes}
       />
     )
-  });
+  })
 }

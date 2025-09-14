@@ -239,6 +239,16 @@
         "name": "riso cantonese",
         "description": "",
         "price": 12
+      },
+      {
+        "name": "ravioli x4",
+        "description": "",
+        "price": 5
+      },
+      {
+        "name": "sashimi x10",
+        "description": "",
+        "price": 8
       }
     ]
   }
