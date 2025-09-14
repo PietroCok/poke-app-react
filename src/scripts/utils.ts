@@ -155,7 +155,7 @@ export const convertPoke = (oldItem: any): Poke => {
       ...ingredients
     },
     createdBy: '',
-    size: oldItem.size ?? 'regular',
+    size: oldItem.dimension ?? 'regular',
     paymentMethod: oldItem.paymentMethod ?? PAYMENT_METHODS.CASH,
   }
 

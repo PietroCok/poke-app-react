@@ -16,6 +16,7 @@ import { useModal } from "@/context/ModalContext";
 import { CreateSharedCartModal } from "@/components/modals/CreateSharedCartModal";
 import { useToast } from "@/context/ToastContext";
 import { SharedCart } from "@/components/cart/SharedCart";
+import { TabbedSection } from "@/components/common/TabbedSection";
 
 
 export interface SharedCartsProps {
@@ -91,6 +92,10 @@ export function SharedCarts({ }: SharedCartsProps) {
     setIsCreateCartOpen(true);
   }
 
+  const renderCartGroup = (group: 'creator' | 'invited') => {
+    return renderSharedCartList(carts, cart.id, deleteSharedCart, loadCartAsActive, unlinkSharedCart, user?.uid ?? '', group)
+  }
+
   return (
     <div className="page-container h-100 flex flex-column">
       <PageHeader
@@ -128,21 +133,17 @@ export function SharedCarts({ }: SharedCartsProps) {
             color={`var(--primary-color)`}
           />
           :
-          <section
-            id="shared-cart-list"
-            className="flex-1 flex flex-column gap-1 padding-1 scroll"
+          <div
+            className="flex-1 flex flex-column gap-1 padding-0-1 scroll"
           >
-            {
-              carts.length > 0 ?
-                renderSharedCartList(carts, cart.id, deleteSharedCart, loadCartAsActive, unlinkSharedCart)
-                :
-                <span
-                  className="flex flex-center h-100"
-                >
-                  Nessun carrello condiviso trovato
-                </span>
-            }
-          </section>
+            <TabbedSection 
+              tabsName={[`creati da me`, `inviti`]}
+              tabsContent={[
+                renderCartGroup('creator'),
+                renderCartGroup('invited')
+              ]}
+            />
+          </div>
       }
 
       <PageFooter
@@ -186,11 +187,30 @@ const renderSharedCartList = (
   activeCartId: string,
   deleteSharedCart: (cart: Cart, cartName: string) => void,
   loadCartAsActive: (cartId: string) => void,
-  unlinkSharedCart: () => void
+  unlinkSharedCart: () => void,
+  userUid: string,
+  group: 'creator' | 'invited',
 ) => {
+  let filteredCarts = carts;
+
+  if(group === 'creator') {
+    filteredCarts = carts.filter(c => c.createdBy === userUid)
+  } else if(group === 'invited') {
+    filteredCarts = carts.filter(c => c.createdBy != userUid)
+  }
+
+  if(filteredCarts.length === 0){
+    return (
+      <div
+        className="flex-1 flex flex-center"
+      >
+        Nessun carrello presente
+      </div>
+    )
+  }
 
   // sort carts by most recent
-  const sortedCarts = carts.sort((cartA: Cart, cartB: Cart) => {
+  const sortedCarts = filteredCarts.sort((cartA: Cart, cartB: Cart) => {
     // If createdAt field is missing we use an empty string
     // This should push the record as the first (chronologically)
     return (cartA.createdAt ?? '') < (cartB.createdAt ?? '') ? 1 : -1;
