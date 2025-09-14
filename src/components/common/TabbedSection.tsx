@@ -27,6 +27,7 @@ const renderHeader = (tabsName: string[], activeTabIndex: number, setActiveTabIn
 
         return (
           <span
+            key={tabName.replace(" ", "-")}
             onClick={() => setActiveTabIndex(index)}
             className={`flex-1 padding-1 text-center text-uppercase pointer ${color}`}
           >
