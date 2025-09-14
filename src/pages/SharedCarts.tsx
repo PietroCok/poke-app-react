@@ -137,7 +137,7 @@ export function SharedCarts({ }: SharedCartsProps) {
             className="flex-1 flex flex-column gap-1 padding-0-1 scroll"
           >
             <TabbedSection 
-              tabsName={['creati da me', 'inviti']}
+              tabsName={[`creati da me`, `inviti`]}
               tabsContent={[
                 renderCartGroup('creator'),
                 renderCartGroup('invited')
@@ -197,6 +197,16 @@ const renderSharedCartList = (
     filteredCarts = carts.filter(c => c.createdBy === userUid)
   } else if(group === 'invited') {
     filteredCarts = carts.filter(c => c.createdBy != userUid)
+  }
+
+  if(filteredCarts.length === 0){
+    return (
+      <div
+        className="flex-1 flex flex-center"
+      >
+        Nessun carrello presente
+      </div>
+    )
   }
 
   // sort carts by most recent
