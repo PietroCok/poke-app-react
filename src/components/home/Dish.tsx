@@ -1,18 +1,69 @@
 import type { DishType } from "@/types"
+import { ButtonIcon } from "../common/ButtonIcon"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPlus } from "@fortawesome/free-solid-svg-icons"
 
 export interface DishProps {
   dish: DishType
+  dishId: string
+  quantity: number
+  isSelected: boolean
+  addDish: (dishId: string) => void,
+  removeDish: (dishId: string) => void,
+  increaseQuantity: (dishId: string) => void,
 }
 
-export function Dish({dish}: DishProps) {
-  const selected = false ? 'selected ' : '';
+export function Dish({
+  dish,
+  dishId,
+  quantity,
+  isSelected,
+  addDish,
+  removeDish,
+  increaseQuantity
+}: DishProps) {
+  const selected = isSelected ? 'selected ' : '';
+
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const checked = event.target.checked;
+
+    if (checked) {
+      addDish(dishId);
+    } else {
+      removeDish(dishId);
+    }
+  }
 
   return (
     <div
-      className={`${selected}ingredient-container relative`}
+      className={`${selected}dish-container relative`}
+      {...(quantity > 1 ? { 'data-extra': quantity } : {})}
     >
-      {dish.name}
-      {dish.price} €
+      <label
+        htmlFor={dishId}
+        className="flex just-between pointer"
+      >
+        <span className="dish-price flex just-end">{dish.price} €</span>
+        <span className="dish-name">{dish.name}</span>
+      </label>
+
+      <input
+        type="checkbox"
+        name={dishId}
+        id={dishId}
+        checked={isSelected}
+        onChange={handleChange}
+      />
+
+      {
+        isSelected &&
+        <ButtonIcon
+          icon={<FontAwesomeIcon icon={faPlus} />}
+          classes={"add-extra flex flex-center transparent-bg h-100 aspect-1 border-round no-active right-0 absolute"}
+          clickHandler={() => increaseQuantity(dishId)}
+          tooltip="Aggiungi copia"
+        />
+      }
     </div>
   )
 }

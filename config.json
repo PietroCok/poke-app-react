@@ -249,6 +249,11 @@
         "name": "sashimi di salmone (10 pezzi)",
         "description": "",
         "price": 8
+      },
+      {
+        "name": "sashimi di tonno (10 pezzi)",
+        "description": "",
+        "price": 10.50
       }
     ]
   }

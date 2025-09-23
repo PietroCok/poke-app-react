@@ -1,4 +1,4 @@
-import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type IngredientsState, type Poke, type PokeSize } from "@/types";
+import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type Dish, type IngredientsState, type Poke, type PokeSize } from "@/types";
 
 import appConfig from '../../config.json';
 import { emptyIngredients } from "@/context/reducer/selectionReducer";
@@ -68,6 +68,21 @@ export const hasItem = (items: Poke[], itemId: string) => {
   return !!items.find(item => item.id === itemId);
 }
 
+// Cache dishes price on load
+const dishes: { [key: string]: number } = {};
+for (const _dishes of Object.values(appConfig.menu)) {
+  for (const dish of _dishes) {
+    dishes[ingredientNameToId(dish.name)] = dish.price;
+  }
+}
+
+export const getDishPrice = (dishId: string): number => {
+  return dishes[dishId] ?? 0;
+}
+
+export const totalMenuSelectionPrice = (_dishes: Dish[]) => {
+  return _dishes.reduce((sum: number, dish: Dish) => sum + getDishPrice(dish.id) * dish.quantity, 0);
+}
 
 // Cache ingredients price on load
 const items: { [key: string]: number } = {};

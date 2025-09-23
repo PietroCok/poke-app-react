@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Poke } from "@/types";
 import { ButtonIcon } from "./ButtonIcon";
 import { Item } from "./Item";
-import { useSelection } from "@/context/SelectionContext";
+import { usePokeSelection } from "@/context/PokeSelectionContext";
 import { useCart } from "@/context/CartContext";
 
 export interface FavoriteItemProps {
@@ -15,7 +15,7 @@ export interface FavoriteItemProps {
  }
 
 export function FavoriteItem({ item, deleteItem, duplicate, useMemo = false }: FavoriteItemProps) {
-  const { loadItemIntoConfigurator } = useSelection();
+  const { loadItemIntoConfigurator } = usePokeSelection();
   const { addItem: addCart, hasItem } = useCart();
 
   const isInCart = hasItem(item.id);

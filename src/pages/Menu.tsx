@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { MenuConfig } from "@/types";
+import type { Dish, MenuConfig } from "@/types";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -10,16 +10,17 @@ import { useCart } from "@/context/CartContext";
 import { PageFooter } from "@/components/common/PageFooter";
 import { ButtonText } from "@/components/common/ButtonText";
 import { SaveSelectionModal } from "@/components/modals/SaveSelectionModal";
-import { useSelection } from "@/context/SelectionContext";
 import { DishCategory } from "@/components/home/DishCategory";
+import { useMenuSelection } from "@/context/MenuSelectionContext";
+import { ingredientNameToId } from "@/scripts/utils";
 
 
-export function Menu({ menu }: {menu: MenuConfig}) {
+export function Menu({ menu }: { menu: MenuConfig }) {
   const [isSaveOpen, setIsSaveOpen] = useState(false);
-  const { resetContext, hasIngredients, getTotalPrice } = useSelection();
+  const { dishes: selectedDishes, addDish, removeDish, increaseQuantity, resetContext, hasDishes, getTotalPrice } = useMenuSelection();
   const { getItemsCount } = useCart();
 
-  const isEmpty = !hasIngredients();
+  const isEmpty = !hasDishes();
 
   return (
     <div className="page-container h-100 flex flex-column">
@@ -41,9 +42,17 @@ export function Menu({ menu }: {menu: MenuConfig}) {
       <h2 id="page-title">Menu</h2>
 
       <section
-        className="flex flex-column flex-1 padding-1"
+        className="menu-container flex flex-column flex-1 padding-1"
       >
-        {renderMenuCategories(menu)}
+        {
+          renderMenuCategories(
+            menu, 
+            selectedDishes,
+            addDish,
+            removeDish,
+            increaseQuantity
+          )
+        }
       </section>
 
 
@@ -87,14 +96,34 @@ export function Menu({ menu }: {menu: MenuConfig}) {
   )
 }
 
-function renderMenuCategories(menu: MenuConfig) {
+function renderMenuCategories(
+  menu: MenuConfig,
+  selectedDishes: Dish[],
+  addDish: (dishId: string) => void,
+  removeDish: (dishId: string) => void,
+  increaseQuantity: (dishId: string) => void,
+) {
   return Object.keys(menu).map(category => {
-    const dishes = menu[category];
+    const dishes = menu[category].map(
+      dish => {
+        const _dishId = ingredientNameToId(dish.name);
+        const _dish = selectedDishes.find(d => d.id == _dishId);
+        return {
+          ...dish,
+          id: _dishId,
+          selected: !!_dish,
+          quantity: _dish ? _dish.quantity : 0
+        }
+      }
+    );
     return (
       <DishCategory
         key={category}
         category={category}
         dishes={dishes}
+        addDish={addDish}
+        removeDish={removeDish}
+        increaseQuantity={increaseQuantity}
       />
     )
   })

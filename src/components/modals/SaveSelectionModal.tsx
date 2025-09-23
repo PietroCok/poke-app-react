@@ -4,12 +4,13 @@ import { faCartShopping, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
 import { PAYMENT_METHODS, type Poke } from "@/types";
 import { ButtonIcon } from "@/components/common/ButtonIcon";
-import { useSelection } from "@/context/SelectionContext";
+import { usePokeSelection } from "@/context/PokeSelectionContext";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 import { useFavorite } from "@/context/FavoriteContext";
 import { useCart } from "@/context/CartContext";
 import { Modal } from "@/components/modals/Modal";
+import { useSelection } from "@/context/SelectionContext";
 
 
 export interface SaveSelectionModalProps {
@@ -25,12 +26,14 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
     ingredients,
     resetContext: resetSelection,
     size,
+    editingId,
+    setEditingId,
+  } = usePokeSelection();
+  const {
     name,
     setName,
     paymentMethod,
     setPaymentMethod,
-    editingId,
-    setEditingId,
   } = useSelection();
 
   const changePaymentMethod = (event: ChangeEvent) => {

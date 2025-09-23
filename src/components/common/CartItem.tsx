@@ -4,7 +4,7 @@ import { faCopy, faPen, faStar, faTrash } from "@fortawesome/free-solid-svg-icon
 import type { Poke } from "@/types";
 import { Item } from "./Item";
 import { ButtonIcon } from "./ButtonIcon";
-import { useSelection } from "@/context/SelectionContext";
+import { usePokeSelection } from "@/context/PokeSelectionContext";
 import { useFavorite } from "@/context/FavoriteContext";
 
 
@@ -17,7 +17,7 @@ export interface CartItemProps {
  }
 
 export function CartItem({ item, disabled, deleteItem, duplicate, useMemo = false }: CartItemProps) {
-  const { loadItemIntoConfigurator } = useSelection();
+  const { loadItemIntoConfigurator } = usePokeSelection();
   const { addFavorite, hasItem } = useFavorite();
 
   const isInFavorite = hasItem(item.id);

@@ -7,7 +7,7 @@ import { IngredientGroup } from "../components/home/IngredientGroup";
 import { SizeSelector } from "../components/home/SizeSelector";
 import { PageFooter } from "../components/common/PageFooter";
 import { ButtonText } from "../components/common/ButtonText";
-import { useSelection } from "../context/SelectionContext";
+import { usePokeSelection } from "../context/PokeSelectionContext";
 import { PageHeader } from "../components/common/PageHeader";
 import { ButtonIcon } from "../components/common/ButtonIcon";
 import { MainMenu } from "../components/common/MainMenu";
@@ -16,7 +16,7 @@ import { useCart } from "@/context/CartContext";
 
 export function Home({ sizes, groups }: PokeConfig) {
   const [isSaveOpen, setIsSaveOpen] = useState(false);
-  const { resetContext, hasIngredients, getTotalPrice } = useSelection();
+  const { resetContext, hasIngredients, getTotalPrice } = usePokeSelection();
   const isEmpty = !hasIngredients();
   const { getItemsCount } = useCart();
 

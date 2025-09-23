@@ -31,10 +31,22 @@ export type MenuConfig = {
   [key: string]: DishType[]
 }
 
+
+/**
+ * Basic dish type for display
+ */
 export type DishType = {
   name: string,
   description: string,
   price: number
+}
+
+/**
+ * Effective dish added to the cart
+ */
+export type Dish = {
+  id: string,
+  quantity: number
 }
 
 
