@@ -236,17 +236,17 @@
   "menu": {
     "mains": [
       {
-        "name": "riso cantonese",
+        "name": "riso alla cantonese",
         "description": "",
         "price": 12
       },
       {
-        "name": "ravioli x4",
+        "name": "ravioli (6 pezzi)",
         "description": "",
         "price": 5
       },
       {
-        "name": "sashimi x10",
+        "name": "sashimi di salmone (10 pezzi)",
         "description": "",
         "price": 8
       }
