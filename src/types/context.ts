@@ -113,7 +113,7 @@ export type CartContextType = {
   unlinkCart: () => void,
   updateCartName: (newName: string) => void,
 
-  addItem: (item: Poke, fromEdit?: boolean) => Promise<void>,
+  addItem: (item: Poke | DishSelection, fromEdit?: boolean) => Promise<void>,
   duplicateItem: (itemId: string) => void,
   deleteItem: (itemId: string, itemName: string) => void
   deleteAllItems: () => void
@@ -157,8 +157,8 @@ export type ModalContextType = {
 }
 
 export type FavoriteContextType = {
-  favorites: Poke[],
-  addFavorite: (item: Poke, fromEdit?: boolean) => Promise<void>
+  favorites: (Poke | DishSelection)[],
+  addFavorite: (item: Poke | DishSelection, fromEdit?: boolean) => Promise<void>
   removeFavorite: (itemId: string, itemName: string) => void
   removeAllFavorites: () => void
   duplicateItem: (itemId: string) => void

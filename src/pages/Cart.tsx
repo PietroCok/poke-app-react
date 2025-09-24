@@ -1,9 +1,6 @@
 import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-regular-svg-icons";
 
-import type { Cart, Poke } from "../types";
-import { ButtonIcon } from "../components/common/ButtonIcon";
+import type { Cart, DishSelection, Poke } from "../types";
 import { MainMenu } from "../components/common/MainMenu";
 import { PageHeader } from "../components/common/PageHeader";
 import { PageFooter } from "../components/common/PageFooter";
@@ -31,12 +28,7 @@ export function Cart() {
     <div className="page-container h-100 flex flex-column">
       <PageHeader
         left={
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faHouse} />}
-            classes="primary-color border-r-10"
-            tooltip="Chiudi"
-            linkTo={"/"}
-          />
+          <></>
         }
         center={
           <CartHeader />
@@ -58,7 +50,7 @@ export function Cart() {
 
       {
         isOrderPreviewOpen &&
-        <OrderPreviewModal 
+        <OrderPreviewModal
           hideModal={() => setIsOrderPreviewOpen(false)}
         />
       }
@@ -72,9 +64,9 @@ export function Cart() {
             disabled={!isCartOwner || !hasItems}
             disabledMessage={
               !isCartOwner ?
-              `Operazione consentita solo al creatore del carrello`
-              :
-              `Il carrello è vuoto`
+                `Operazione consentita solo al creatore del carrello`
+                :
+                `Il carrello è vuoto`
             }
           />
         }
@@ -83,13 +75,13 @@ export function Cart() {
           <ButtonText
             text="Preview"
             classes="primary-bg primary-contrast-color border-r-10"
-            clickHandler={() => {setIsOrderPreviewOpen(true)}}
+            clickHandler={() => { setIsOrderPreviewOpen(true) }}
             disabled={!isCartOwner || !hasItems}
             disabledMessage={
               !isCartOwner ?
-              `Operazione consentita solo al creatore del carrello`
-              :
-              `Il carrello è vuoto`
+                `Operazione consentita solo al creatore del carrello`
+                :
+                `Il carrello è vuoto`
             }
           />
         }
@@ -115,7 +107,7 @@ const renderItems = (
   }
 
   // sort by cart name
-  const sortedItems: Poke[] = Object.values(items).sort((itemA: Poke, itemB: Poke) => {
+  const sortedItems: (Poke | DishSelection)[] = Object.values(items).sort((itemA: Poke | DishSelection, itemB: Poke | DishSelection) => {
     return itemA.name > itemB.name ? 1 : -1;
   })
 

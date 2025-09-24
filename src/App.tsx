@@ -23,6 +23,7 @@ import { ModalProvider } from './context/ModalContext';
 import { ToastProvider } from './context/ToastContext';
 import { FavoriteProvider } from './context/FavoriteContext';
 import { Menu } from './pages/Menu';
+import { PokeConfigurator } from './pages/PokeConfigurator';
 
 const config: AppConfig = appConfig;
 
@@ -48,7 +49,8 @@ export default function App() {
                     >
 
                       <Route element={<SelectionProvider />}>
-                        <Route path="/" element={<Home {...config} />} />
+                        <Route path="/" element={<Home />} />
+                        <Route path="/poke-configurator" element={<PokeConfigurator {...config} />} />
                         <Route path="/menu" element={<Menu {...config} />} />
                         <Route path="/cart" element={<Cart />} />
                         <Route path="/favorites" element={<Favorites />} />

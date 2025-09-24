@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Modal } from "./Modal";
 import { ButtonText } from "../common/ButtonText";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import type { Poke } from "@/types";
+import type { DishSelection, Poke } from "@/types";
 import { useCart } from "@/context/CartContext";
 import { itemToString } from "@/scripts/utils";
 
@@ -146,7 +146,7 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
 
 
 
-function generateOrderMessage(items: Poke[], orderName: string, orderTime: string,) {
+function generateOrderMessage(items: (Poke | DishSelection)[], orderName: string, orderTime: string,) {
   let greetings = 'Buongiorno';
 
   if ((new Date()).getHours() > 14) {

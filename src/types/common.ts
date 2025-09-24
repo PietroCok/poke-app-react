@@ -27,14 +27,13 @@ export type Poke = CartItem & {
 }
 
 export type DishSelection = CartItem & {
-  dishes: Dish[],
-  createdBy: string,
+  dishes: Dish[]
 }
 
 export type Cart = {
   id: string,
   items: {
-    [id: string]: Poke
+    [id: string]: Poke | DishSelection
   },
   name: string,
   createdBy: string,

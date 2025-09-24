@@ -81,7 +81,7 @@ export function MenuSelectionProvider({ children }: { children: React.ReactNode 
     showInfo(`${item.name} caricato`, { duration: 2 });
 
     if (navigateHome) {
-      navigate('/');
+      navigate('/menu');
     }
   }
 

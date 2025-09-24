@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo } from "react";
 import { Outlet } from "react-router-dom";
 
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import type { FavoriteContextType, Poke, StaticFavoriteContextType } from "@/types";
+import type { DishSelection, FavoriteContextType, Poke, StaticFavoriteContextType } from "@/types";
 import { useModal } from "./ModalContext";
 import { useToast } from "./ToastContext";
 import { hasItem } from "@/scripts/utils";
@@ -23,11 +23,11 @@ export const useFavorite = () => {
 export interface FavoriteProviderProps { }
 
 export function FavoriteProvider({ }: FavoriteProviderProps) {
-  const [favorites, setFavorites] = useLocalStorage<Poke[]>('poke-favorites', []);
+  const [favorites, setFavorites] = useLocalStorage<(Poke | DishSelection)[]>('poke-favorites', []);
   const { showConfirm } = useModal();
   const { showInfo, showError } = useToast();
 
-  const addFavorite = async (item: Poke, fromEdit?: boolean) => {
+  const addFavorite = async (item: Poke | DishSelection, fromEdit?: boolean) => {
     setFavorites(
       prevState => {
         let oldItemId = item.id;

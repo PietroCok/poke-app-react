@@ -1,14 +1,14 @@
 import { createContext, useContext, useEffect, useMemo } from "react";
 import { Outlet } from "react-router-dom";
 
-import type { Cart, CartContextType, PaymentMethod, Poke, StaticCartContextType } from "@/types";
+import type { Cart, CartContextType, DishSelection, PaymentMethod, Poke, StaticCartContextType } from "@/types";
 import { addCartItem, createCart, deleteCart, observeCart, removeAllCartItems, removeCartItem, removeCartUser, replaceCartItem } from "../firebase/db";
 import { useLocalStorageReducer } from "../hooks/useLocalStorage";
 import { useAuth } from "./AuthContext";
 import { CART_ACTIONS, cartReducer } from "./reducer/CartReducer";
 import { useModal } from "./ModalContext";
 import { useToast } from "./ToastContext";
-import { getPokePrice, hasItem } from "@/scripts/utils";
+import { getPokePrice, hasItem, isDishSelection, isPoke, totalMenuSelectionPrice } from "@/scripts/utils";
 
 export interface CartProviderProps {
 
@@ -137,7 +137,7 @@ export function CartProvider({ }: CartProviderProps) {
     });
   }
 
-  const addItem = async (item: Poke, fromEdit = false) => {
+  const addItem = async (item: Poke | DishSelection, fromEdit = false) => {
     const newItem = structuredClone(item);
 
     // If the items is saved after edit, update its id and remove old item
@@ -265,7 +265,11 @@ const getTotalPrice = (cart: Cart, method?: PaymentMethod) => {
   let totalPrice = 0;
   for (const item of Object.values(cart.items)) {
     if (!method || item.paymentMethod == method) {
-      totalPrice += getPokePrice(item.size, item.ingredients);
+      if(isPoke(item)) {
+        totalPrice += getPokePrice(item.size, item.ingredients);
+      } else if (isDishSelection(item)) {
+        totalPrice += totalMenuSelectionPrice(item.dishes);
+      }
     }
   }
 

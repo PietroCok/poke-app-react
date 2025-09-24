@@ -104,7 +104,7 @@ export function PokeSelectionProvider({ children }: { children: React.ReactNode 
     showInfo(`${item.name} caricato`, { duration: 2 });
 
     if (navigateHome) {
-      navigate('/');
+      navigate('/poke-configurator');
     }
   }
 

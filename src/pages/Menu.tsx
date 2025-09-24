@@ -89,6 +89,7 @@ export function Menu({ menu }: { menu: MenuConfig }) {
         isSaveOpen &&
         <SaveSelectionModal
           hideModal={() => setIsSaveOpen(false)}
+          source="dish"
         />
       }
 

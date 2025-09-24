@@ -2,7 +2,7 @@ import { type ChangeEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
-import { PAYMENT_METHODS, type Poke } from "@/types";
+import { PAYMENT_METHODS, type DishSelection, type Poke } from "@/types";
 import { ButtonIcon } from "@/components/common/ButtonIcon";
 import { usePokeSelection } from "@/context/PokeSelectionContext";
 import { useAuth } from "@/context/AuthContext";
@@ -11,13 +11,15 @@ import { useFavorite } from "@/context/FavoriteContext";
 import { useCart } from "@/context/CartContext";
 import { Modal } from "@/components/modals/Modal";
 import { useSelection } from "@/context/SelectionContext";
+import { useMenuSelection } from "@/context/MenuSelectionContext";
 
 
 export interface SaveSelectionModalProps {
+  source: 'poke' | 'dish'
   hideModal: () => void
 }
 
-export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
+export function SaveSelectionModal({ source, hideModal }: SaveSelectionModalProps) {
   const { user } = useAuth();
   const { showError } = useToast();
   const { addFavorite } = useFavorite();
@@ -26,9 +28,14 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
     ingredients,
     resetContext: resetSelection,
     size,
-    editingId,
-    setEditingId,
+    editingId: pokeEditingId,
+    setEditingId: setPokeEditingId,
   } = usePokeSelection();
+  const {
+    dishes,
+    editingId: dishEditingId,
+    setEditingId: setDishEditingId
+  } = useMenuSelection();
   const {
     name,
     setName,
@@ -43,13 +50,28 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
   }
 
   const saveTo = (destination: string) => {
-    const item: Poke = {
-      id: editingId || crypto.randomUUID(),
-      name: name,
-      ingredients: ingredients,
-      createdBy: user?.uid || '',
-      size: size,
-      paymentMethod: paymentMethod,
+    let item: Poke | DishSelection;
+
+    if (source == 'poke') {
+      item = {
+        id: pokeEditingId || crypto.randomUUID(),
+        name: name,
+        createdBy: user?.uid || '',
+        paymentMethod: paymentMethod,
+        ingredients: ingredients,
+        size: size,
+      }
+    } else if (source == 'dish') {
+      item = {
+        id: dishEditingId || crypto.randomUUID(),
+        name: name,
+        createdBy: user?.uid || '',
+        paymentMethod: paymentMethod,
+        dishes: dishes,
+      }
+    } else {
+      console.warn('Unknown save source');
+      return;
     }
 
     switch (destination) {
@@ -66,23 +88,26 @@ export function SaveSelectionModal({ hideModal }: SaveSelectionModalProps) {
         break;
     }
 
-    setEditingId('');
+    setPokeEditingId('');
+    setDishEditingId('');
     resetSelection();
     hideModal();
   }
 
-  const _saveCart = (item: Poke) => {
+  const _saveCart = (item: Poke | DishSelection) => {
+    const editingId = "size" in item ? pokeEditingId : dishEditingId;
     addCart(item, !!editingId);
   }
 
-  const _saveFavorite = (item: Poke) => {
+  const _saveFavorite = (item: Poke | DishSelection) => {
+    const editingId = "size" in item ? pokeEditingId : dishEditingId;
     addFavorite(item, !!editingId);
   }
 
   return (
     <Modal
       autoFocus={true}
-      title={`Salva poke`}
+      title={`${source == 'poke' ? 'Salva poke': 'Salva piatti'}`}
       titleClasses="text-center"
       hideModal={hideModal}
       actions={[

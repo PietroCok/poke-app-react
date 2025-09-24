@@ -41,10 +41,10 @@ export function Dish({
     >
       <label
         htmlFor={dishId}
-        className="flex just-between pointer"
+        className="flex flex-column pointer"
       >
-        <span className="dish-price flex just-end">{dish.price} €</span>
         <span className="dish-name">{dish.name}</span>
+        <span className="dish-price flex text-small">{dish.price} €</span>
       </label>
 
       <input
