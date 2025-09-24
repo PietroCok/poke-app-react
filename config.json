@@ -254,6 +254,16 @@
         "name": "sashimi di tonno (10 pezzi)",
         "description": "",
         "price": 10.50
+      },
+      {
+        "name": "sashimi di tonno (11 pezzi)",
+        "description": "",
+        "price": 11.50
+      },
+      {
+        "name": "sashimi di tonno (12 pezzi)",
+        "description": "",
+        "price": 12.50
       }
     ]
   }
