@@ -1,13 +1,9 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-regular-svg-icons";
-
-import { ButtonIcon } from "@/components/common/ButtonIcon";
+import type { DishSelection, Poke } from "@/types";
 import { MainMenu } from "@/components/common/MainMenu";
 import { PageHeader } from "@/components/common/PageHeader";
 import { ButtonText } from "@/components/common/ButtonText";
 import { PageFooter } from "@/components/common/PageFooter";
 import { useFavorite } from "@/context/FavoriteContext";
-import type { Poke } from "@/types";
 import { FavoriteItem } from "@/components/common/FavoriteItem";
 
 const ITEM_MEMO_THRESHOLD = 10;
@@ -20,14 +16,6 @@ export function Favorites() {
   return (
     <div className="page-container h-100 flex flex-column">
       <PageHeader
-        left={
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faHouse} />}
-            classes="primary-color border-r-10"
-            tooltip="Chiudi"
-            linkTo={"/"}
-          />
-        }
         center={
           <h3
             className="flex flex-center h-100"
@@ -79,7 +67,7 @@ export function Favorites() {
 
 
 const renderFavorites = (
-  items: Poke[], 
+  items: (Poke | DishSelection)[],
   useMemo: boolean,
   deleteItem: (itemId: string, itemName: string) => void,
   duplicate: (itemId: string) => void
