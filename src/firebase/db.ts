@@ -1,7 +1,7 @@
 import { get, getDatabase, onValue, ref, remove, set, update } from "firebase/database";
 import type { User } from "firebase/auth";
 
-import type { Cart, Poke, UserProfile } from "@/types";
+import type { Cart, DishSelection, Poke, UserProfile } from "@/types";
 import { firebaseApp } from "./index";
 
 
@@ -224,7 +224,7 @@ export const hasCartUser = async (cartId: string, userUid: string): Promise<bool
   return false;
 }
 
-export const addCartItem = async (cartId: string, item: Poke): Promise<boolean> => {
+export const addCartItem = async (cartId: string, item: Poke | DishSelection): Promise<boolean> => {
   try {
     await set(ref(firebaseDatabase, `/shared-carts/cart-${cartId}/items/${item.id}`), item);
     return true;
@@ -234,7 +234,7 @@ export const addCartItem = async (cartId: string, item: Poke): Promise<boolean> 
   return false;
 }
 
-export const replaceCartItem = async (cartId: string, item: Poke, oldItemId: string) => {
+export const replaceCartItem = async (cartId: string, item: Poke | DishSelection, oldItemId: string) => {
   try {
     const updates: any = {};
     updates[`shared-carts/cart-${cartId}/items/${item.id}`] = item;
