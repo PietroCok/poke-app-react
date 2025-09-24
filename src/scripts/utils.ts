@@ -1,4 +1,4 @@
-import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type Dish, type IngredientsState, type Poke, type PokeSize } from "@/types";
+import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type Dish, type DishSelection, type IngredientsState, type Poke, type PokeSize } from "@/types";
 
 import appConfig from '../../config.json';
 import { emptyIngredients } from "@/context/reducer/selectionReducer";
@@ -30,12 +30,30 @@ export function shallowEqual(obj1: Record<string, any>, obj2: Record<string, any
   return true;
 }
 
+export function isPoke(item: Poke | DishSelection): item is Poke {
+  return "size" in item;
+}
+
+export function isDishSelection(item: Poke | DishSelection): item is DishSelection {
+  return "dishes" in item;
+}
+
 /**
 * Converts an item to a string
 * 
 * @retruns a string representing the item
 */
-export function itemToString(item: Poke) {
+export function itemToString(item: Poke | DishSelection) {
+  if(isPoke(item)) {
+    return itemPokeToString(item);
+  } else if (isDishSelection(item)){
+    return itemDishToString(item);
+  } else {
+    return 'Unknown item type...';
+  }
+}
+
+function itemPokeToString(item: Poke) {
   let str = '';
   try {
     str = `${item.size.toUpperCase()}: `;
@@ -64,7 +82,23 @@ export function itemToString(item: Poke) {
 }
 
 
-export const hasItem = (items: Poke[], itemId: string) => {
+function itemDishToString(item: DishSelection) {
+  let str = [];
+
+  try {
+
+    for (const dish of item.dishes) {
+      str.push(`- ${ingredientIdToName(dish.id)}${dish.quantity > 1 ? (' x' + dish.quantity): ''}`);
+    }
+
+  } catch (error) {
+    str.push('Error loading item description...');
+  }
+
+  return str.join('\n');
+}
+
+export const hasItem = (items: (Poke | DishSelection)[], itemId: string) => {
   return !!items.find(item => item.id === itemId);
 }
 
