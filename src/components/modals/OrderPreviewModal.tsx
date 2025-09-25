@@ -166,14 +166,23 @@ function generateOrderMessage(items: (Poke | DishSelection)[], orderName: string
   const dishCount = dishes.reduce((sum, dish) => sum + dish.quantity, 0);
   const messageIntro = getIntroduction(pokeCount, dishCount, orderName, orderTime);
 
-  const completeMessage =
-    `${messageIntro}
+  let completeMessage = messageIntro;
 
-${pokeCount > 0 ? 'Poke:' : ''}
-${stringedPokes.join('\n\r')}
+  if (pokeCount > 0) {
+    completeMessage += `\n`
+    if (dishCount > 0) {
+      completeMessage += `\n${pokeCount > 0 ? 'Poke:' : ''}`
+    }
+    completeMessage += `\n${stringedPokes.join('\n\r')}`
+  }
 
-${dishCount > 0 ? 'Piatti: ' : ''}
-${stringedDishes.join('\n')}`
+  if (dishCount > 0) {
+    completeMessage += `\n`
+    if (pokeCount > 0) {
+      completeMessage += `\n${dishCount > 0 ? 'Piatti:' : ''}`;
+    }
+    completeMessage += `\n${stringedDishes.join('\n')}`
+  }
 
   return completeMessage;
 }
@@ -191,11 +200,11 @@ function getIntroduction(pokeCount: number, dishCount: number, orderName: string
   }
 
   if (pokeCount > 0 && dishCount > 0) {
-    intro += ' e '
+    intro += ' e'
   }
 
   if (dishCount > 0) {
-    intro += dishCount;
+    intro += ` ${dishCount}`;
     if (dishCount === 1) {
       intro += ' piatto';
     } else {
