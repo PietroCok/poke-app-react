@@ -44,9 +44,9 @@ export function isDishSelection(item: Poke | DishSelection): item is DishSelecti
 * @retruns a string representing the item
 */
 export function itemToString(item: Poke | DishSelection) {
-  if(isPoke(item)) {
+  if (isPoke(item)) {
     return itemPokeToString(item);
-  } else if (isDishSelection(item)){
+  } else if (isDishSelection(item)) {
     return itemDishToString(item);
   } else {
     return 'Unknown item type...';
@@ -88,7 +88,7 @@ function itemDishToString(item: DishSelection) {
   try {
 
     for (const dish of item.dishes) {
-      str.push(`- ${ingredientIdToName(dish.id)}${dish.quantity > 1 ? (' x' + dish.quantity): ''}`);
+      str.push(`- ${ingredientIdToName(dish.id)} x${dish.quantity}`);
     }
 
   } catch (error) {
