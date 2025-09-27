@@ -42,7 +42,7 @@ export function Menu({ menu }: { menu: MenuConfig }) {
       <h2 id="page-title">Menu</h2>
 
       <section
-        className="menu-container flex flex-column flex-1 padding-1"
+        className="menu-container flex flex-column flex-1"
       >
         {
           renderMenuCategories(
