@@ -29,14 +29,21 @@ export function DishCategory({ category, dishes, addDish, removeDish, increaseQu
     setIsOpen(target.open);
   }
 
+  const selectedCount = dishes.reduce((count, dish) => count + dish.quantity, 0);
+  const classes = selectedCount > 0 ? 'selected' : '';
+
   return (
     <details
       onToggle={handleToggle}
     >
       <summary
-        className="dish-menu-category-header pointer sticky top-0 main-bg padding-1-0 text-uppercase text-center weight-bold z-1"
+        className={`dish-menu-category-header pointer sticky top-0 main-bg padding-1-0 text-uppercase text-center weight-bold z-1 ${classes}`}
       >
-        {category}
+        <span
+          data-dish-count={(selectedCount > 0) ? selectedCount : null}
+        >
+          {category}
+        </span>
         <FontAwesomeIcon
           icon={faAngleDown}
           className={`absolute right-1 ${isOpen && 'rotate-180'}`}
