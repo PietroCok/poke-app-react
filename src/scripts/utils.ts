@@ -95,7 +95,33 @@ export function itemDishToString(dishes: Dish[], includeCode?: boolean): string 
     console.warn(`Error loading item description: ${error}`);
   }
 
-  str.sort((a, b) => a[0].localeCompare(b[0]));
+  // sort dishes by codes
+  str.sort((a, b) => {
+    const codA = a[0];
+    const codB = b[0];
+
+    if(Number(codA) && Number(codB)) {
+      // padstart let us compare number with different number of digits
+      return codA.padStart(6, '0').localeCompare(codB.padStart(6, '0'));
+    }
+
+    // handles codes with text part
+    
+    // extract numeric and text part for individual compare
+    const matchA = codA.match(/(\d+)(\w*)/);
+    const matchB = codB.match(/(\d+)(\w*)/);
+
+    const partsA = matchA ? [matchA[1], matchA[2]] : [];
+    const partsB = matchB ? [matchB[1], matchB[2]] : [];
+
+    const numOrder = partsA[0].padStart(6, '0').localeCompare(partsB[0].padStart(6, '0'));
+
+    if(numOrder !== 0) {
+      return numOrder;
+    }
+
+    return partsA[1].padStart(6, '0').localeCompare(partsB[1].padStart(6, '0'));
+  });
 
   return str.map(s => s[1]).join('\n');
 }
