@@ -6,7 +6,7 @@ import { ButtonText } from "../common/ButtonText";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import type { Dish, DishSelection, Poke } from "@/types";
 import { useCart } from "@/context/CartContext";
-import { ingredientIdToName, isDishSelection, isPoke, itemToString } from "@/scripts/utils";
+import { isDishSelection, isPoke, itemDishToString, itemToString } from "@/scripts/utils";
 
 export interface OrderPreviewModalProps {
   hideModal: () => void
@@ -152,14 +152,10 @@ function generateOrderMessage(items: (Poke | DishSelection)[], orderName: string
   const dishes: Dish[] = mergeDishes(items.filter(item => isDishSelection(item)));
 
   const stringedPokes = [];
-  const stringedDishes = [];
+  const stringedDishes = itemDishToString(dishes, true);
 
   for (const [index, item] of Object.entries(pokes)) {
     stringedPokes.push(`${Number(index) + 1}) ${itemToString(item)}`)
-  }
-
-  for (const item of Object.values(dishes)) {
-    stringedDishes.push(`- ${ingredientIdToName(item.id)} x${item.quantity}`)
   }
 
   const pokeCount = pokes.length;
@@ -181,7 +177,7 @@ function generateOrderMessage(items: (Poke | DishSelection)[], orderName: string
     if (pokeCount > 0) {
       completeMessage += `\n${dishCount > 0 ? 'Piatti:' : ''}`;
     }
-    completeMessage += `\n${stringedDishes.join('\n')}`
+    completeMessage += `\n${stringedDishes}`
   }
 
   return completeMessage;
