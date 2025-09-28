@@ -26,7 +26,7 @@ export function SaveSelectionModal({ source, hideModal }: SaveSelectionModalProp
   const { addItem: addCart } = useCart();
   const {
     ingredients,
-    resetContext: resetSelection,
+    resetContext: resetPokeSelection,
     size,
     editingId: pokeEditingId,
     setEditingId: setPokeEditingId,
@@ -34,7 +34,8 @@ export function SaveSelectionModal({ source, hideModal }: SaveSelectionModalProp
   const {
     dishes,
     editingId: dishEditingId,
-    setEditingId: setDishEditingId
+    setEditingId: setDishEditingId,
+    resetContext: resetMenuSelection,
   } = useMenuSelection();
   const {
     name,
@@ -90,7 +91,8 @@ export function SaveSelectionModal({ source, hideModal }: SaveSelectionModalProp
 
     setPokeEditingId('');
     setDishEditingId('');
-    resetSelection();
+    resetPokeSelection();
+    resetMenuSelection();
     hideModal();
   }
 
@@ -107,7 +109,7 @@ export function SaveSelectionModal({ source, hideModal }: SaveSelectionModalProp
   return (
     <Modal
       autoFocus={true}
-      title={`${source == 'poke' ? 'Salva poke': 'Salva piatti'}`}
+      title={`${source == 'poke' ? 'Salva poke' : 'Salva piatti'}`}
       titleClasses="text-center"
       hideModal={hideModal}
       actions={[
