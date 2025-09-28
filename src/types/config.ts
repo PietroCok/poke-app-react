@@ -37,8 +37,8 @@ export type MenuConfig = {
  */
 export type DishType = {
   name: string,
-  description: string,
-  price: number
+  price: number,
+  code: string
 }
 
 /**
