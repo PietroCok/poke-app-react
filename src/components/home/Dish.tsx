@@ -43,7 +43,13 @@ export function Dish({
         htmlFor={dishId}
         className="flex flex-column pointer"
       >
-        <span className="dish-name">{dish.name}</span>
+        <div
+          className="flex gap-05"
+        >
+          <span className="dish-code">{dish.code}</span>
+          -
+          <span className="dish-name">{dish.name}</span>
+        </div>
         <span className="dish-price flex text-small">{dish.price} €</span>
       </label>
 
