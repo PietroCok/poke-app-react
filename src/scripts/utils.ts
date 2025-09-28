@@ -47,7 +47,7 @@ export function itemToString(item: Poke | DishSelection) {
   if (isPoke(item)) {
     return itemPokeToString(item);
   } else if (isDishSelection(item)) {
-    return itemDishToString(item);
+    return itemDishToString(item.dishes);
   } else {
     return 'Unknown item type...';
   }
@@ -82,20 +82,22 @@ function itemPokeToString(item: Poke) {
 }
 
 
-function itemDishToString(item: DishSelection) {
-  let str = [];
+export function itemDishToString(dishes: Dish[], includeCode?: boolean): string {
+  let str: string[][] = [];
 
   try {
 
-    for (const dish of item.dishes) {
-      str.push(`- ${ingredientIdToName(dish.id)} x${dish.quantity}`);
+    for (const dish of dishes) {
+      str.push([dishesCache[dish.id].code, `${includeCode ? `${dishesCache[dish.id].code})` : '-'} ${ingredientIdToName(dish.id)} x${dish.quantity}`]);
     }
 
   } catch (error) {
-    str.push('Error loading item description...');
+    console.warn(`Error loading item description: ${error}`);
   }
 
-  return str.join('\n');
+  str.sort((a, b) => a[0].localeCompare(b[0]));
+
+  return str.map(s => s[1]).join('\n');
 }
 
 export const hasItem = (items: (Poke | DishSelection)[], itemId: string) => {
@@ -103,15 +105,18 @@ export const hasItem = (items: (Poke | DishSelection)[], itemId: string) => {
 }
 
 // Cache dishes price on load
-const dishes: { [key: string]: number } = {};
+const dishesCache: { [key: string]: {price: number, code: string} } = {};
 for (const _dishes of Object.values(appConfig.menu)) {
   for (const dish of _dishes) {
-    dishes[ingredientNameToId(dish.name)] = dish.price;
+    dishesCache[ingredientNameToId(dish.name)] = {
+      price: dish.price,
+      code: dish.code
+    };
   }
 }
 
 export const getDishPrice = (dishId: string): number => {
-  return dishes[dishId] ?? 0;
+  return dishesCache[dishId]?.price ?? 0;
 }
 
 export const totalMenuSelectionPrice = (_dishes: Dish[]) => {
