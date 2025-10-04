@@ -1,13 +1,13 @@
-import { memo, useMemo, useState, type ToggleEvent } from "react";
+import { memo, useState, type ToggleEvent } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 
-import { PAYMENT_METHODS, type Poke } from "../../types";
-import { getIngredientPrice, getPokePrice, itemToString, shallowEqual } from "../../scripts/utils";
+import { PAYMENT_METHODS, type DishSelection, type Poke } from "../../types";
+import { getIngredientPrice, getPokePrice, isDishSelection, isPoke, itemToString, shallowEqual, totalMenuSelectionPrice } from "../../scripts/utils";
 
 export interface ItemProps {
-  item: Poke,
+  item: Poke | DishSelection,
   disabled?: boolean,
   actions: any[]
   useMemo?: boolean
@@ -19,13 +19,50 @@ function areEquals(prevProps: ItemProps, nextProps: ItemProps) {
   // Conditionally skip memoization checks
   if (!nextProps.useMemo) return false;
 
-  return (
-    isSameItem(prevProps.item, nextProps.item) &&
-    prevProps.disabled === nextProps.disabled
-  );
+  const prevItem = prevProps.item;
+  const nextItem = nextProps.item;
+
+  if (isPoke(prevItem) && isPoke(nextItem)) {
+    return (
+      isSamePoke(prevItem, nextItem) &&
+      prevProps.disabled === nextProps.disabled
+    );
+  } else if (isDishSelection(prevItem) && isDishSelection(nextItem)) {
+    return (
+      isSameDishSelection(prevItem, nextItem) &&
+      prevProps.disabled === nextProps.disabled
+    );
+  }
+
+  // One of each type
+  return false;
 }
 
-function isSameItem(prevItem: Poke, nextItem: Poke) {
+function isSameDishSelection(prevItem: DishSelection, nextItem: DishSelection) {
+
+  if (prevItem.dishes.length != nextItem.dishes.length) {
+    return false;
+  }
+
+  const sortedPrevDishes = prevItem.dishes.sort((a, b) => a.id.localeCompare(b.id));
+  const sortedNextDishes = nextItem.dishes.sort((a, b) => a.id.localeCompare(b.id));
+
+  for (let i = 0; i < sortedPrevDishes.length; i++) {
+    const prevDish = sortedPrevDishes[i];
+    const nextDish = sortedNextDishes[i];
+    if (prevDish.id != nextDish.id) {
+      return false;
+    }
+
+    if (prevDish.quantity != nextDish.quantity) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isSamePoke(prevItem: Poke, nextItem: Poke) {
   const {
     ingredients: prevIngredientsGroup,
     ...prevOthers
@@ -76,10 +113,15 @@ function _Item({ item, disabled = false, actions }: ItemProps) {
     setIsOpen(target.open);
   }
 
-  const itemPrice = useMemo(() => getPokePrice(item.size, item.ingredients), [
-    item.size,
-    item.ingredients
-  ]);
+  const itemPrice = (() => {
+    if (isPoke(item)) {
+      return getPokePrice(item.size, item.ingredients);
+    } else if (isDishSelection(item)) {
+      return totalMenuSelectionPrice(item.dishes);
+    } else {
+      return 0;
+    }
+  })();
 
   const classes = disabled ? 'item-disabled ' : '';
 

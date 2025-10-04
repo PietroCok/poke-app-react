@@ -9,6 +9,7 @@ import { StackedIcons } from "./StackedIcons";
 import { UserMenu } from "../UserMenu";
 import { ThemeModeSwitcher } from "../ThemeModeSwitcher";
 import { ThemeColorSwitcher } from "../ThemeColorSwitcher";
+import { faHouse } from "@fortawesome/free-regular-svg-icons";
 
 export interface MainMenuProps {
   extraMenuItems?: React.ReactNode
@@ -51,16 +52,11 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
             tooltip="Chiudi"
           />
 
-          <ThemeModeSwitcher
-            menuId={'theme-mode'}
-            openMenuId={openMenuId}
-            setMenuId={setSubMenuId}
-          />
-
-          <ThemeColorSwitcher
-            menuId={'theme-colorcolor'}
-            openMenuId={openMenuId}
-            setMenuId={setSubMenuId}
+          <ButtonIcon
+            icon={<FontAwesomeIcon icon={faHouse} />}
+            classes="primary-color border-r-10"
+            tooltip="Home"
+            linkTo={"/"}
           />
 
           <ButtonIcon
@@ -93,6 +89,18 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
               />
             </>
           }
+
+          <ThemeModeSwitcher
+            menuId={'theme-mode'}
+            openMenuId={openMenuId}
+            setMenuId={setSubMenuId}
+          />
+
+          <ThemeColorSwitcher
+            menuId={'theme-colorcolor'}
+            openMenuId={openMenuId}
+            setMenuId={setSubMenuId}
+          />
 
           {extraMenuItems}
 

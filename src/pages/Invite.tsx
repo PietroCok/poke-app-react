@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { faHouse } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { ButtonIcon } from "@/components/common/ButtonIcon";
 import { ButtonText } from "@/components/common/ButtonText";
 import { LoadingSpinner } from "@/components/common/LoadingSpinner";
 import { PageFooter } from "@/components/common/PageFooter";
@@ -79,15 +76,7 @@ export function Invite({ }: InviteProps) {
   return (
     <div className="page-container h-100 flex flex-column">
 
-      <PageHeader
-        left={
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faHouse} />}
-            classes="primary-color border-r-10"
-            linkTo="/"
-          />
-        }
-      />
+      <PageHeader />
 
       {
         loading ?

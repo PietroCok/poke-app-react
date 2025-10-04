@@ -1,5 +1,5 @@
 import type { PokeSize } from "@/types";
-import { useSelection } from "../../context/SelectionContext";
+import { usePokeSelection } from "../../context/PokeSelectionContext";
 
 export interface SizeGroupProps {
   name: PokeSize,
@@ -12,7 +12,7 @@ type Limits = {
 }
 
 export function SizeGroup({ name, price, limits }: SizeGroupProps) {
-  const { size, selectSize } = useSelection();
+  const { size, selectSize } = usePokeSelection();
   const id = `size-${name}`;
 
   const selected = name === size ? 'selected' : '';

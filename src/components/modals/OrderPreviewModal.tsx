@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { Modal } from "./Modal";
 import { ButtonText } from "../common/ButtonText";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import type { Poke } from "@/types";
+import type { Dish, DishSelection, Poke } from "@/types";
 import { useCart } from "@/context/CartContext";
-import { itemToString } from "@/scripts/utils";
+import { isDishSelection, isPoke, itemDishToString, itemToString } from "@/scripts/utils";
 
 export interface OrderPreviewModalProps {
   hideModal: () => void
@@ -30,7 +30,7 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
       return;
     }
     console.log('field-sizing not suppoter -> manual workaround');
-    if(messageRef.current){
+    if (messageRef.current) {
       messageRef.current.style.height = messageRef.current.scrollHeight + 3 + "px"
     }
   }, [orderMessage])
@@ -146,24 +146,91 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
 
 
 
-function generateOrderMessage(items: Poke[], orderName: string, orderTime: string,) {
-  let greetings = 'Buongiorno';
+function generateOrderMessage(items: (Poke | DishSelection)[], orderName: string, orderTime: string,) {
 
-  if ((new Date()).getHours() > 14) {
-    greetings = 'Buonasera';
+  const pokes: Poke[] = items.filter(item => isPoke(item));
+  const dishes: Dish[] = mergeDishes(items.filter(item => isDishSelection(item)));
+
+  const stringedPokes = [];
+  const stringedDishes = itemDishToString(dishes, true);
+
+  for (const [index, item] of Object.entries(pokes)) {
+    stringedPokes.push(`${Number(index) + 1}) ${itemToString(item)}`)
   }
 
-  const stringedItems = [];
+  const pokeCount = pokes.length;
+  const dishCount = dishes.reduce((sum, dish) => sum + dish.quantity, 0);
+  const messageIntro = getIntroduction(pokeCount, dishCount, orderName, orderTime);
 
-  for (const [index, item] of Object.entries(items)) {
-    stringedItems.push(`${Number(index) + 1}) ${itemToString(item)}`)
+  let completeMessage = messageIntro;
+
+  if (pokeCount > 0) {
+    completeMessage += `\n`
+    if (dishCount > 0) {
+      completeMessage += `\n${pokeCount > 0 ? 'Poke:' : ''}`
+    }
+    completeMessage += `\n${stringedPokes.join('\n\r')}`
   }
 
-  const completeOrderString =
-    `${greetings},
-vorrei ordinare ${items.length > 1 ? items.length : "una"} poke da asporto per le ${orderTime}${orderName ? " a nome: " + orderName : ""}.
+  if (dishCount > 0) {
+    completeMessage += `\n`
+    if (pokeCount > 0) {
+      completeMessage += `\n${dishCount > 0 ? 'Piatti:' : ''}`;
+    }
+    completeMessage += `\n${stringedDishes}`
+  }
 
-${stringedItems.join('\n\r')}`;
+  return completeMessage;
+}
 
-  return completeOrderString;
+
+function getIntroduction(pokeCount: number, dishCount: number, orderName: string, orderTime: string) {
+  const greetings = (new Date()).getHours() > 14 ? 'Buonasera' : 'Buongiorno';
+
+  let intro = `${greetings},`;
+
+  intro += '\nvorrei ordinare';
+
+  if (pokeCount > 0) {
+    intro += ` ${pokeCount} poke`;
+  }
+
+  if (pokeCount > 0 && dishCount > 0) {
+    intro += ' e'
+  }
+
+  if (dishCount > 0) {
+    intro += ` ${dishCount}`;
+    if (dishCount === 1) {
+      intro += ' piatto';
+    } else {
+      intro += ' piatti';
+    }
+  }
+
+  intro += ` da asporto per le ${orderTime}.`;
+
+  if (orderName) {
+    intro += ` a nome: ${orderName}`
+  }
+
+  return intro;
+}
+
+function mergeDishes(dishSelections: DishSelection[]): Dish[] {
+  const dishMap: Map<string, number> = new Map();
+  const dishes: Dish[] = [];
+
+  for (const selection of dishSelections) {
+    for (const dish of selection.dishes) {
+      const previous = dishMap.get(dish.id) ?? 0;
+      dishMap.set(dish.id, previous + dish.quantity);
+    }
+  }
+
+  for (const [id, quantity] of dishMap) {
+    dishes.push({ id, quantity });
+  }
+
+  return dishes;
 }

@@ -1,3 +1,4 @@
+import type { Dish } from "./config";
 import type { IngredientsState, PokeSize } from "./context"
 
 export interface SubMenuProps {
@@ -13,19 +14,26 @@ export const PAYMENT_METHODS = {
 
 export type PaymentMethod = typeof PAYMENT_METHODS[keyof typeof PAYMENT_METHODS];
 
-export type Poke = {
+export type CartItem = {
   id: string
   name: string
-  ingredients: IngredientsState,
   createdBy: string
-  size: PokeSize,
   paymentMethod?: PaymentMethod
+}
+
+export type Poke = CartItem & {
+  ingredients: IngredientsState,
+  size: PokeSize,
+}
+
+export type DishSelection = CartItem & {
+  dishes: Dish[]
 }
 
 export type Cart = {
   id: string,
   items: {
-    [id: string]: Poke
+    [id: string]: Poke | DishSelection
   },
   name: string,
   createdBy: string,

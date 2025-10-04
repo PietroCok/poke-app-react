@@ -189,8 +189,12 @@
   font-size: large;
 }
 
+.border-1-solid {
+  border: 1px solid
+}
+
 .border-color {
-  border: 1px solid var(--main-color);
+  border-color: var(--main-color);
 }
 
 .border-r-10 {

@@ -1,4 +1,4 @@
-import type { Cart, Poke } from "@/types";
+import type { Cart, DishSelection, Poke } from "@/types";
 import { emptyCart } from "../CartContext";
 
 
@@ -16,7 +16,7 @@ export const CART_ACTIONS = {
 type CartAction = {
   type: ActionType,
   cart?: Cart,
-  item?: Poke,
+  item?: Poke | DishSelection,
   itemId?: string
 }
 

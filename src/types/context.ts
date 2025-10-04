@@ -1,8 +1,9 @@
 import type { FirebaseError } from "firebase/app"
 import type { User, UserCredential } from "firebase/auth"
-import type { Cart, PaymentMethod, Poke } from "./common"
+import type { Cart, DishSelection, PaymentMethod, Poke } from "./common"
 
 import appConfig from '../../config.json';
+import type { Dish } from "./config";
 
 export type ContextIngredient = {
   id: string,
@@ -13,7 +14,15 @@ export type IngredientsState = {
   [key: string]: ContextIngredient[],
 }
 
-export type StaticSelectionContextType = {
+export type SelectionContextType = {
+  name: string,
+  setName: (name: string) => void,
+
+  paymentMethod: PaymentMethod,
+  setPaymentMethod: (paymentMethod: PaymentMethod) => void,
+}
+
+export type StaticPokeSelectionContextType = {
   getLimit: (groupId: string) => number,
   groupCount: (groupId: string) => number,
   groupExtraPrice: (groupId: string) => number,
@@ -23,7 +32,7 @@ export type StaticSelectionContextType = {
 
 export type PokeSize = keyof typeof appConfig.sizes;
 
-export type SelectionContextType = {
+export type PokeSelectionContextType = {
   ingredients: IngredientsState,
   size: PokeSize,
 
@@ -36,16 +45,27 @@ export type SelectionContextType = {
 
   resetContext: () => void,
 
-  name: string,
-  setName: (name: string) => void,
-
-  paymentMethod: PaymentMethod,
-  setPaymentMethod: (paymentMethod: PaymentMethod) => void,
-
   editingId: string,
   setEditingId: (itemId: string) => void
 }
 
+export type StaticMenuSelectionContextType = {
+  getTotalPrice: () => number
+  hasDishes: () => number
+}
+
+export type MenuSelectionContextType = {
+  dishes: Dish[]
+  addDish: (dishId: string) => void,
+  removeDish: (dishId: string) => void,
+  increaseQuantity: (dishId: string) => void,
+  loadDishesIntoMenu: (dish: DishSelection, navigateHome?: boolean) => void,
+
+  resetContext: () => void,
+
+  editingId: string,
+  setEditingId: (itemId: string) => void
+}
 
 export type UserProfile = {
   createdAt: string
@@ -93,7 +113,7 @@ export type CartContextType = {
   unlinkCart: () => void,
   updateCartName: (newName: string) => void,
 
-  addItem: (item: Poke, fromEdit?: boolean) => Promise<void>,
+  addItem: (item: Poke | DishSelection, fromEdit?: boolean) => Promise<void>,
   duplicateItem: (itemId: string) => void,
   deleteItem: (itemId: string, itemName: string) => void
   deleteAllItems: () => void
@@ -137,8 +157,8 @@ export type ModalContextType = {
 }
 
 export type FavoriteContextType = {
-  favorites: Poke[],
-  addFavorite: (item: Poke, fromEdit?: boolean) => Promise<void>
+  favorites: (Poke | DishSelection)[],
+  addFavorite: (item: Poke | DishSelection, fromEdit?: boolean) => Promise<void>
   removeFavorite: (itemId: string, itemName: string) => void
   removeAllFavorites: () => void
   duplicateItem: (itemId: string) => void

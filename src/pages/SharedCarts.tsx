@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowsRotate, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowsRotate, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import type { Cart } from "@/types";
 import { getCarts } from "@/firebase/db";
@@ -99,14 +99,6 @@ export function SharedCarts({ }: SharedCartsProps) {
   return (
     <div className="page-container h-100 flex flex-column">
       <PageHeader
-        left={
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faArrowLeft} />}
-            classes="primary-color border-r-10"
-            tooltip="Indietro"
-            clickHandler={() => navigate(-1)}
-          />
-        }
         center={
           <h3 className="h-100 flex flex-center text-center">
             Carrelli condivisi

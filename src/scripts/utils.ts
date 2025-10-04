@@ -1,4 +1,4 @@
-import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type IngredientsState, type Poke, type PokeSize } from "@/types";
+import { PAYMENT_METHODS, type AppConfig, type ContextIngredient, type Dish, type DishSelection, type IngredientsState, type Poke, type PokeSize } from "@/types";
 
 import appConfig from '../../config.json';
 import { emptyIngredients } from "@/context/reducer/selectionReducer";
@@ -30,12 +30,30 @@ export function shallowEqual(obj1: Record<string, any>, obj2: Record<string, any
   return true;
 }
 
+export function isPoke(item: Poke | DishSelection): item is Poke {
+  return "size" in item;
+}
+
+export function isDishSelection(item: Poke | DishSelection): item is DishSelection {
+  return "dishes" in item;
+}
+
 /**
 * Converts an item to a string
 * 
 * @retruns a string representing the item
 */
-export function itemToString(item: Poke) {
+export function itemToString(item: Poke | DishSelection) {
+  if (isPoke(item)) {
+    return itemPokeToString(item);
+  } else if (isDishSelection(item)) {
+    return itemDishToString(item.dishes);
+  } else {
+    return 'Unknown item type...';
+  }
+}
+
+function itemPokeToString(item: Poke) {
   let str = '';
   try {
     str = `${item.size.toUpperCase()}: `;
@@ -64,10 +82,72 @@ export function itemToString(item: Poke) {
 }
 
 
-export const hasItem = (items: Poke[], itemId: string) => {
+export function itemDishToString(dishes: Dish[], includeCode?: boolean): string {
+  let str: string[][] = [];
+
+  try {
+
+    for (const dish of dishes) {
+      str.push([dishesCache[dish.id].code, `${includeCode ? `${dishesCache[dish.id].code})` : '-'} ${ingredientIdToName(dish.id)} x${dish.quantity}`]);
+    }
+
+  } catch (error) {
+    console.warn(`Error loading item description: ${error}`);
+  }
+
+  // sort dishes by codes
+  str.sort((a, b) => {
+    const codA = a[0];
+    const codB = b[0];
+
+    if(Number(codA) && Number(codB)) {
+      // padstart let us compare number with different number of digits
+      return codA.padStart(6, '0').localeCompare(codB.padStart(6, '0'));
+    }
+
+    // handles codes with text part
+    
+    // extract numeric and text part for individual compare
+    const matchA = codA.match(/(\d+)(\w*)/);
+    const matchB = codB.match(/(\d+)(\w*)/);
+
+    const partsA = matchA ? [matchA[1], matchA[2]] : [];
+    const partsB = matchB ? [matchB[1], matchB[2]] : [];
+
+    const numOrder = partsA[0].padStart(6, '0').localeCompare(partsB[0].padStart(6, '0'));
+
+    if(numOrder !== 0) {
+      return numOrder;
+    }
+
+    return partsA[1].padStart(6, '0').localeCompare(partsB[1].padStart(6, '0'));
+  });
+
+  return str.map(s => s[1]).join('\n');
+}
+
+export const hasItem = (items: (Poke | DishSelection)[], itemId: string) => {
   return !!items.find(item => item.id === itemId);
 }
 
+// Cache dishes price on load
+const dishesCache: { [key: string]: {price: number, code: string} } = {};
+for (const _dishes of Object.values(appConfig.menu)) {
+  for (const dish of _dishes) {
+    dishesCache[ingredientNameToId(dish.name)] = {
+      price: dish.price,
+      code: dish.code
+    };
+  }
+}
+
+export const getDishPrice = (dishId: string): number => {
+  return dishesCache[dishId]?.price ?? 0;
+}
+
+export const totalMenuSelectionPrice = (_dishes: Dish[]) => {
+  return _dishes.reduce((sum: number, dish: Dish) => sum + getDishPrice(dish.id) * dish.quantity, 0);
+}
 
 // Cache ingredients price on load
 const items: { [key: string]: number } = {};

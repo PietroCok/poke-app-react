@@ -355,6 +355,11 @@ input:checked~.toggle-right {
   padding-bottom: 0;
 }
 
+.cart-item-description {
+  white-space: pre-line;
+  line-height: 1.5rem;
+}
+
 .cart-item-extra-info {
   padding: 1rem;
   padding-top: 0;

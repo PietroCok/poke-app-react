@@ -89,11 +89,16 @@ input[type="checkbox"] {
   gap: 2px;
 }
 
+.add-extra {
+  height: 4.5rem;
+}
+
 /* END INGREDIENTS GROUP */
 
 /* INGREDIENTS */
 
-.ingredient-container {
+.ingredient-container,
+.dish-container {
   border: 2px solid var(--main-color);
   border-radius: 5px;
   text-transform: capitalize;
@@ -110,7 +115,8 @@ input[type="checkbox"] {
   padding: 1rem 0;
 }
 
-.ingredient-container.selected {
+.ingredient-container.selected,
+.dish-container.selected {
   border-color: var(--primary-color);
   box-shadow: 0 0 10px 0 var(--primary-color) inset;
 }
@@ -122,7 +128,8 @@ input[type="checkbox"] {
   flex: 1;
 }
 
-.ingredient-container[data-extra]::after {
+.ingredient-container[data-extra]::after,
+.dish-container[data-extra]::after {
   content: 'x' attr(data-extra);
   position: absolute;
   right: 0;
@@ -136,3 +143,74 @@ input[type="checkbox"] {
 }
 
 /* END INGREDIENTS */
+
+
+/* MENU */
+
+.dish-menu-category-header {
+  margin-bottom: 1rem;
+}
+
+.dish-menu-category-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 1rem;
+  border-bottom: 1px solid var(--main-color);
+  opacity: .5;
+}
+
+[data-dish-count]::after {
+  content: attr(data-dish-count);
+  position: absolute;
+  margin-left: .5rem;
+  width: 2ch;
+  height: 2ch;
+  border: 1px solid var(--primary-color);
+  border-radius: 50%;
+  padding: 5px;
+  transform: translateY(-5px);
+  font-size: small;
+  opacity: .8;
+}
+
+.dish-menu-category-header.selected,
+.dish-menu-category-header.selected::after {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.menu-container {
+  gap: 1rem;
+  overflow-x: hidden;
+}
+
+.dish-container {
+  flex: 0;
+}
+
+.dish-container>label {
+  display: flex;
+  padding: 1.5rem;
+  min-width: 250px;
+  flex: 1;
+  gap: 0.5rem;
+  padding-right: 4.5rem;
+  padding-left: 1rem;
+}
+
+.dish-container.selected label {
+  padding-right: 4.5rem;
+}
+
+.dish-price {
+  min-width: 5ch;
+}
+
+.dish-name {
+  flex: 1;
+}
+
+/* END MENU */

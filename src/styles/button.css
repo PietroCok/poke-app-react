@@ -65,7 +65,6 @@
 
 a.button-text {
   text-decoration: none;
-  width: fit-content;
 }
 
 .button-icon-only.small {
@@ -79,4 +78,8 @@ a.button-text {
 
 .button-text.medium {
   font-size: medium;
+}
+
+.button-text.large {
+  font-size: x-large;
 }

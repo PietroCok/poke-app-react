@@ -1,6 +1,6 @@
 import type { ContextIngredient } from "@/types";
 
-import { useSelection } from "../../context/SelectionContext";
+import { usePokeSelection } from "../../context/PokeSelectionContext";
 import { ingredientNameToId } from "../../scripts/utils";
 import { GroupLimits } from "./GroupLimits"
 import { Ingredient } from "./Ingredient"
@@ -25,7 +25,7 @@ export function IngredientGroup({ group }: IngredientGroupProps) {
     addIngredient,
     increaseQuantity,
     removeIngredient
-  } = useSelection();
+  } = usePokeSelection();
 
   const ingredients = group.options;
 
