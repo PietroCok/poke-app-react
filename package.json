@@ -7,7 +7,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "dev": "vite --mode development",
     "build": "npm run typecheck && vite build --mode production",
-    "build-test": "npm run typecheck && vite build --mode development",
+    "build-test": "npm run typecheck && vite build --mode test",
     "preview": "vite preview",
     "deploy-prod": "deploy-prod.cmd",
     "deploy-test": "deploy-test.cmd"
