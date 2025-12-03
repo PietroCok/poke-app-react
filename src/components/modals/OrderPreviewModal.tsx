@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { Modal } from "./Modal";
 import { ButtonText } from "../common/ButtonText";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import type { Dish, DishSelection, Poke } from "@/types";
+import type { DishSelection, Poke } from "@/types";
 import { useCart } from "@/context/CartContext";
-import { isDishSelection, isPoke, itemDishToString, itemToString } from "@/scripts/utils";
+import { isDishSelection, isPoke, itemToString } from "@/scripts/utils";
 
 export interface OrderPreviewModalProps {
   hideModal: () => void
@@ -149,17 +149,22 @@ export function OrderPreviewModal({ hideModal }: OrderPreviewModalProps) {
 function generateOrderMessage(items: (Poke | DishSelection)[], orderName: string, orderTime: string,) {
 
   const pokes: Poke[] = items.filter(item => isPoke(item));
-  const dishes: Dish[] = mergeDishes(items.filter(item => isDishSelection(item)));
+  const dishes: DishSelection[] = items.filter(item => isDishSelection(item));
 
-  const stringedPokes = [];
-  const stringedDishes = itemDishToString(dishes, true);
+  const stringedPokes: string[] = [];
+  const stringedDishes: string[] = [];
 
   for (const [index, item] of Object.entries(pokes)) {
     stringedPokes.push(`${Number(index) + 1}) ${itemToString(item)}`)
   }
 
+  for (const [index, item] of Object.entries(dishes)) {
+    stringedDishes.push(`${Number(index) + 1}) ${itemToString(item, true).replaceAll(/(?<=\n)/gm, '   ')}`)
+  }
+
   const pokeCount = pokes.length;
-  const dishCount = dishes.reduce((sum, dish) => sum + dish.quantity, 0);
+  const dishCount = dishes.reduce(
+    (sum, dishSelection) => sum + dishSelection.dishes.reduce((sum, dish) => sum + dish.quantity, 0), 0);
   const messageIntro = getIntroduction(pokeCount, dishCount, orderName, orderTime);
 
   let completeMessage = messageIntro;
@@ -175,9 +180,9 @@ function generateOrderMessage(items: (Poke | DishSelection)[], orderName: string
   if (dishCount > 0) {
     completeMessage += `\n`
     if (pokeCount > 0) {
-      completeMessage += `\n${dishCount > 0 ? 'Piatti:' : ''}`;
+      completeMessage += `\n${dishCount > 0 ? 'Piatti (possibilmente raggruppati come segue):' : ''}`;
     }
-    completeMessage += `\n${stringedDishes}`
+    completeMessage += `\n${stringedDishes.join('\n\r')}`
   }
 
   return completeMessage;
@@ -217,20 +222,3 @@ function getIntroduction(pokeCount: number, dishCount: number, orderName: string
   return intro;
 }
 
-function mergeDishes(dishSelections: DishSelection[]): Dish[] {
-  const dishMap: Map<string, number> = new Map();
-  const dishes: Dish[] = [];
-
-  for (const selection of dishSelections) {
-    for (const dish of selection.dishes) {
-      const previous = dishMap.get(dish.id) ?? 0;
-      dishMap.set(dish.id, previous + dish.quantity);
-    }
-  }
-
-  for (const [id, quantity] of dishMap) {
-    dishes.push({ id, quantity });
-  }
-
-  return dishes;
-}
