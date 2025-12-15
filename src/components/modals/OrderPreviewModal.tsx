@@ -178,10 +178,15 @@ function generateOrderMessage(items: (Poke | DishSelection)[], orderName: string
   }
 
   if (dishCount > 0) {
-    completeMessage += `\n`
+    completeMessage += `\n`;
+
+    const messageRequest = '(possibilmente raggruppati come segue)';
     if (pokeCount > 0) {
-      completeMessage += `\n${dishCount > 0 ? 'Piatti (possibilmente raggruppati come segue):' : ''}`;
+      completeMessage += `\n${dishCount > 0 ? `Piatti${dishes.length > 1 ? ` ${messageRequest}` : ''}:` : ''}`;
+    } else if (dishes.length > 1) {
+      completeMessage += `\n${messageRequest}`;
     }
+
     completeMessage += `\n${stringedDishes.join('\n\r')}`
   }
 
