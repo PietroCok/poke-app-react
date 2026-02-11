@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave, faX } from "@fortawesome/free-solid-svg-icons";
@@ -9,15 +9,21 @@ import { useToast } from "@/context/ToastContext";
 import { Modal } from "./Modal";
 
 export interface CreateSharedCartModalProps {
-  setIsOpen: (value: boolean) => void
+  setIsOpen: (value: boolean) => void,
+  callback?: () => void,
+  linkLocalCart?: boolean,
 }
 
-export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps) {
+export function CreateSharedCartModal({ setIsOpen, callback, linkLocalCart = false }: CreateSharedCartModalProps) {
   const [cartName, setCartName] = useState('');
   const [useActiveCart, setuseActiveCart] = useState(false);
   const { createCart } = useCart();
   const { showError } = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setuseActiveCart(linkLocalCart)
+  }, [])
 
   const createSharedCart = async (event: any) => {
     event.preventDefault();
@@ -29,6 +35,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
       return;
     }
 
+    callback && callback();
     navigate('/cart');
   }
 
@@ -72,7 +79,7 @@ export function CreateSharedCartModal({ setIsOpen }: CreateSharedCartModalProps)
             title="Utilizza i dati del carrello attualmente attivo"
           >
             <label htmlFor="use-local-cart">
-              Collega carrello locale
+              Condivi carrello locale
             </label>
             <label
               htmlFor="use-local-cart"

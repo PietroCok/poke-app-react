@@ -125,7 +125,10 @@ const renderUserList = (users: UserProfile[], currentUser: User, updateStatus: (
         className="users-list-element"
         key={user.uid}
       >
-        <div>
+        <div 
+          className="ellipsis"
+          title={user.email}
+        >
           {user.email}
         </div>
 

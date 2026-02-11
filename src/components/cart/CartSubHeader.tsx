@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { faAngleDown, faBowlFood, faCoins } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faBowlFood, faCoins, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
+import { NavLink } from "react-router-dom";
 
 import { useCart } from "@/context/CartContext";
 import { PAYMENT_METHODS } from "@/types";
@@ -24,7 +25,7 @@ export function CartSubHeader({ }: CartSubHeaderProps) {
       onClick={() => setIsOpen(!isOpen)}
     >
       <div
-        className="flex gap-2"
+        className="flex gap-2 cart-info-summary"
       >
         <div
           className="flex gap-05"
@@ -76,6 +77,27 @@ export function CartSubHeader({ }: CartSubHeaderProps) {
           }
         </div>
       }
+
+      <div className="flex w-100 gap-1">
+        <NavLink
+          className="flex-1 flex flex-center padding-1 new-cart-poke gap-05"
+          title="Aggiungi poke"
+          to={'/poke-configurator'}
+        >
+          {/* <FontAwesomeIcon icon={faPlus} /> */}
+          <FontAwesomeIcon icon={faBowlFood} />
+          Poke
+        </NavLink>
+        <NavLink
+          className="flex-1 flex flex-center padding-1 new-cart-dish gap-05"
+          title="Aggiungi piatti da menu"
+          to={'/menu'}
+        >
+          {/* <FontAwesomeIcon icon={faPlus} /> */}
+          <FontAwesomeIcon icon={faUtensils} />
+          Menu
+        </NavLink>
+      </div>
     </section>
   )
 }

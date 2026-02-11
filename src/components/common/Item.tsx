@@ -135,11 +135,13 @@ function _Item({ item, disabled = false, actions }: ItemProps) {
         <summary
           className="cart-item-summary flex align-center just-between padding-1"
         >
-          <span>
+          <span
+            className="ellipsis"
+          >
             <FontAwesomeIcon className="cart-item-pay" icon={item.paymentMethod == PAYMENT_METHODS.CASH ? faCoins : faPaypal} />
             {item.name}
           </span>
-          <div className={`flex align-center just-end ${isOpen ? '' : 'gap-05'}`}>
+          <div className={`flex align-center just-end min-w-fit ${isOpen ? '' : 'gap-05'}`}>
             <span className="cart-item-price">{itemPrice.toFixed(2)} €</span>
             <div className="h-button-icon"></div>
             {
