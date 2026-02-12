@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { faAngleDown, faBowlFood, faCoins, faUtensils } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faBowlFood, faCoins, faTag, faUtensils } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaypal } from "@fortawesome/free-brands-svg-icons";
 import { NavLink } from "react-router-dom";
@@ -30,7 +30,7 @@ export function CartSubHeader({ }: CartSubHeaderProps) {
         <div
           className="flex gap-05"
         >
-          <FontAwesomeIcon icon={faBowlFood} />
+          <FontAwesomeIcon icon={faTag} />
           <span
           >
             {itemsCount}
