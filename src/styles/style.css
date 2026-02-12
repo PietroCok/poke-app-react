@@ -390,10 +390,22 @@ input:checked~.toggle-right {
   margin: 2px 1rem 10px 1rem;
 }
 
-.cart-info svg {
+.cart-info .cart-info-summary svg {
   transition: all 200ms ease-in-out;
 }
 
+.new-cart-poke,
+.new-cart-dish {
+  text-decoration: none;
+  color: var(--main-color) !important;
+  border: 2px solid var(--main-color);
+  border-radius: 10px;
+}
+
+.new-cart-poke:hover,
+.new-cart-dish:hover {
+  color: var(--primary-color) !important;
+}
 
 /* END CART */
 

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLink, faLinkSlash } from "@fortawesome/free-solid-svg-icons";
 
 import type { Cart, DishSelection, Poke } from "../types";
 import { MainMenu } from "../components/common/MainMenu";
@@ -11,24 +13,62 @@ import { CartSubHeader } from "@/components/cart/CartSubHeader";
 import { CartHeader } from "@/components/cart/CartHeader";
 import { CartItem } from "@/components/common/CartItem";
 import { OrderPreviewModal } from "@/components/modals/OrderPreviewModal";
+import { ButtonIcon } from "@/components/common/ButtonIcon";
+import { useModal } from "@/context/ModalContext";
+import { CreateSharedCartModal } from "@/components/modals/CreateSharedCartModal";
+import { useToast } from "@/context/ToastContext";
 
 const ITEM_MEMO_THRESHOLD = 10;
 
 export function Cart() {
-  const { cart, deleteAllItems, deleteItem, duplicateItem, getItemsCount } = useCart();
-  const { user } = useAuth();
+  const { cart, deleteAllItems, deleteItem, duplicateItem, getItemsCount, unlinkCart } = useCart();
+  const { user, isUserActive } = useAuth();
   const [isOrderPreviewOpen, setIsOrderPreviewOpen] = useState(false);
+  const [isCreateCartOpen, setIsCreateCartOpen] = useState(false);
+  const { showConfirm } = useModal();
+  const { showInfo } = useToast();
 
   const userUid = user?.uid || '';
   const itemsCount = getItemsCount();
   const hasItems = itemsCount > 0;
   const isCartOwner = !cart.isShared || userUid === cart.createdBy;
 
+  const unlinkSharedCart = async () => {
+    if (await showConfirm("Scollegare il carrello corrente?")) {
+      unlinkCart();
+      showInfo("Carrello condiviso scollegato");
+    }
+  }
+
+  const openSharedCartCreationModal = () => {
+    setIsCreateCartOpen(true);
+  }
+
+  const onCartShared = () => {
+    setIsCreateCartOpen(false);
+    showInfo('Il carrello è stato condiviso')
+  }
+
   return (
     <div className="page-container h-100 flex flex-column">
       <PageHeader
         left={
-          <></>
+          cart.isShared ?
+            <ButtonIcon
+              icon={<FontAwesomeIcon icon={faLinkSlash} />}
+              classes="red border-r-10"
+              tooltip="Scollega carrello"
+              clickHandler={() => unlinkSharedCart()}
+            />
+            :
+            <ButtonIcon
+              icon={<FontAwesomeIcon icon={faLink} />}
+              classes="border-r-10 primary-color"
+              tooltip="Nuovo carrello condiviso"
+              clickHandler={openSharedCartCreationModal}
+              disabled={!isUserActive()}
+            disabledMessage={`Operazione disponibile ai soli utenti abilitati`}
+            />
         }
         center={
           <CartHeader />
@@ -47,6 +87,15 @@ export function Cart() {
       >
         {renderItems(cart, userUid, deleteItem, duplicateItem)}
       </section>
+
+      {
+        isCreateCartOpen &&
+        <CreateSharedCartModal
+          setIsOpen={setIsCreateCartOpen}
+          linkLocalCart={true}
+          callback={() => onCartShared()}
+        />
+      }
 
       {
         isOrderPreviewOpen &&
