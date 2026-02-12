@@ -133,7 +133,7 @@ function _Item({ item, disabled = false, actions }: ItemProps) {
         onToggle={handleToggle}
       >
         <summary
-          className="cart-item-summary flex align-center just-between padding-1"
+          className="cart-item-summary flex align-center just-between padding-1 gap-05"
         >
           <span
             className="ellipsis"
