@@ -43,6 +43,7 @@ body {
 
   max-width: 900px;
   margin: 0 auto;
+  position: relative;
 }
 
 /* Removes the highlight effect on mobile devices */
@@ -176,28 +177,6 @@ details summary {
 }
 
 /* END PAGE FOOTER */
-
-
-
-/* MAIN MENU */
-#main-menu-overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-
-  z-index: 999;
-}
-
-#main-menu-options {
-  padding: 1rem;
-  margin: 0 auto;
-  max-width: 900px;
-}
-
-/* END MAIN MENU */
-
 
 
 /* ADMIN PANEL - USERS */

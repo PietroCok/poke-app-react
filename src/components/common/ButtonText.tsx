@@ -1,6 +1,6 @@
 import { Button, type ButtonProps } from "./Button"
 
-interface ButtonTextProps extends ButtonProps {
+export interface ButtonTextProps extends ButtonProps {
   text: string
 }
 

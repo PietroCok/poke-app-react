@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import type { User } from "firebase/auth";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate, faCheck, faX } from "@fortawesome/free-solid-svg-icons";
-import { faHouse } from "@fortawesome/free-regular-svg-icons";
 
 import { UserStatusLevel, type UserProfile, type UserStatus } from "../types";
 
@@ -12,6 +11,7 @@ import { ButtonIcon } from "../components/common/ButtonIcon";
 import { getUsers, updateUserStatus } from "../firebase/db";
 import { LoadingSpinner } from "../components/common/LoadingSpinner";
 import { useAuth } from "../context/AuthContext";
+import { MainMenu } from "@/components/common/MainMenu";
 
 
 export function AdminUsersManagement() {
@@ -51,18 +51,13 @@ export function AdminUsersManagement() {
     <div className="page-container flex flex-column">
       <PageHeader
         classes="main-bg"
-        left={
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faHouse} />}
-            classes="primary-color border-r-10"
-            tooltip="Indietro"
-            linkTo="/"
-          />
+        right={
+          <MainMenu />
         }
         center={
           <h2 className="flex flex-center h-100">Accounts</h2>
         }
-        right={
+        left={
           <ButtonIcon
             icon={<FontAwesomeIcon color={`var(--primary-color)`} icon={faArrowsRotate} />}
             classes="border-r-10"

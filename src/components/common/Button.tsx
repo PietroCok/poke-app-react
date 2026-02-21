@@ -41,6 +41,7 @@ export function Button({ children, style, classes, tooltip, disabled, disabledMe
         className={`${_classes}button`}
         title={tooltip}
         style={style}
+        onClick={clickCallback}
         {...rest}
       >
         {children}

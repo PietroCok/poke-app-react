@@ -1,108 +1,135 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faCartShopping, faShareNodes, faStar, faX } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCartShopping, faGear, faRightFromBracket, faShareNodes, faShoppingCart, faStar, faX } from "@fortawesome/free-solid-svg-icons";
 
 import { ButtonIcon } from "./ButtonIcon";
 import { useAuth } from "../../context/AuthContext";
 import { StackedIcons } from "./StackedIcons";
-import { UserMenu } from "../UserMenu";
-import { ThemeModeSwitcher } from "../ThemeModeSwitcher";
-import { ThemeColorSwitcher } from "../ThemeColorSwitcher";
 import { faHouse } from "@fortawesome/free-regular-svg-icons";
+import { MenuElement } from "./MenuElement";
+import type { ButtonTextIconProps } from "./ButtonTextIcon";
+import { PageHeader } from "./PageHeader";
+import { useModal } from "@/context/ModalContext";
 
 export interface MainMenuProps {
-  extraMenuItems?: React.ReactNode
+  extraMenuItems?: ButtonTextIconProps[]
 }
 
 export function MainMenu({ extraMenuItems }: MainMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const { showConfirm } = useModal();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // Tracks current open submenu
-  const [openMenuId, setOpenMenuId] = useState('');
-
-  const setSubMenuId = (menuId: string) => {
-    setOpenMenuId((openMenuId === menuId) ? '' : menuId);
-  }
-
-  function checkCloseMenu(event: React.MouseEvent<HTMLElement> | React.TouchEvent<HTMLElement>) {
-    // Close the menu only if the user has not clicked one of the buttons
-    const target = event.target as HTMLElement;
-    if (target.id == "main-menu-overlay" || target.id == "main-menu-options") {
-      setIsOpen(false);
+  const _logout = async () => {
+    if (await showConfirm(`Procedere con la disconnessione dall'account?`)) {
+      await logout();
+      if (!user) {
+        navigate("/login");
+      }
     }
   }
 
-  function renderMenuOptions() {
+  const closeMenu = (destinationRoute = "", force = false) => {
+    (force || destinationRoute == location.pathname) && setIsOpen(false);
+  }
+
+  function renderMenu() {
     return (
       <div
-        id="main-menu-overlay"
-        onClick={checkCloseMenu}
-        onTouchStart={checkCloseMenu}
+        className="page-container h-100 w-100 z-100 absolute top-0 main-bg"
       >
-        <div
-          id="main-menu-options"
-          className="flex flex-column align-end gap-1"
-        >
-          <ButtonIcon
-            icon={<FontAwesomeIcon icon={faX} />}
-            clickHandler={() => setIsOpen(false)}
-            classes="red border-r-10"
-            tooltip="Chiudi"
-          />
+        <PageHeader
+          classes="main-bg"
+          right={
+            <ButtonIcon
+              icon={<FontAwesomeIcon icon={faX} />}
+              classes="red border-r-10"
+              tooltip="Chiudi"
+              clickHandler={() => closeMenu("", true)}
+            />
+          }
+          left={
+            <h3
+              className="h-100 flex align-center"
+            >
+              Menu
+            </h3>
+          }
+        />
 
-          <ButtonIcon
+        <div
+          className="flex flex-column"
+        >
+
+          <MenuElement
+            text="Home"
             icon={<FontAwesomeIcon icon={faHouse} />}
-            classes="primary-color border-r-10"
+            classes="primary-color top-separator-light bottom-separator-light"
             tooltip="Home"
             linkTo={"/"}
+            clickHandler={() => closeMenu("/")}
           />
 
-          <ButtonIcon
+          <MenuElement
+            text="Preferiti"
             icon={<FontAwesomeIcon icon={faStar} />}
-            classes="gold border-r-10"
+            classes="gold bottom-separator-light"
             tooltip="Preferiti"
             linkTo={"/favorites"}
+            clickHandler={() => closeMenu("/favorites")}
           />
 
-          {/* The following are available only when the user is logged in */}
+          <MenuElement
+            text="Carrello"
+            icon={<FontAwesomeIcon icon={faShoppingCart} />}
+            classes="gold bottom-separator-light"
+            tooltip="Carello"
+            linkTo={"/cart"}
+            clickHandler={() => closeMenu("/cart")}
+          />
+
           {
             user &&
-            <>
-              <ButtonIcon
-                icon={
-                  <StackedIcons
-                    outer={<FontAwesomeIcon color={`var(--accent-gold)`} icon={faCartShopping} />}
-                    inner={<FontAwesomeIcon color={`var(--primary-color)`} icon={faShareNodes} />}
-                  />
-                }
-                classes="primary-color border-r-10"
-                tooltip="Carrelli condivisi"
-                linkTo="/shared-carts"
-              />
-
-              <UserMenu
-                menuId={'user-menu'}
-                openMenuId={openMenuId}
-                setMenuId={setSubMenuId}
-              />
-            </>
+            <MenuElement
+              text="Carelli condivisi"
+              icon={
+                <StackedIcons
+                  outer={<FontAwesomeIcon color={`var(--accent-gold)`} icon={faCartShopping} />}
+                  inner={<FontAwesomeIcon color={`var(--primary-color)`} icon={faShareNodes} />}
+                />
+              }
+              classes="primary-color bottom-separator-light"
+              tooltip="Carrelli condivisi"
+              linkTo="/shared-carts"
+              clickHandler={() => closeMenu("/shared-carts")}
+            />
           }
 
-          <ThemeModeSwitcher
-            menuId={'theme-mode'}
-            openMenuId={openMenuId}
-            setMenuId={setSubMenuId}
+          <MenuElement
+            text="Impostazioni"
+            icon={<FontAwesomeIcon icon={faGear} />}
+            tooltip="Impostazioni"
+            classes="main-color bottom-separator-light"
+            linkTo="/settings"
+            clickHandler={() => closeMenu("/settings")}
           />
 
-          <ThemeColorSwitcher
-            menuId={'theme-colorcolor'}
-            openMenuId={openMenuId}
-            setMenuId={setSubMenuId}
-          />
+          {
+            user &&
+            <MenuElement
+              text="Logout"
+              icon={<FontAwesomeIcon color={`var(--accent-red)`} icon={faRightFromBracket} />}
+              classes="bottom-separator-light"
+              tooltip="Logout"
+              clickHandler={_logout}
+            />
+          }
 
-          {extraMenuItems}
+          {extraMenuItems?.map(elementProps => <MenuElement {...elementProps} />)}
 
         </div>
       </div>
@@ -121,11 +148,10 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
       </div>
 
       {isOpen && createPortal(
-        renderMenuOptions(),
+        renderMenu(),
         document.getElementById('root')!
       )}
     </>
   )
 }
-
 
