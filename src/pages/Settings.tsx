@@ -85,7 +85,7 @@ export function Settings({ }: SettingsProps) {
         {
           openMenuId == MENU.PROFILE &&
           <div
-            className={`bottom-separator-light`}
+            className={`bottom-separator-light flex flex-column`}
           >
             <MenuElement
               text="Gestione utenti"
@@ -121,7 +121,7 @@ export function Settings({ }: SettingsProps) {
         {
           openMenuId == MENU.THEME &&
           <div
-            className={`bottom-separator-light`}
+            className={`bottom-separator-light flex flex-column`}
           >
             {themeOptions.map((option) => {
               return (
