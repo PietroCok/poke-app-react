@@ -4,8 +4,9 @@
   cursor: pointer;
   border: 0 transparent;
 
-  &:not(.disabled):not(.no-active):active {
+  &:not(.disabled):not(.no-active):not(.menu-element):active {
     box-shadow: 0 0 2px 1px var(--main-color);
+    z-index: 1;
   }
 }
 
@@ -13,6 +14,15 @@
 @media (hover: hover) {
   .button:not(.disabled):not(.no-active):hover {
     box-shadow: 0 0 2px 1px var(--main-color);
+    z-index: 1;
+  }
+
+  .menu-element:hover {
+    box-shadow: none !important;
+
+    & span {
+      color: var(--primary-color);
+    }
   }
 }
 
@@ -49,7 +59,7 @@
 
 /* Capitalize only first letter of the button text (works even for phrases) */
 .button-text {
-  display:inline-block;
+  display: inline-block;
   text-transform: lowercase;
 }
 
@@ -60,7 +70,7 @@
 .button-text {
   font-weight: bold;
   font-size: large;
-  padding: .75em;
+  padding: .75rem;
 }
 
 a.button-text {
@@ -70,7 +80,7 @@ a.button-text {
 .button-icon-only.small {
   padding: .75rem;
 
-  & svg{
+  & svg {
     width: 1rem;
     height: 1rem;
   }
@@ -82,4 +92,45 @@ a.button-text {
 
 .button-text.large {
   font-size: x-large;
+}
+
+
+.bottom-separator {
+  border-bottom: 1px solid var(--main-color);
+}
+
+.bottom-separator-light {
+  border-bottom: 1px solid color(from var(--main-color) srgb r g b / .2);
+}
+
+.top-separator-light {
+  border-top: 1px solid color(from var(--main-color) srgb r g b / .2);
+}
+
+
+.sub-element-list {
+  position: relative;
+}
+
+.sub-element-list>* {
+  transform: scale(.8);
+}
+
+.sub-element-list::before {
+  content: '';
+  height: 100%;
+  border-left: 2px solid var(--main-color);
+  opacity: .2;
+  position: absolute;
+  left: -21px;
+}
+
+.sub-element-list:first-child::before {
+  height: 80%;
+  bottom: 0;
+}
+
+.sub-element-list:last-child::before {
+  height: 80%;
+  top: 0;
 }
