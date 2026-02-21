@@ -12,11 +12,23 @@ const lightModeLightness = '30%';
 const defaultHue = 150;
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
+export const THEMES = Object.freeze({
+  LIGHT: "light",
+  DARK: "dark",
+  AUTO: "auto"
+})
+
 export const iconMapping = {
-  "light": faSun,
-  "dark": faMoon,
-  "auto": faA
+  [THEMES.LIGHT]: faSun,
+  [THEMES.DARK]: faMoon,
+  [THEMES.AUTO]: faA
 } as const;
+
+export const THEMESDESCRIPTION = Object.freeze({
+  [THEMES.LIGHT]: "chiaro",
+  [THEMES.DARK]: "scuro",
+  [THEMES.AUTO]: "automatico"
+})
 
 export const themeOptions = Object.entries(iconMapping).map(o => {
   return {
@@ -48,11 +60,11 @@ export const useTheme = () => {
 };
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [storedTheme, setSelectedTheme] = useLocalStorage<Theme>('preferred-theme', 'auto');
+  const [storedTheme, setSelectedTheme] = useLocalStorage<Theme>('preferred-theme', THEMES.AUTO);
   const [hue, setColor] = useLocalStorage<number>('preferred-theme-color', defaultHue);
 
   // fall back to auto if invalid theme is found in localstorage
-  const theme = isValidTheme(storedTheme) ? storedTheme : "auto";
+  const theme = isValidTheme(storedTheme) ? storedTheme : THEMES.AUTO;
   // Set initial them retrieved from localstorage
 
   useEffect(() => {
@@ -78,7 +90,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const adjustThemeContrast = (theme: string) => {
     let saturation = darkModeSaturation;
     let lightness = darkModeLightness;
-    if(theme === 'light' || (theme === 'auto' && !prefersDark)){
+    if(theme === THEMES.LIGHT || (theme === THEMES.AUTO && !prefersDark)){
       saturation = lightModeSaturation;
       lightness = lightModeLightness;
     }
