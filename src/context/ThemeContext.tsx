@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect } from "react";
 
-import { faA, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
+import { faDesktop, faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const darkModeSaturation = '60%';
@@ -21,13 +21,13 @@ export const THEMES = Object.freeze({
 export const iconMapping = {
   [THEMES.LIGHT]: faSun,
   [THEMES.DARK]: faMoon,
-  [THEMES.AUTO]: faA
+  [THEMES.AUTO]: faDesktop
 } as const;
 
 export const THEMESDESCRIPTION = Object.freeze({
   [THEMES.LIGHT]: "chiaro",
   [THEMES.DARK]: "scuro",
-  [THEMES.AUTO]: "automatico"
+  [THEMES.AUTO]: "sistema"
 })
 
 export const themeOptions = Object.entries(iconMapping).map(o => {
