@@ -108,12 +108,20 @@ a.button-text {
 }
 
 
-.sub-element-list {
-  position: relative;
+.sub-element-group {
+  padding-left: 2rem;
 }
 
-.sub-element-list>* {
-  transform: scale(.8);
+.menu-element svg {
+  width: 1.25rem;
+}
+
+.menu-element .stacked-icons-inner svg {
+  width: .8rem;
+}
+
+.sub-element-list {
+  position: relative;
 }
 
 .sub-element-list::before {
@@ -122,7 +130,7 @@ a.button-text {
   border-left: 2px solid var(--main-color);
   opacity: .2;
   position: absolute;
-  left: -21px;
+  left: -11px;
 }
 
 .sub-element-list:first-child::before {
@@ -133,4 +141,9 @@ a.button-text {
 .sub-element-list:last-child::before {
   height: 80%;
   top: 0;
+}
+
+.sub-element-list:only-child::before {
+  height: 60%;
+  top: 20%;
 }

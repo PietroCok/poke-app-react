@@ -78,14 +78,14 @@ export function Settings({ }: SettingsProps) {
           text="Profilo"
           tooltip="profilo"
           icon={<FontAwesomeIcon icon={faUser} color={`var(--primary-color)`} />}
-          classes={`top-separator-light ${openMenuId != MENU.PROFILE ? `bottom-separator-light` : ``}`}
+          classes={`top-separator-light ${openMenuId != MENU.PROFILE ? `bottom-separator-light` : `padding-bottom-0`}`}
           clickHandler={() => onSectionClick(MENU.PROFILE)}
         />
 
         {
           openMenuId == MENU.PROFILE &&
           <div
-            className={`bottom-separator-light flex flex-column`}
+            className={`sub-element-group bottom-separator-light flex flex-column`}
           >
             {
               profile?.role === ROLES.ADMIN &&
@@ -117,14 +117,14 @@ export function Settings({ }: SettingsProps) {
           text="Tema"
           tooltip="Modifica tema"
           icon={<FontAwesomeIcon icon={currentThemeIcon} />}
-          classes={`${openMenuId != MENU.THEME ? `bottom-separator-light` : ``}`}
+          classes={`${openMenuId != MENU.THEME ? `bottom-separator-light` : `padding-bottom-0`}`}
           clickHandler={() => onSectionClick(MENU.THEME)}
         />
 
         {
           openMenuId == MENU.THEME &&
           <div
-            className={`bottom-separator-light flex flex-column`}
+            className={`sub-element-group bottom-separator-light flex flex-column`}
           >
             {themeOptions.map((option) => {
               return (
@@ -145,7 +145,7 @@ export function Settings({ }: SettingsProps) {
           text="Colore"
           tooltip="Modifica colore"
           icon={<FontAwesomeIcon icon={faSquare} color={`var(--primary-color)`} />}
-          classes={`${openMenuId != MENU.COLOR ? `bottom-separator-light` : ``}`}
+          classes={`${openMenuId != MENU.COLOR ? `bottom-separator-light` : `padding-bottom-0`}`}
           clickHandler={() => onSectionClick(MENU.COLOR)}
         />
 

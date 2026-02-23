@@ -237,6 +237,10 @@
   padding-top: 0;
 }
 
+.padding-bottom-0 {
+  padding-bottom: 0;
+}
+
 .margin-0 {
   margin: 0;
 }
@@ -263,10 +267,6 @@
 
 .margin-r10 {
   margin-right: 10px;
-}
-
-.margin-l3 {
-  margin-left: 3rem;
 }
 
 .margin-b6 {
