@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShield, faSquare, faTrash, faUser, faUsers } from "@fortawesome/free-solid-svg-icons";
 
-import { MainMenu } from "@/components/common/MainMenu";
-import { PageHeader } from "@/components/common/PageHeader";
 import { iconMapping, themeOptions, THEMESDESCRIPTION, useTheme } from "@/context/ThemeContext";
 import { MenuElement } from "@/components/common/MenuElement";
 import { StackedIcons } from "@/components/common/StackedIcons";
@@ -30,7 +28,7 @@ export function Settings({ }: SettingsProps) {
   const currentThemeIcon = iconMapping[theme];
 
   const [openMenuId, setOpenMenuId] = useState('');
-  const { profile, deleteAccount } = useAuth();
+  const { profile, user, deleteAccount } = useAuth();
   const { showConfirm } = useModal();
   const { showInfo } = useToast();
   const navigate = useNavigate();
@@ -55,37 +53,28 @@ export function Settings({ }: SettingsProps) {
 
   return (
     <div
-      className="page-container h-100"
+      className="flex flex-column bottom-separator-light"
     >
-      <PageHeader
-        right={
-          <MainMenu />
-        }
-        left={
-          <h3
-            className="h-100 flex align-center"
-          >
-            Impostazioni
-          </h3>
-        }
-      />
 
-      <section
-        className="flex flex-column"
+      <div
+        className="flex flex-column sub-element-group"
       >
 
-        <MenuElement
-          text="Profilo"
-          tooltip="profilo"
-          icon={<FontAwesomeIcon icon={faUser} color={`var(--primary-color)`} />}
-          classes={`top-separator-light ${openMenuId != MENU.PROFILE ? `bottom-separator-light` : `padding-bottom-0`}`}
-          clickHandler={() => onSectionClick(MENU.PROFILE)}
-        />
+        {
+          user &&
+          <MenuElement
+            text="Profilo"
+            tooltip="profilo"
+            icon={<FontAwesomeIcon icon={faUser} color={`var(--primary-color)`} />}
+            classes={`${openMenuId != MENU.PROFILE ? `` : `padding-bottom-0`} sub-element-list`}
+            clickHandler={() => onSectionClick(MENU.PROFILE)}
+          />
+        }
 
         {
           openMenuId == MENU.PROFILE &&
           <div
-            className={`sub-element-group bottom-separator-light flex flex-column`}
+            className={`flex flex-column sub-element-group sub-element-list`}
           >
             {
               profile?.role === ROLES.ADMIN &&
@@ -97,7 +86,7 @@ export function Settings({ }: SettingsProps) {
                     inner={<FontAwesomeIcon color={`var(--main-color)`} icon={faShield} />}
                   />
                 }
-                classes="margin-l3 sub-element sub-element-list"
+                classes="sub-element sub-element-list"
                 tooltip="Gestione utenti"
                 linkTo={"/admin/users"}
               />
@@ -106,7 +95,7 @@ export function Settings({ }: SettingsProps) {
             <MenuElement
               text="Elimina account"
               icon={<FontAwesomeIcon color={`var(--accent-red)`} icon={faTrash} />}
-              classes="margin-l3 sub-element sub-element-list"
+              classes="sub-element sub-element-list"
               tooltip="Cancella account"
               clickHandler={_deleteAccount}
             />
@@ -117,14 +106,14 @@ export function Settings({ }: SettingsProps) {
           text="Tema"
           tooltip="Modifica tema"
           icon={<FontAwesomeIcon icon={currentThemeIcon} />}
-          classes={`${openMenuId != MENU.THEME ? `bottom-separator-light` : `padding-bottom-0`}`}
+          classes={`${openMenuId != MENU.THEME ? `` : `padding-bottom-0`} sub-element-list`}
           clickHandler={() => onSectionClick(MENU.THEME)}
         />
 
         {
           openMenuId == MENU.THEME &&
           <div
-            className={`sub-element-group bottom-separator-light flex flex-column`}
+            className={`flex flex-column sub-element-group sub-element-list`}
           >
             {themeOptions.map((option) => {
               return (
@@ -133,7 +122,7 @@ export function Settings({ }: SettingsProps) {
                   key={option.theme}
                   icon={<FontAwesomeIcon icon={option.icon} />}
                   clickHandler={() => setTheme(option.theme)}
-                  classes="margin-l3 sub-element sub-element-list"
+                  classes="sub-element sub-element-list"
                   tooltip={option.theme}
                 />
               )
@@ -145,14 +134,14 @@ export function Settings({ }: SettingsProps) {
           text="Colore"
           tooltip="Modifica colore"
           icon={<FontAwesomeIcon icon={faSquare} color={`var(--primary-color)`} />}
-          classes={`${openMenuId != MENU.COLOR ? `bottom-separator-light` : `padding-bottom-0`}`}
+          classes={`${openMenuId != MENU.COLOR ? `` : `padding-bottom-0`} sub-element-list`}
           clickHandler={() => onSectionClick(MENU.COLOR)}
         />
 
         {
           openMenuId == MENU.COLOR &&
           <div
-            className={`bottom-separator-light flex gap-05 padding-05 just-between`}
+            className={`flex gap-05 padding-05 just-between sub-element-list`}
           >
             {
               hues.map(h => {
@@ -173,8 +162,7 @@ export function Settings({ }: SettingsProps) {
           </div>
         }
 
-      </section>
-
+      </div>
     </div>
   )
 }

@@ -12,6 +12,7 @@ import { MenuElement } from "./MenuElement";
 import type { ButtonTextIconProps } from "./ButtonTextIcon";
 import { PageHeader } from "./PageHeader";
 import { useModal } from "@/context/ModalContext";
+import { Settings } from "./Settings";
 
 export interface MainMenuProps {
   extraMenuItems?: ButtonTextIconProps[]
@@ -23,6 +24,7 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
   const { showConfirm } = useModal();
   const navigate = useNavigate();
   const location = useLocation();
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const _logout = async () => {
     if (await showConfirm(`Procedere con la disconnessione dall'account?`)) {
@@ -113,10 +115,13 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
             text="Impostazioni"
             icon={<FontAwesomeIcon icon={faGear} />}
             tooltip="Impostazioni"
-            classes="main-color bottom-separator-light"
-            linkTo="/settings"
-            clickHandler={() => closeMenu("/settings")}
+            classes={`main-color ${!isSettingsOpen ? `bottom-separator-light` : `padding-bottom-0`}`}
+            clickHandler={() => setIsSettingsOpen(!isSettingsOpen)}
           />
+
+          {
+            isSettingsOpen && <Settings />
+          }
 
           {
             user &&

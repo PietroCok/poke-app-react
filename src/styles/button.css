@@ -125,25 +125,25 @@ a.button-text {
 }
 
 .sub-element-list::before {
+  --line-padding: 10px;
   content: '';
-  height: 100%;
   border-left: 2px solid var(--main-color);
   opacity: .2;
   position: absolute;
   left: -11px;
-}
-
-.sub-element-list:first-child::before {
-  height: 80%;
+  top: 0;
   bottom: 0;
 }
 
+.sub-element-list:first-child::before {
+  top: var(--line-padding);
+}
+
 .sub-element-list:last-child::before {
-  height: 80%;
-  top: 0;
+  bottom: var(--line-padding);
 }
 
 .sub-element-list:only-child::before {
-  height: 60%;
-  top: 20%;
+  top: var(--line-padding);
+  bottom: var(--line-padding);
 }
