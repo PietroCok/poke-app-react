@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { iconMapping, themeOptions, THEMESDESCRIPTION, useTheme } from "@/context/ThemeContext";
 import { MenuElement } from "@/components/common/MenuElement";
 import { StackedIcons } from "@/components/common/StackedIcons";
-import { useAuth } from "@/context/AuthContext";
+import { ROLES, useAuth } from "@/context/AuthContext";
 import { useModal } from "@/context/ModalContext";
 import { useToast } from "@/context/ToastContext";
 import { ButtonIcon } from "@/components/common/ButtonIcon";
@@ -50,7 +50,7 @@ export function Settings({ }: SettingsProps) {
   }
 
   const onSectionClick = (menuId: string) => {
-    setOpenMenuId(openMenuId != menuId ? menuId: '');
+    setOpenMenuId(openMenuId != menuId ? menuId : '');
   }
 
   return (
@@ -87,18 +87,21 @@ export function Settings({ }: SettingsProps) {
           <div
             className={`bottom-separator-light flex flex-column`}
           >
-            <MenuElement
-              text="Gestione utenti"
-              icon={
-                <StackedIcons
-                  outer={<FontAwesomeIcon color={`var(--primary-color)`} icon={faUsers} />}
-                  inner={<FontAwesomeIcon color={`var(--main-color)`} icon={faShield} />}
-                />
-              }
-              classes="margin-l3 sub-element sub-element-list"
-              tooltip="Gestione utenti"
-              linkTo={"/admin/users"}
-            />
+            {
+              profile?.role === ROLES.ADMIN &&
+              <MenuElement
+                text="Gestione utenti"
+                icon={
+                  <StackedIcons
+                    outer={<FontAwesomeIcon color={`var(--primary-color)`} icon={faUsers} />}
+                    inner={<FontAwesomeIcon color={`var(--main-color)`} icon={faShield} />}
+                  />
+                }
+                classes="margin-l3 sub-element sub-element-list"
+                tooltip="Gestione utenti"
+                linkTo={"/admin/users"}
+              />
+            }
 
             <MenuElement
               text="Elimina account"

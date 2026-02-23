@@ -13,6 +13,10 @@ export interface AuthProviderProps {
   children: React.ReactNode
 }
 
+export const ROLES = Object.freeze({
+  ADMIN: "admin"
+})
+
 const AuthContext = createContext<AuthContextType | null>(null);
 const StaticAuthContext = createContext<StaticAuthContextType | null>(null);
 
