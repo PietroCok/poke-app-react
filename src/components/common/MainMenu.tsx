@@ -87,7 +87,7 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
             text="Carrello"
             icon={<FontAwesomeIcon icon={faShoppingCart} />}
             classes="gold bottom-separator-light"
-            tooltip="Carello"
+            tooltip="Carrello"
             linkTo={"/cart"}
             clickHandler={() => closeMenu("/cart")}
           />
@@ -95,7 +95,7 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
           {
             user &&
             <MenuElement
-              text="Carelli condivisi"
+              text="Carrelli condivisi"
               icon={
                 <StackedIcons
                   outer={<FontAwesomeIcon color={`var(--accent-gold)`} icon={faCartShopping} />}
