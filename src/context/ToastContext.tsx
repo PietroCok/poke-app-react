@@ -122,9 +122,9 @@ export function ToastProvider({ children }: ToastProviderProps) {
   }, [])
 
   const contextValue = useMemo(() => ({
-    showToast: (message: string, options?: ToastOptions) => showToast(message, options),
-    showInfo: (message: string, options?: ToastOptions) => showInfo(message, options),
-    showError: (message: string, options?: ToastOptions) => showError(message, options)
+    showToast,
+    showInfo,
+    showError
   }), [])
 
   return (

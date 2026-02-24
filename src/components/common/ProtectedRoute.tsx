@@ -17,13 +17,13 @@ export function ProtectedRoute({ roles }: ProtectedRouteProps) {
   const location = useLocation();
   const { showError } = useToast();
 
-  const isUnauthorized = roles && (!profile || !isUserAthorized(profile, roles));
+  const isUnauthorized = !isOffline && user && roles && (!profile || !isUserAthorized(profile, roles));
 
   useEffect(() => {
     if (isUnauthorized) {
       showError('Utente non autorizzato');
     }
-  }, [])
+  }, [isUnauthorized, showError])
 
   if (!user && !isOffline) {
     // Here we force to user to the login page and save the requested path
