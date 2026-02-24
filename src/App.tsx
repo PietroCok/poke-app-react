@@ -24,7 +24,6 @@ import { ToastProvider } from './context/ToastContext';
 import { FavoriteProvider } from './context/FavoriteContext';
 import { Menu } from './pages/Menu';
 import { PokeConfigurator } from './pages/PokeConfigurator';
-import { Settings } from './pages/Settings';
 
 const config: AppConfig = appConfig;
 
@@ -38,7 +37,6 @@ export default function App() {
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Registration />} />
-                <Route path="/settings" element={<Settings/>} />
 
                 <Route element={<ProtectedRoute />}>
 
