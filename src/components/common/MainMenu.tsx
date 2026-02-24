@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,6 +25,13 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  useEffect(() => {
+    // Close settings when closing the menu
+    if(!isOpen) {
+      setIsSettingsOpen(false);
+    }
+  }, [isOpen]);
 
   const _logout = async () => {
     if (await showConfirm(`Procedere con la disconnessione dall'account?`)) {
