@@ -3,6 +3,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from '../../context/AuthContext';
 import type { UserProfile } from "@/types";
 import { useToast } from "@/context/ToastContext";
+import { useEffect } from "react";
 
 export interface ProtectedRouteProps {
   roles?: string[]
@@ -16,6 +17,14 @@ export function ProtectedRoute({ roles }: ProtectedRouteProps) {
   const location = useLocation();
   const { showError } = useToast();
 
+  const isUnauthorized = roles && (!profile || !isUserAthorized(profile, roles));
+
+  useEffect(() => {
+    if (isUnauthorized) {
+      showError('Utente non autorizzato');
+    }
+  }, [])
+
   if (!user && !isOffline) {
     // Here we force to user to the login page and save the requested path
     console.log('User not logged. Redirecting to login page...');
@@ -23,9 +32,8 @@ export function ProtectedRoute({ roles }: ProtectedRouteProps) {
   }
 
   // Checks if the path requires the user to have a role
-  if (roles && (!profile || !isUserAthorized(profile, roles))) {
+  if (isUnauthorized) {
     console.log('User unauthorized. Redirecting to home page...');
-    showError('Utente non autorizzato')
     return <Navigate to="/" replace />;
   }
 
