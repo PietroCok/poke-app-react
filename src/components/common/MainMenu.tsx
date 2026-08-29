@@ -27,8 +27,13 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   useEffect(() => {
-    // Close settings when closing the menu
-    if(!isOpen) {
+    if(isOpen) {
+      // For the pages where the conten is allowed to scrool on the html element -> remove whil menu is open
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.documentElement.style.overflow = 'auto';
+
+      // Close settings when closing the menu
       setIsSettingsOpen(false);
     }
   }, [isOpen]);
@@ -49,7 +54,7 @@ export function MainMenu({ extraMenuItems }: MainMenuProps) {
   function renderMenu() {
     return (
       <div
-        className="page-container h-100 w-100 z-100 absolute top-0 main-bg"
+        className="page-container h-100 w-100 z-100 absolute top-0 main-bg fixed bottom-0 max-w-900"
       >
         <PageHeader
           classes="main-bg"

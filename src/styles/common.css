@@ -313,6 +313,10 @@
   min-width: fit-content;
 }
 
+.max-w-900 {
+  max-width: 900px;
+}
+
 .gap-05 {
   gap: 0.5rem;
 }
